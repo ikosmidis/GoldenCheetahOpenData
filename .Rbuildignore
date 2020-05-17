@@ -1,0 +1,8 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+inst/scratch
+^README\.Rmd$
+^\.travis\.yml$
+^codecov\.yml$
+^CRAN-RELEASE$
+^CODE_OF_CONDUCT\.md$
