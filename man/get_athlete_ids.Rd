@@ -4,7 +4,7 @@
 \alias{get_athlete_ids}
 \title{List available athletes}
 \usage{
-get_athlete_ids(details = TRUE, source = "S3")
+get_athlete_ids(details = TRUE, n_athletes = Inf, mirror = "S3")
 }
 \arguments{
 \item{details}{if \code{FALSE} a vector with the available athlete IDs is returned. If \code{TRUE}, then a data frame with athlete IDs and accompnying details is returned. See Details.}
