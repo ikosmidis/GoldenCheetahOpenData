@@ -1,29 +1,3 @@
-#' Return athlete IDs that have been modified between two dates
-#'
-#' @inheritParams get_athlete_ids
-#' @param object an `object` of class `gc_opendata_athletes`. If `NULL` (default) then the output of `get_athletes(TRUE)` is used
-#' @param from a character string of the form "YYYY-MM-DD" specifying the from date. If `-Inf` (default) then the minimum date from `object$LastModified`
-#' @param to a character string of the form "YYYY-MM-DD" specifying the to date. If `Inf` (default) then the maximum date from `object$LastModified`
-between.gc_opendata_athletes <- function(object = NULL, from = -Inf, to = +Inf) {
-    stopifnot("object is not of class gc_opendata_athletes" = inherits(object, "gc_opendata_athletes"))
-    if (is.null(object)) {
-        object <- get_athletes()
-    }
-    from <- if (from == -Inf)
-                min(object$LastModified)
-            else
-                as.POSIXct(from, tz = "UTC", format = "%Y-%m-%d")
-    to <- if (from == Inf)
-              max(object$LastModified)
-          else
-              ## to + 1 day - 1 second
-              as.POSIXct(to, tz = "UTC", format = "%Y-%m-%d") + 60 * 60 * 24 - 1
-    out <- subset(object, (LastModified >= from) & LastModified <= to)
-    class(out) <- c("GCOD_df", class(out))
-    attr(out, "details") <- details
-    out
-}
-
 #' @inheritParams get_athlete_ids
 #' @param athlete_id
 #' @param dir
@@ -34,13 +8,10 @@ download_athlete_data <- function(athlete_id,
                                   mirror = "S3",
                                   verbose = TRUE,
                                   ...) {
-
-
     if (!dir.exists(dir)) {
         stop("'", dir, "' is not a valid path")
     }
     mirror <- match.arg(mirror, c("OSF", "S3"))
-
     ## Download
     if (isTRUE(mirror == "S3")) {
         gc_bucket <- 'goldencheetah-opendata'
@@ -48,32 +19,31 @@ download_athlete_data <- function(athlete_id,
         path <- file.path(dir, basename(object))
         for (j in seq_along(object)) {
             if (verbose) {
-                cat("Donwloading", path[j], "...")
+                cat(path[j], "\n")
+                cat("Downloading... ")
             }
             save_object(object[j],
                         bucket = gc_bucket,
-                        file = path[j], ...)
+                        file = path[j], ...)           
+            if (isTRUE(extract)) {
+                extraction_dir <- paste0(dir, "/", athlete_id[j])
+                if (verbose) {
+                    cat("Extracting... ")
+                }
+                unzip(path[j],
+                      overwrite = TRUE,
+                      exdir = extraction_dir)
+            }
             if (verbose) {
-                cat(" Done.\n")
+                cat("Done.\n")
             }
         }
     }
     if (isTRUE(mirror == "OSF")) {
         stop("OSF is not implemented yet")
     }
-
-
-    if (extract) {
-
-    }
-
+    ## extraction
     path
-
-    ## tmp_extraction_dir <- paste0(path, "/", athlete_id)
-    ## json <- paste0("{", athlete_id, "}.json")
-    ## tmp_json <- paste0(tmp_extraction_dir, "/", json)
-
-
 }
 
 get_athlete_data <- function(athlete_id) {
