@@ -2,12 +2,12 @@
 % Please edit documentation in R/extract_workouts.R
 \name{extract_workouts.GCOD_files}
 \alias{extract_workouts.GCOD_files}
-\title{Extract workouts from the archives downloaded using \code{download_workouts()}}
+\title{Extract workouts from the archives downloaded using \code{\link[=download_workouts]{download_workouts()}}.}
 \usage{
 \method{extract_workouts}{GCOD_files}(object, verbose = FALSE, clean_up = FALSE, overwrite = TRUE)
 }
 \arguments{
-\item{object}{an object of class \code{GCOD_files} as produced from \code{download_workouts()}}
+\item{object}{an object of class \code{GCOD_files} as produced from \code{\link[=download_workouts]{download_workouts()}}.}
 
 \item{verbose}{logical determining whether progress information should be printed. Default is \code{FALSE}.}
 
@@ -19,8 +19,11 @@
 An object of class \code{GCOD_files} which is the same as \code{object} except that \code{object$extracted = TRUE}.
 }
 \description{
-Extract workouts from the archives downloaded using \code{download_workouts()}
+Extract workouts from the archives downloaded using \code{\link[=download_workouts]{download_workouts()}}.
 }
 \details{
-Athlete IDs will be infered from \code{object$path}
+Athlete IDs are infered from \code{object$path}.
+}
+\seealso{
+\code{\link[=download_workouts]{download_workouts()}}
 }

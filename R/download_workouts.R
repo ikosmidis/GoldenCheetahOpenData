@@ -1,14 +1,19 @@
-#' Download and, optionally, extract the archive with the workouts for a particular athlete ID
+#' Download and, optionally, extract the archive with the workouts for a particular athlete ID.
 #'
-#' @rdname download_workouts
 #' @inheritParams get_athlete_ids
-#' @param athlete_id a character string with the athlete ID or the first few characters of it, or an object of class `GCOD_df` as constructed by `get_athlete_ids()`.
+#' @param athlete_id a character string with the athlete ID or the first few characters of it, or an object of class `GCOD_df` as constructed by [`get_athlete_ids()`].
 #' @param dir the directory to download the zip files for the selected athleted IDs.
 #' @param pattern character string containing a regular expression to be matched with the athlete IDs in `athlete_id`. Only applicable if `athlete_id` is an object of class `GCOD_df`. Default is `NULL`, which selects all IDs in `athlete_id`.
-#' @param extract logical determining whether the workout files in the downloaded archives should be extracted. Default is `FALSE`. If `TRUE`, then the archives are extractred in sub-directories unded `dir`. The sub-directories are named according to the athlete ID.
+#' @param extract logical determining whether the workout files in the downloaded archives should be extracted. Default is `FALSE`. If `TRUE`, then the archives are extractred in sub-directories unded `dir`. The sub-directories are named according to the athlete ID. See Details.
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
 #' @param confirm logical determining whether the user should be asked whether they should continue with the download or not. Default is `TRUE`.
-#' @param ... extra arguments to be passed to `aws.s3::save_object()`.
+#' @param ... extra arguments to be passed to [`aws.s3::save_object()`].
+#'
+#' @details
+#' If `extract = TRUE`, then [`extract_workouts()`] is called with `clean_up = TRUE` and `overwrite = TRUE`.
+#'
+#' @seealso
+#' [`extract_workouts()`]
 #'
 #' @examples
 #' \donttest{
@@ -79,7 +84,7 @@ download_workouts <- function(athlete_id,
                 mirror = mirror)
     class(out) <- "GCOD_files"
     if (isTRUE(extract)) {
-        out <- extract_workouts.GCOD_files(out, verbose)
+        out <- extract_workouts.GCOD_files(out, verbose, clean_up = TRUE, overwirte = TRUE)
     }
     out
 }

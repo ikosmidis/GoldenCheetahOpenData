@@ -26,10 +26,6 @@ expect_identical(out$mirror, "S3")
 expect_true(inherits(out, "GCOD_files"))
 expect_true(file.exists(out$path))
 
-## Check extraction
-expect_message(extract_workouts.GCOD_files(out, verbose = TRUE),
-               pattern = "Extracting")
-
 ## Check that supplying the first few letters of the ID works
 out <- download_workouts("002", dir = tempdir(), extract = TRUE)
 expect_true(out$extracted)

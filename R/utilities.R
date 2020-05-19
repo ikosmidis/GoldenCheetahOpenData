@@ -1,9 +1,58 @@
-#' Return athlete IDs that have been modified between two dates
+#' Extract information from an object of class `GCOD_df`, as produced by [`get_athlete_ids()`].
+#' @name GCOD_df_info
+#' @param object an object of class `GCOD_df`, as produced by [`get_athlete_ids()`].
 #'
-#' @param object an `object` of class `gc_opendata_athletes`. If `NULL` (default) then the output of `get_athletes(TRUE)` is used
+#' @details
+#' File sizes are reported in bytes but inherit from class `object_size`. So `format.object_size()` can be used for pretty units, etc.
+#'
+#' @seealso [`get_athlete_ids()`]
+#' @aliases min_size max_size mean_size total_size n_ids
+NULL
+
+#' @rdname GCOD_df_info
+#' @export
+n_ids.GCOD_df <- function(object) {
+    nrow(object)
+}
+
+#' @rdname GCOD_df_info
+#' @export
+min_size.GCOD_df <- function(object) {
+    out <- min(object$size)
+    class(out) <- "object_size"
+    out
+}
+
+#' @rdname GCOD_df_info
+#' @export
+max_size.GCOD_df <- function(object) {
+    out <- max(object$size)
+    class(out) <- "object_size"
+    out
+}
+
+#' @rdname GCOD_df_info
+#' @export
+total_size.GCOD_df <- function(object) {
+    out <- sum(object$size)
+    class(out) <- "object_size"
+    out
+}
+
+#' @rdname GCOD_df_info
+#' @export
+mean_size.GCOD_df <- function(object) {
+    out <- mean(object$size)
+    class(out) <- "object_size"
+    out
+}
+
+#' Return athlete IDs that have been modified between two dates.
+#'
+#' @param object an `object` of class `GCOD_df`, as produced by [`get_athlete_ids`]. If `NULL` (default) then the output of a call to [`get_athletes()`] is used.
 #' @param from a character string of the form "YYYY-MM-DD" specifying the from date. If `-Inf` (default) then the minimum date from `object$LastModified`
 #' @param to a character string of the form "YYYY-MM-DD" specifying the to date. If `Inf` (default) then the maximum date from `object$LastModified`
-between.gc_opendata_athletes <- function(object = NULL, from = -Inf, to = +Inf) {
+between.GCOD_df <- function(object = NULL, from = -Inf, to = +Inf) {
     stopifnot("object is not of class gc_opendata_athletes" = inherits(object, "gc_opendata_athletes"))
     if (is.null(object)) {
         object <- get_athletes()

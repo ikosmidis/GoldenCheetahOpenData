@@ -1,4 +1,4 @@
-#' List available athletes
+#' List available athletes.
 #'
 #' @param n_ids integer indicating the maximum number of athlete IDs to return. Default is `Inf`, which will return all available athelte IDs.
 #' @param mirror either `"S3"` or `"OSF"`, indicating the GoldeCheetah OpenData mirror to use. Default and recommended is "S3". See Details.
@@ -50,7 +50,7 @@ get_athlete_ids <- function(n_ids = Inf,
     out
 }
 
-#' Print method for objects of class `GCOD_df`, as produced by `get_athlete_ids()`
+#' Print method for objects of class `GCOD_df`, as produced by [`get_athlete_ids()`].
 #'
 #' @param object an object of class `GCOD_df`.
 #' @param txtplot logical indicating whether or not a text barplot should be printed of the percent of athlete ID records modified per year quarter. Default is `FALSE`.
@@ -64,6 +64,7 @@ print.GCOD_df <- function(object, txtplot = FALSE, ...) {
     }
     else {
         sizes <- object$size
+        ## Not using the min_size, max_size, etc, methods here
         total_size <- sum(sizes)
         min_size <- min(sizes)
         max_size <- max(sizes)
@@ -84,3 +85,5 @@ print.GCOD_df <- function(object, txtplot = FALSE, ...) {
         }
     }
 }
+
+

@@ -1,8 +1,7 @@
-
-#' Extract workouts from the archives downloaded using `download_workouts()`
+#' Extract workouts from the archives downloaded using [`download_workouts()`].
 #'
 #' @rdname extract_workouts
-#' @param object an object of class `GCOD_files` as produced from `download_workouts()`
+#' @param object an object of class `GCOD_files` as produced from [`download_workouts()`].
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
 #' @param clean_up logical determining whether the workout directories should be deleted before extraction, if they already exist. Default is `FALSE`.
 #' @param overwrite logical determining whether the workout directories should be overwritten, if they already exist. Default is `TRUE`.
@@ -11,7 +10,10 @@
 #' An object of class `GCOD_files` which is the same as `object` except that `object$extracted = TRUE`.
 #'
 #' @details
-#' Athlete IDs will be infered from `object$path`
+#' Athlete IDs are infered from `object$path`.
+#'
+#' @seealso
+#' [`download_workouts()`]
 #'
 #' @export
 extract_workouts.GCOD_files <- function(object,

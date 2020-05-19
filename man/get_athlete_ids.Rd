@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_athlete_ids.R
 \name{get_athlete_ids}
 \alias{get_athlete_ids}
-\title{List available athletes}
+\title{List available athletes.}
 \usage{
 get_athlete_ids(n_ids = Inf, mirror = "S3", prefix = NULL, ...)
 }
@@ -16,7 +16,7 @@ get_athlete_ids(n_ids = Inf, mirror = "S3", prefix = NULL, ...)
 \item{...}{further options to be passed to \verb{[aws.s3::get_bucket_df()]}.}
 }
 \description{
-List available athletes
+List available athletes.
 }
 \details{
 The \code{data.frame} that is returned if \code{details = TRUE} has

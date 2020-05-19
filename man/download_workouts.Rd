@@ -2,7 +2,7 @@
 % Please edit documentation in R/download_workouts.R
 \name{download_workouts}
 \alias{download_workouts}
-\title{Download and, optionally, extract the archive with the workouts for a particular athlete ID}
+\title{Download and, optionally, extract the archive with the workouts for a particular athlete ID.}
 \usage{
 download_workouts(
   athlete_id,
@@ -16,13 +16,13 @@ download_workouts(
 )
 }
 \arguments{
-\item{athlete_id}{a character string with the athlete ID or the first few characters of it, or an object of class \code{GCOD_df} as constructed by \code{get_athlete_ids()}.}
+\item{athlete_id}{a character string with the athlete ID or the first few characters of it, or an object of class \code{GCOD_df} as constructed by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
 
 \item{dir}{the directory to download the zip files for the selected athleted IDs.}
 
 \item{pattern}{character string containing a regular expression to be matched with the athlete IDs in \code{athlete_id}. Only applicable if \code{athlete_id} is an object of class \code{GCOD_df}. Default is \code{NULL}, which selects all IDs in \code{athlete_id}.}
 
-\item{extract}{logical determining whether the workout files in the downloaded archives should be extracted. Default is \code{FALSE}. If \code{TRUE}, then the archives are extractred in sub-directories unded \code{dir}. The sub-directories are named according to the athlete ID.}
+\item{extract}{logical determining whether the workout files in the downloaded archives should be extracted. Default is \code{FALSE}. If \code{TRUE}, then the archives are extractred in sub-directories unded \code{dir}. The sub-directories are named according to the athlete ID. See Details.}
 
 \item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating the GoldeCheetah OpenData mirror to use. Default and recommended is "S3". See Details.}
 
@@ -30,13 +30,19 @@ download_workouts(
 
 \item{confirm}{logical determining whether the user should be asked whether they should continue with the download or not. Default is \code{TRUE}.}
 
-\item{...}{extra arguments to be passed to \code{aws.s3::save_object()}.}
+\item{...}{extra arguments to be passed to \code{\link[aws.s3:save_object]{aws.s3::save_object()}}.}
 }
 \description{
-Download and, optionally, extract the archive with the workouts for a particular athlete ID
+Download and, optionally, extract the archive with the workouts for a particular athlete ID.
+}
+\details{
+If \code{extract = TRUE}, then \code{\link[=extract_workouts]{extract_workouts()}} is called with \code{clean_up = TRUE} and \code{overwrite = TRUE}.
 }
 \examples{
 \donttest{
 oo <- download_workouts("000d")
 }
+}
+\seealso{
+\code{\link[=extract_workouts]{extract_workouts()}}
 }
