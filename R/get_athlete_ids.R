@@ -14,7 +14,7 @@
 #'
 #' IK, 20200517: ADD EXAMPLES
 #' @export
-get_athlete_ids <- function(n_athletes = Inf,
+get_athlete_ids <- function(n_ids = Inf,
                             mirror = "S3",
                             prefix = NULL,
                             ...) {
@@ -24,7 +24,7 @@ get_athlete_ids <- function(n_athletes = Inf,
         athlete_prefix <- paste0("data/", prefix)
         out <- get_bucket(bucket = gc_bucket,
                           prefix = athlete_prefix,
-                          max = n_athletes + 1,
+                          max = n_ids + 1,
                           ...)
         out <- as.data.frame(out, stringsAsFactors = FALSE)
         ## Get athlete id's
@@ -50,7 +50,7 @@ get_athlete_ids <- function(n_athletes = Inf,
     out
 }
 
-#' Print method for objects of class `GCOD_df`
+#' Print method for objects of class `GCOD_df`, as produced by `get_athlete_ids()`
 #'
 #' @param object an object of class `GCOD_df`.
 #' @param txtplot logical indicating whether or not a text barplot should be printed of the percent of athlete ID records modified per year quarter. Default is `FALSE`.
@@ -58,8 +58,8 @@ get_athlete_ids <- function(n_athletes = Inf,
  #'
 #' @export
 print.GCOD_df <- function(object, txtplot = FALSE, ...) {
-    n_athletes <- nrow(object)
-    if (isTRUE(n_athletes == 0)) {
+    n_ids <- nrow(object)
+    if (isTRUE(n_ids == 0)) {
         cat("Number of athlete IDs:", 0, "\n")
     }
     else {
@@ -69,7 +69,7 @@ print.GCOD_df <- function(object, txtplot = FALSE, ...) {
         max_size <- max(sizes)
         class(min_size) <- class(max_size) <- class(total_size) <- "object_size"
         date_range <- range(object$last_modified)
-        cat("Number of athlete IDs:", n_athletes, "\n")
+        cat("Number of athlete IDs:", n_ids, "\n")
         cat("File sizes:",
             "min =", format(min_size, units = "auto"), "|",
             "max =", format(max_size, units = "auto"), "|",
