@@ -12,6 +12,7 @@ Imports:
     aws.s3,
     osfr,
     trackeR,
+    jsonlite,
     readr
 Suggests: 
     covr, tinytest

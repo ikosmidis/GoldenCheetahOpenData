@@ -1,6 +1,5 @@
 #' Return athlete IDs that have been modified between two dates
 #'
-#' @inheritParams get_athlete_ids
 #' @param object an `object` of class `gc_opendata_athletes`. If `NULL` (default) then the output of `get_athletes(TRUE)` is used
 #' @param from a character string of the form "YYYY-MM-DD" specifying the from date. If `-Inf` (default) then the minimum date from `object$LastModified`
 #' @param to a character string of the form "YYYY-MM-DD" specifying the to date. If `Inf` (default) then the maximum date from `object$LastModified`
