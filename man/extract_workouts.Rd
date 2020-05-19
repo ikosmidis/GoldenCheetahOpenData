@@ -17,6 +17,8 @@
 }
 \value{
 An object of class \code{GCOD_files} which is the same as \code{object} except that \code{object$extracted = TRUE}.
+
+The workouts are extracted and put in sub-directories in the same directory as the original archive (i.e. where the files \code{object$path} are). These sub-directories have exactly the same name as the archives (excluding the file extension).
 }
 \description{
 Extract workouts from the archives downloaded using \code{\link[=download_workouts]{download_workouts()}}.

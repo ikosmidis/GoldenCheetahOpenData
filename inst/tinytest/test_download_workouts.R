@@ -36,7 +36,8 @@ expect_true(out$extracted)
 expect_true(file.exists(out$path))
 expect_true(dir.exists(dirname(out$path)))
 
-expect_true(file.remove(out$path))
+## Clean up
+expect_true(all(file.remove(out$path)))
 unlink(gsub(".zip", "", out$path), recursive = TRUE)
 
 

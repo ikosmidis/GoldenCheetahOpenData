@@ -9,6 +9,8 @@
 #' @return
 #' An object of class `GCOD_files` which is the same as `object` except that `object$extracted = TRUE`.
 #'
+#' The workouts are extracted and put in sub-directories in the same directory as the original archive (i.e. where the files `object$path` are). These sub-directories have exactly the same name as the archives (excluding the file extension).
+#'
 #' @details
 #' Athlete IDs are infered from `object$path`.
 #'
