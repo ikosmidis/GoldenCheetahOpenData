@@ -1,3 +1,5 @@
+#'
+#'
 process_workouts.GCOD_files <- function(object, verbose = FALSE) {
     if (!isTRUE(object$extracted)) {
         extract_workouts.GCOD_files(object, verbose = FALSE)

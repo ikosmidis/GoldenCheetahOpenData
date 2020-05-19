@@ -2,7 +2,7 @@
 % Please edit documentation in R/download_workouts.R
 \name{download_workouts}
 \alias{download_workouts}
-\title{Download and, optionally, extract the archive with the workouts for a particular athlete ID.}
+\title{Download and, optionally, extract the archive with the workouts for a particular athlete ID in the GoldenCheetah OpenData project.}
 \usage{
 download_workouts(
   athlete_id,
@@ -36,7 +36,7 @@ download_workouts(
 \item{...}{extra arguments to be passed to \code{\link[aws.s3:save_object]{aws.s3::save_object()}}.}
 }
 \description{
-Download and, optionally, extract the archive with the workouts for a particular athlete ID.
+Download and, optionally, extract the archive with the workouts for a particular athlete ID in the GoldenCheetah OpenData project.
 }
 \details{
 If \code{extract = TRUE}, then \code{\link[=extract_workouts]{extract_workouts()}} is called with \code{clean_up = TRUE} and \code{overwrite = TRUE}.
@@ -55,6 +55,9 @@ if (interactive) {
 }
 
 }
+}
+\references{
+Liversedge, M. (2020). GoldenCheetah OpenData Project. OSF. \url{https://doi.org/10.17605/OSF.IO/6HFPZ}
 }
 \seealso{
 \code{\link[=extract_workouts]{extract_workouts()}}

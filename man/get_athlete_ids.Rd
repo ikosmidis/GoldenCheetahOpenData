@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_athlete_ids.R
 \name{get_athlete_ids}
 \alias{get_athlete_ids}
-\title{List available athletes.}
+\title{Retrieve information for the available athleted IDs in the GoldenCheetah OpenData project.}
 \usage{
 get_athlete_ids(n_ids = Inf, mirror = "S3", prefix = NULL, ...)
 }
@@ -21,7 +21,7 @@ A \code{\link{data.frame}} inheriting from class \code{GCOD_df} with variables
 "owner_display_name", "storage_class", "bucket", and "athlete_id".
 }
 \description{
-List available athletes.
+Retrieve information for the available athleted IDs in the GoldenCheetah OpenData project.
 }
 \details{
 
@@ -46,6 +46,10 @@ ids[which.min(ids$size), "athlete_id"]
 ids[which.max(ids$size), "athlete_id"]
 
 }
+
+}
+\references{
+Liversedge, M. (2020). GoldenCheetah OpenData Project. OSF. \url{https://doi.org/10.17605/OSF.IO/6HFPZ}
 }
 \seealso{
 \code{\link[=print.GCOD_df]{print.GCOD_df()}} \code{\link[=min_size.GCOD_df]{min_size.GCOD_df()}} \code{\link[=max_size.GCOD_df]{max_size.GCOD_df()}} \code{\link[=total_size.GCOD_df]{total_size.GCOD_df()}} \code{\link[=mean_size.GCOD_df]{mean_size.GCOD_df()}} \code{\link[=n_ids.GCOD_df]{n_ids.GCOD_df()}}

@@ -1,4 +1,4 @@
-#' List available athletes.
+#' Retrieve information for the available athleted IDs in the GoldenCheetah OpenData project.
 #'
 #' @param n_ids integer indicating the maximum number of athlete IDs to return. Default is `Inf`, which will return all available athelte IDs.
 #' @param mirror either `"S3"` or `"OSF"`, indicating the GoldeCheetah OpenData mirror to use. Default and recommended is "S3". See Details.
@@ -12,6 +12,9 @@
 #' "owner_display_name", "storage_class", "bucket", and "athlete_id".
 #'
 #' @seealso [`print.GCOD_df()`] [`min_size.GCOD_df()`] [`max_size.GCOD_df()`] [`total_size.GCOD_df()`] [`mean_size.GCOD_df()`] [`n_ids.GCOD_df()`]
+#'
+#' @references
+#' Liversedge, M. (2020). GoldenCheetah OpenData Project. OSF. \url{https://doi.org/10.17605/OSF.IO/6HFPZ}
 #'
 #' @examples
 #'
@@ -33,6 +36,7 @@
 #' ids[which.max(ids$size), "athlete_id"]
 #'
 #' }
+#'
 #' @export
 get_athlete_ids <- function(n_ids = Inf,
                             mirror = "S3",

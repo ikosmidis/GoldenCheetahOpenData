@@ -1,4 +1,4 @@
-#' Download and, optionally, extract the archive with the workouts for a particular athlete ID.
+#' Download and, optionally, extract the archive with the workouts for a particular athlete ID in the GoldenCheetah OpenData project.
 #'
 #' @inheritParams get_athlete_ids
 #' @param athlete_id a character string with the athlete ID or the first few characters of it, or an object of class `GCOD_df` as constructed by [`get_athlete_ids()`].
@@ -15,6 +15,9 @@
 #'
 #' @seealso
 #' [`extract_workouts()`]
+#'
+#' @references
+#' Liversedge, M. (2020). GoldenCheetah OpenData Project. OSF. \url{https://doi.org/10.17605/OSF.IO/6HFPZ}
 #'
 #' @examples
 #' \donttest{
