@@ -15,15 +15,38 @@ get_athlete_ids(n_ids = Inf, mirror = "S3", prefix = NULL, ...)
 
 \item{...}{further options to be passed to \verb{[aws.s3::get_bucket_df()]}.}
 }
+\value{
+A \code{\link{data.frame}} inheriting from class \code{GCOD_df} with variables
+"key", "last_modified", "e_tag", "size", "owner_id",
+"owner_display_name", "storage_class", "bucket", and "athlete_id".
+}
 \description{
 List available athletes.
 }
 \details{
-The \code{data.frame} that is returned if \code{details = TRUE} has
-"Key", "LastModified", "ETag", "Size", "Size", "Owner_ID",
-"Owner_DisplayName", "StorageClass", "Bucket", "athlete_id"
 
-IK, 20200517: ADD DETAILS ON MIRROR
+}
+\examples{
 
-IK, 20200517: ADD EXAMPLES
+\donttest{
+# Get details for all available athlete IDs
+ids <- get_athlete_ids()
+# Print basic info for the IDs retrieved
+print(ids, txtplot = TRUE)
+# Extract basic info for the IDs retrieved
+n_ids(ids)
+format(min_size(ids), unit = "auto")
+format(max_size(ids), unit = "auto")
+format(mean_size(ids), unit = "auto")
+format(total_size(ids), unit = "auto")
+
+# `ids` inherits from `data.frame` so we can easily find which IDs
+# have the minimum/maximum sizes (etc)
+ids[which.min(ids$size), "athlete_id"]
+ids[which.max(ids$size), "athlete_id"]
+
+}
+}
+\seealso{
+\code{\link[=print.GCOD_df]{print.GCOD_df()}} \code{\link[=min_size.GCOD_df]{min_size.GCOD_df()}} \code{\link[=max_size.GCOD_df]{max_size.GCOD_df()}} \code{\link[=total_size.GCOD_df]{total_size.GCOD_df()}} \code{\link[=mean_size.GCOD_df]{mean_size.GCOD_df()}} \code{\link[=n_ids.GCOD_df]{n_ids.GCOD_df()}}
 }

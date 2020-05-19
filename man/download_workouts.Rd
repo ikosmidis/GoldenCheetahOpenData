@@ -12,6 +12,7 @@ download_workouts(
   mirror = "S3",
   verbose = TRUE,
   confirm = FALSE,
+  overwrite = FALSE,
   ...
 )
 }
@@ -30,6 +31,8 @@ download_workouts(
 
 \item{confirm}{logical determining whether the user should be asked whether they should continue with the download or not. Default is \code{TRUE}.}
 
+\item{overwrite}{logical determining whether existing archives with the same names as the ones to be downloaded should be overwritten. Default is \code{TRUE}.}
+
 \item{...}{extra arguments to be passed to \code{\link[aws.s3:save_object]{aws.s3::save_object()}}.}
 }
 \description{
@@ -40,7 +43,17 @@ If \code{extract = TRUE}, then \code{\link[=extract_workouts]{extract_workouts()
 }
 \examples{
 \donttest{
-oo <- download_workouts("000d")
+## Using the first few letters of the athlete ID
+if (interactive) {
+   files_007_1 <- download_workouts("007", confirm = TRUE)
+}
+
+## Using a `GCOD_df` object and fitering using regex
+ids_00 <- get_athlete_ids(prefix = "00")
+if (interactive) {
+   files_007_2 <- download_workouts(ids_00, pattern = "007", confirm = TRUE)
+}
+
 }
 }
 \seealso{

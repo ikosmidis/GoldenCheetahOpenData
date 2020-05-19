@@ -1,13 +1,13 @@
 ## Get athlete ids from AWS S3
 
 ## List the 0 athlete files
-s3_ids0 <- get_athlete_ids(details = TRUE, mirror = "S3", n_athletes = 0)
+s3_ids0 <- get_athlete_ids(details = TRUE, mirror = "S3", n_ids = 0)
 
 ## List the 11 first athlete files from S3 in alphabetical order
-s3_ids <- get_athlete_ids(details = TRUE, mirror = "S3", n_athletes = 11)
+s3_ids <- get_athlete_ids(details = TRUE, mirror = "S3", n_ids = 11)
 
 ## Get data for a specific athlete
-s3_ids1 <- get_athlete_ids(details = TRUE, mirror = "S3", prefix = "000", n_athletes = 11)
+s3_ids1 <- get_athlete_ids(details = TRUE, mirror = "S3", prefix = "000", n_ids = 11)
 
 ## Check the dimensions
 expect_identical(dim(s3_ids0), as.integer(c(0, 9)))

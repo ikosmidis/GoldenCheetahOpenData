@@ -7,6 +7,7 @@
 #' @param extract logical determining whether the workout files in the downloaded archives should be extracted. Default is `FALSE`. If `TRUE`, then the archives are extractred in sub-directories unded `dir`. The sub-directories are named according to the athlete ID. See Details.
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
 #' @param confirm logical determining whether the user should be asked whether they should continue with the download or not. Default is `TRUE`.
+#' @param overwrite logical determining whether existing archives with the same names as the ones to be downloaded should be overwritten. Default is `TRUE`.
 #' @param ... extra arguments to be passed to [`aws.s3::save_object()`].
 #'
 #' @details
@@ -17,7 +18,17 @@
 #'
 #' @examples
 #' \donttest{
-#' oo <- download_workouts("000d")
+#' ## Using the first few letters of the athlete ID
+#' if (interactive) {
+#'    files_007_1 <- download_workouts("007", confirm = TRUE)
+#' }
+#'
+#' ## Using a `GCOD_df` object and fitering using regex
+#' ids_00 <- get_athlete_ids(prefix = "00")
+#' if (interactive) {
+#'    files_007_2 <- download_workouts(ids_00, pattern = "007", confirm = TRUE)
+#' }
+#'
 #' }
 download_workouts <- function(athlete_id,
                               dir = tempdir(),
@@ -26,16 +37,19 @@ download_workouts <- function(athlete_id,
                               mirror = "S3",
                               verbose = TRUE,
                               confirm = FALSE,
+                              overwrite = FALSE,
                               ...) {
     mirror <- match.arg(mirror, c("OSF", "S3"))
     if (!dir.exists(dir)) {
-        stop("'", dir, "' is not a valid path.")
+        stop("'", dir, "' does not exist.")
     }
     if (inherits(athlete_id, "GCOD_df")) {
         sizes <- athlete_id$size
         athlete_id <- athlete_id$athlete_id
         if (!is.null(pattern)) {
-            athlete_id <- athlete_id[grepl(pattern, athlete_id)]
+            inds <- grepl(pattern, athlete_id)
+            sizes <- sizes[inds]
+            athlete_id <- athlete_id[inds]
         }
     }
     else {
@@ -70,7 +84,9 @@ download_workouts <- function(athlete_id,
             }
             save_object(object[j],
                         bucket = gc_bucket,
-                        file = path[j], ...)
+                        file = path[j],
+                        overwrite = overwrite,
+                        ...)
             if (verbose) {
                 message("Done.")
             }
@@ -84,7 +100,7 @@ download_workouts <- function(athlete_id,
                 mirror = mirror)
     class(out) <- "GCOD_files"
     if (isTRUE(extract)) {
-        out <- extract_workouts.GCOD_files(out, verbose, clean_up = TRUE, overwirte = TRUE)
+        out <- extract_workouts.GCOD_files(out, verbose, clean_up = TRUE, overwrite = TRUE)
     }
     out
 }

@@ -8,7 +8,7 @@ expect_error(download_workouts(c("000", "001"), dir = tempdir(), verbose = TRUE)
 set.seed(123)
 randomstring <- paste(sample(c(letters, 0:9, "-", "+", "_"), 100, replace = TRUE), collapse = "")
 expect_error(download_workouts("000", dir = randomstring),
-             pattern = "is not a valid path")
+             pattern = "does not exist")
 
 ## Download workouts using the first few letters of athlete IDs
 expect_message(download_workouts("000d", dir = tempdir(), verbose = TRUE),
@@ -26,10 +26,15 @@ expect_identical(out$mirror, "S3")
 expect_true(inherits(out, "GCOD_files"))
 expect_true(file.exists(out$path))
 
-## Check that supplying the first few letters of the ID works
-out <- download_workouts("002", dir = tempdir(), extract = TRUE)
+## Check that overwrite works
+expect_error(out <- download_workouts("002", dir = tempdir(),
+                                      extract = TRUE, overwrite = FALSE))
+
+## Check that extraction works
+out <- download_workouts("002", dir = tempdir(), extract = TRUE, overwrite = TRUE)
 expect_true(out$extracted)
 expect_true(file.exists(out$path))
-expect_true(file.exists(gsub(".zip", "", out$path)))
+expect_true(dir.exists(dirname(out$path)))
+expect_true(file.remove(out$path))
 
-## Check
+
