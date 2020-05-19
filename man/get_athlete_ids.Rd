@@ -4,10 +4,10 @@
 \alias{get_athlete_ids}
 \title{List available athletes}
 \usage{
-get_athlete_ids(n_athletes = Inf, mirror = "S3", prefix = NULL, ...)
+get_athlete_ids(n_ids = Inf, mirror = "S3", prefix = NULL, ...)
 }
 \arguments{
-\item{n_athletes}{integer indicating the maximum number of athlete IDs to return. Default is \code{Inf}, which will return all available athelte IDs.}
+\item{n_ids}{integer indicating the maximum number of athlete IDs to return. Default is \code{Inf}, which will return all available athelte IDs.}
 
 \item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating the GoldeCheetah OpenData mirror to use. Default and recommended is "S3". See Details.}
 

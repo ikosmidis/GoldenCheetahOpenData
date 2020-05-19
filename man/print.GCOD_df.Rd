@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_athlete_ids.R
 \name{print.GCOD_df}
 \alias{print.GCOD_df}
-\title{Print method for objects of class \code{GCOD_df}}
+\title{Print method for objects of class \code{GCOD_df}, as produced by \code{get_athlete_ids()}}
 \usage{
 \method{print}{GCOD_df}(object, txtplot = FALSE, ...)
 }
@@ -14,5 +14,5 @@
 \item{...}{currently not used.}
 }
 \description{
-Print method for objects of class \code{GCOD_df}
+Print method for objects of class \code{GCOD_df}, as produced by \code{get_athlete_ids()}
 }

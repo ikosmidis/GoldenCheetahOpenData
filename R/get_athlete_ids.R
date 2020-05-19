@@ -1,6 +1,6 @@
 #' List available athletes
 #'
-#' @param n_athletes integer indicating the maximum number of athlete IDs to return. Default is `Inf`, which will return all available athelte IDs.
+#' @param n_ids integer indicating the maximum number of athlete IDs to return. Default is `Inf`, which will return all available athelte IDs.
 #' @param mirror either `"S3"` or `"OSF"`, indicating the GoldeCheetah OpenData mirror to use. Default and recommended is "S3". See Details.
 #' @param prefix character string that limits the response to athlete IDs that begin with it. Default is `NULL`, which does not limit responses.
 #' @param ... further options to be passed to `[aws.s3::get_bucket_df()]`.
