@@ -15,8 +15,8 @@ extract_workouts <- function(object, ...) {
 }
 
 #' @export
-process_workouts <- function(object, ...) {
-    UseMethod("process_workouts")
+read_workouts <- function(object, ...) {
+    UseMethod("read_workouts")
 }
 
 

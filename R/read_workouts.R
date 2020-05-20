@@ -1,9 +1,9 @@
-#' Coerce the workouts that have been extracted using [`extract_workouts()`] into lists of [`trackeR::trackeRdata`] objects for further processing into `trackeR`.
+#' Read the workout `.csv` files that have been extracted using [`extract_workouts()`] and organized them into lists of [`trackeR::trackeRdata`] objects for further processing into the `trackeR` R package.
 #'
 #' @param object an object of class `GCOD_files` as produced from [`download_workouts()`] or [`extract_workouts()`].
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
 #' @param ... other arguments to be passed to [`extract_workouts()`]
-#' @rdname process_workouts
+#' @rdname read_workouts
 #'
 #' @details
 #' If `object$extracted` is `FALSE`, then the workout files are extracted automatically using [`extract_workouts()`].
@@ -26,7 +26,7 @@
 #' 1--29. [doi:10.18637/jss.v082.i07](https://doi.org/10.18637/jss.v082.i07)
 #'
 #' @export
-process_workouts.GCOD_files <- function(object, verbose = FALSE, delete = FALSE, ...) {
+read_workouts.GCOD_files <- function(object, verbose = FALSE, delete = FALSE, ...) {
     if (!isTRUE(object$extracted)) {
         extract_workouts.GCOD_files(object, verbose = FALSE, ...)
     }
