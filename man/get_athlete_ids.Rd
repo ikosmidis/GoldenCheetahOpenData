@@ -33,6 +33,7 @@ Retrieve information for the available athleted IDs in the GoldenCheetah OpenDat
 ids <- get_athlete_ids()
 # Print basic info for the IDs retrieved
 print(ids, txtplot = TRUE)
+
 # Extract basic info for the IDs retrieved
 n_ids(ids)
 format(min_size(ids), unit = "auto")
@@ -40,11 +41,13 @@ format(max_size(ids), unit = "auto")
 format(mean_size(ids), unit = "auto")
 format(total_size(ids), unit = "auto")
 
-# `ids` inherits from `data.frame` so we can easily find which IDs
-# have the minimum/maximum sizes (etc)
+# `ids` inherits from `data.frame` so we can easily do stuff like
+# find which IDshave the minimum/maximum sizes
 ids[which.min(ids$size), "athlete_id"]
 ids[which.max(ids$size), "athlete_id"]
-
+# find all IDs with the string "007"
+subset(ids, grepl("007", ids$athlete_id))
+# etc
 }
 
 }

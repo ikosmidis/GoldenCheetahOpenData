@@ -1,47 +1,97 @@
+#' Coerce the workouts that have been extracted using [`extract_workouts()`] into lists of [`trackeR::trackeRdata`] objects for further processing into `trackeR`.
 #'
+#' @param object an object of class `GCOD_files` as produced from [`download_workouts()`] or [`extract_workouts()`].
+#' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
+#' @param ... other arguments to be passed to [`extract_workouts()`]
+#' @rdname process_workouts
 #'
-process_workouts.GCOD_files <- function(object, verbose = FALSE) {
+#' @details
+#' If `object$extracted` is `FALSE`, then the workout files are extracted automatically using [`extract_workouts()`].
+#'
+#' It is assumed that the filename for each workout corresponds to the timestamp where the first observation is made for the session. Timestamps are in UTC.
+#'
+#' If the number of workout files in the archive of a particular athlete ID does not match the number of workouts recorded in the json files within that archive, then the workout files for the ID are not read.
+#'
+#' @return
+#' A list of [`trackeR::trackeRdata`] objects.
+#'
+#' @seealso
+#' [`trackeR::trackeRdata()`]
+#'
+#' @references
+#'
+#' Frick, H., Kosmidis, I. (2017). trackeR: Infrastructure for Running
+#' and Cycling Data from GPS-Enabled Tracking Devices in R. *Journal
+#' of Statistical Software*, **82**(7),
+#' 1--29. [doi:10.18637/jss.v082.i07](https://doi.org/10.18637/jss.v082.i07)
+#'
+#' @export
+process_workouts.GCOD_files <- function(object, verbose = FALSE, delete = FALSE, ...) {
     if (!isTRUE(object$extracted)) {
-        extract_workouts.GCOD_files(object, verbose = FALSE)
+        extract_workouts.GCOD_files(object, verbose = FALSE, ...)
     }
     path <- object$path
-    n_paths <- length(path)
     athlete_id <- gsub(".zip", "", basename(path))
+    n_ids <- length(athlete_id)
     extraction_dir <- paste0(dirname(path), "/", athlete_id)
 
+    units0 <- trackeR::generate_units(
+                           variable = c(rep(c("distance", "speed", "pace", "altitude"), 3),  "cadence_running"),
+                           unit = c(rep(c("km", "km_per_h", "min_per_km", "m"), 3), "steps_per_min"),
+                           sport = c(rep(c("cycling", "running", "swimming"), each = 4), "running"))
+
+
     process_id <- function(extraction_dir, athlete_id) {
-        json <- paste0(extraction_dir, "/", "{", athlete_id, "}.json")
-        js <- jsonlite::read_json(json)
+        json <- paste0("{", athlete_id, "}.json")
+        js <- jsonlite::read_json(file.path(extraction_dir, json))
         json_dates <- as.POSIXct(sapply(js$RIDES, function(x) x$date),
                                  format = "%Y/%m/%d %H:%M:%S UTC",
                                  tz = "UTC")
-        zip_files <- dir(tmp_extraction_dir)
-        zip_files <- zip_files[-match(json, zip_files)]
-        zip_dates <- as.POSIXct(zip_files,
+        csv_files <- dir(extraction_dir)
+        csv_files <- csv_files[-match(json, csv_files)]
+        csv_dates <- as.POSIXct(csv_files,
                                 format = "%Y_%m_%d_%H_%M_%S.csv",
                                 tz = "")
-        ## ensure zip_dates and json_dates are ordered and assume 1-1 match
-        o_zip_dates <- order(zip_dates)
-        zip_dates <- zip_dates[o_zip_dates]
-        zip_files <- zip_files[o_zip_dates]
+        if (length(json_dates) != length(csv_dates)) {
+            warning("Number of workout files for ID ", athlete_id,  " does not match the number of workouts in ", json, ". Workouts have not been read.")
+            return(NA)
+        }
+        ## ensure csv_dates and json_dates are ordered and assume 1-1 match
+        o_csv_dates <- order(csv_dates)
+        csv_dates <- csv_dates[o_csv_dates]
+        csv_files <- csv_files[o_csv_dates]
         o_json_dates <- order(json_dates)
         json_dates <- json_dates[o_json_dates]
         sports <- sapply(js$RIDES, function(x) trackeR:::guess_sport(x$sport))
         sports <- sports[o_json_dates]
-        spec <- cols(
-            secs = col_double(),
-            km = col_double(),
-            power = col_double(),
-            hr = col_double(),
-            cad = col_double(),
-            alt = col_double())
+        spec <- readr::cols(
+            secs = readr::col_double(),
+            km = readr::col_double(),
+            power = readr::col_double(),
+            hr = readr::col_double(),
+            cad = readr::col_double(),
+            alt = readr::col_double())
         nsess <- length(sports)
         sessions <- as.list(numeric(nsess))
+        ## If js rides are more than files stop
+
         ## Read the files sequentially
         for (j in seq_along(sports)) {
-            if (is.na(sports[j])) next
-            cat(paste0(j, "/", nsess), "Reading file", zip_files[j], "|", "sport", sports[j], "|\n")
-            current_data <- read_csv(paste0(tmp_extraction_dir, "/", zip_files[j]),
+            if (is.na(sports[j])) {
+                warning("missing sport information for ",
+                        paste("ID", athlete_id), " file ",
+                        csv_files[j], ". Skipping.")
+
+                next
+            }
+            if (verbose) {
+                message(paste("ID", athlete_id, "|",
+                              "reading", csv_files[j],
+                              paste0("(", j, "/", nsess, ")"),
+                              "|", sports[j]), appendLF = TRUE)
+            }
+            csv_file <- file.path(extraction_dir, csv_files[j])
+            current_data <- readr::read_csv(csv_file,
                                      col_types = spec)
             n <- nrow(current_data)
             current_data <- with(current_data, {
@@ -53,20 +103,31 @@ process_workouts.GCOD_files <- function(object, verbose = FALSE) {
                     distance = km,
                     heart_rate = hr,
                     speed = rep(NA, n),
-                    cadence_running = rep(NA, n),
-                    cadence_cycling = cad,
+                    cadence_running = if (sports[j] == "running") 2 * cad else rep(NA, n),
+                    cadence_cycling = if (sports[j] == "cycling") cad else rep(NA, n),
                     power = power,
                     temperature = rep(NA, n))
             })
-            attr(current_data, "file") <- zip_files[j]
-            units0 <- generate_units(variable = "distance", unit = "km", sport = sports[j])
-            current_session <- trackeRdata(current_data, units = units0, sport = sports[j])
+            attr(current_data, "file") <- csv_file
+            current_session <- trackeR::trackeRdata(current_data, units = units0, sport = sports[j])
             sessions[[j]] <- current_session
         }
-        sessions <- do.call("c", sessions)
-        ## delete files, but keep zip if necessaryt
-        ## add progress option
+
+        inds <- identical(sessions, as.list(numeric(nsess)))
+        if (inds) {
+            return(NA)
+        }
+        else {
+            return(do.call("c", sessions[!inds]))
+        }
     }
+
+    out <- list()
+    for (k in seq.int(n_ids)) {
+
+        out[[athlete_id[k]]] <- process_id(extraction_dir[k], athlete_id[k])
+    }
+    names(out) <- athlete_id
+    out
+
 }
-
-

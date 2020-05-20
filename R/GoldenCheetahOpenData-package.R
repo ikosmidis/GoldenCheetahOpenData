@@ -15,6 +15,12 @@ extract_workouts <- function(object, ...) {
 }
 
 #' @export
+process_workouts <- function(object, ...) {
+    UseMethod("process_workouts")
+}
+
+
+#' @export
 n_ids <- function(object) {
     UseMethod("n_ids")
 }
