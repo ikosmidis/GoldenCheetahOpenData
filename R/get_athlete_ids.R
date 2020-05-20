@@ -1,4 +1,4 @@
-#' Retrieve information for the available athleted IDs in the GoldenCheetah OpenData project.
+#' Retrieve information for athlete IDs that are available in the GoldenCheetah OpenData project.
 #'
 #' @param n_ids integer indicating the maximum number of athlete IDs to return. Default is `Inf`, which will return all available athelte IDs.
 #' @param mirror either `"S3"` or `"OSF"`, indicating the GoldeCheetah OpenData mirror to use. Default and recommended is "S3". See Details.
@@ -66,6 +66,7 @@ get_athlete_ids <- function(n_ids = Inf,
         }
         names(out) <- c("key", "last_modified", "e_tag", "size", "owner_id", "owner_display_name", "storage_class", "bucket", "athlete_id")
         out$size <- as.numeric(out$size)
+        attr(out, "mirror") <- "S3"
         if (isTRUE(nrow(out))) {
             rownames(out) <- seq.int(nrow(out))
         }
@@ -95,15 +96,14 @@ print.GCOD_df <- function(object, txtplot = FALSE, ...) {
         total_size <- sum(sizes)
         min_size <- min(sizes)
         max_size <- max(sizes)
-        class(min_size) <- class(max_size) <- class(total_size) <- "object_size"
         date_range <- range(object$last_modified)
+        cat("Mirror:", attr(object, "mirror"), "\n")
         cat("Number of athlete IDs:", n_ids, "\n")
         cat("File sizes:",
-            "min =", format(min_size, units = "auto"), "|",
-            "max =", format(max_size, units = "auto"), "|",
-            "total =", format(total_size, units = "auto"), "\n")
+            "min =", format_object_size(min_size), "|",
+            "max =", format_object_size(max_size), "|",
+            "total =", format_object_size(total_size), "\n")
         cat("Last modified: between", paste(format(date_range), collapse = " and "), "\n")
-        ## txtbarchart(as.factor(format(object$last_modified, format = "%Y-%m")), ylab = "Athletes %")
         if (isTRUE(txtplot)) {
             cat("Athlete ID records modified per year quarter:\n")
             tabs <- cut(object$last_modified, breaks = "quarter", ordered_result = TRUE)

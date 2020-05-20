@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_athlete_ids.R
 \name{get_athlete_ids}
 \alias{get_athlete_ids}
-\title{Retrieve information for the available athleted IDs in the GoldenCheetah OpenData project.}
+\title{Retrieve information for athlete IDs that are available in the GoldenCheetah OpenData project.}
 \usage{
 get_athlete_ids(n_ids = Inf, mirror = "S3", prefix = NULL, ...)
 }
@@ -21,7 +21,7 @@ A \code{\link{data.frame}} inheriting from class \code{GCOD_df} with variables
 "owner_display_name", "storage_class", "bucket", and "athlete_id".
 }
 \description{
-Retrieve information for the available athleted IDs in the GoldenCheetah OpenData project.
+Retrieve information for athlete IDs that are available in the GoldenCheetah OpenData project.
 }
 \details{
 

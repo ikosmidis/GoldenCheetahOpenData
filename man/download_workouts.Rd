@@ -10,7 +10,7 @@ download_workouts(
   pattern = NULL,
   extract = FALSE,
   mirror = "S3",
-  verbose = TRUE,
+  verbose = FALSE,
   confirm = FALSE,
   overwrite = FALSE,
   ...

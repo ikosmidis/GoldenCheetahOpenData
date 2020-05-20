@@ -33,12 +33,12 @@
 #' }
 #'
 #' }
-download_workouts <- function(athlete_id,
+download_workouts <- function(object,
                               dir = tempdir(),
                               pattern = NULL,
                               extract = FALSE,
                               mirror = "S3",
-                              verbose = TRUE,
+                              verbose = FALSE,
                               confirm = FALSE,
                               overwrite = FALSE,
                               ...) {
@@ -46,23 +46,25 @@ download_workouts <- function(athlete_id,
     if (!dir.exists(dir)) {
         stop("'", dir, "' does not exist.")
     }
-    if (inherits(athlete_id, "GCOD_df")) {
-        sizes <- athlete_id$size
-        athlete_id <- athlete_id$athlete_id
+    if (inherits(object, "GCOD_df")) {
+        sizes <- object$size
+        athlete_id <- object$athlete_id
         if (!is.null(pattern)) {
             inds <- grepl(pattern, athlete_id)
             sizes <- sizes[inds]
             athlete_id <- athlete_id[inds]
+            object <- object[inds, ]
         }
     }
     else {
-        if (length(athlete_id) > 1) {
-            stop("length(athlete_id) should be 1.")
+        if (length(object) > 1) {
+            stop("Vectors of character strings are not supported for `object`.")
         }
-        athlete_id <- get_athlete_ids(mirror = mirror, prefix = athlete_id)
-        sizes <- athlete_id$size
-        athlete_id <- athlete_id$athlete_id
+        object <- get_athlete_ids(mirror = mirror, prefix = object)
+        sizes <- object$size
+        athlete_id <- object$athlete_id
     }
+
     ## Download
     n_ids <- length(athlete_id)
     if (n_ids == 0) {
@@ -70,22 +72,24 @@ download_workouts <- function(athlete_id,
     }
     if (isTRUE(confirm)) {
         total_size <- sum(sizes)
-        class(total_size) <- "object_size"
-        out <- askYesNo(paste("Continue downloading", format(total_size, units = "auto"), "of workout data for", n_ids, "athlete IDs?"))
+        out <- askYesNo(paste("Continue downloading", format_object_size(total_size), "of workout data for", n_ids, "athlete IDs?"))
         if (!isTRUE(out)) {
             return(NULL)
         }
     }
     if (isTRUE(mirror == "S3")) {
         gc_bucket <- 'goldencheetah-opendata'
-        object <- paste0("data/", athlete_id, ".zip")
-        file_names <- basename(object)
+        s3_path <- paste0("data/", athlete_id, ".zip")
+        file_names <- basename(s3_path)
         path <- file.path(dir, file_names)
         for (j in seq.int(n_ids)) {
             if (verbose) {
-                message(paste("Downloading", file_names[j], "... "), appendLF = FALSE)
+                current_size <- to_object_size(sizes[j])
+                message(paste("Downloading", file_names[j],
+                              paste0("(", format_object_size(sizes[j]),")"), "... "),
+                        appendLF = FALSE)
             }
-            save_object(object[j],
+            save_object(s3_path[j],
                         bucket = gc_bucket,
                         file = path[j],
                         overwrite = overwrite,
@@ -98,10 +102,8 @@ download_workouts <- function(athlete_id,
     if (isTRUE(mirror == "OSF")) {
         stop("OSF is not implemented yet.")
     }
-    out <- list(path = path,
-                extracted = FALSE,
-                mirror = mirror)
-    class(out) <- "GCOD_files"
+
+    out <- construct_GCOD_files(path, FALSE, TRUE, mirror, object)
     if (isTRUE(extract)) {
         out <- extract_workouts.GCOD_files(out, verbose, clean_up = TRUE, overwrite = TRUE)
     }

@@ -2,7 +2,7 @@
 
 ## Error if a vector of character strings
 expect_error(download_workouts(c("000", "001"), dir = tempdir(), verbose = TRUE),
-             pattern = "length\\(athlete_id\\) should be")
+             pattern = "Vectors of character strings are not supported")
 
 ## Error if dir does not exists
 set.seed(123)
