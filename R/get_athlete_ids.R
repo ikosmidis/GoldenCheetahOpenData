@@ -1,17 +1,18 @@
 #' Retrieve information for athlete IDs that are available in the GoldenCheetah OpenData project.
 #'
 #' @param n_ids integer indicating the maximum number of athlete IDs to return. Default is `Inf`, which will return all available athelte IDs.
-#' @param mirror either `"S3"` or `"OSF"`, indicating the GoldeCheetah OpenData mirror to use. Default and recommended is "S3". See Details.
+#' @param mirror either `"S3"` or `"OSF"`, indicating which GoldeCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.
 #' @param prefix character string that limits the response to athlete IDs that begin with it. Default is `NULL`, which does not limit responses.
 #' @param ... further options to be passed to `[aws.s3::get_bucket_df()]`.
 #' @details
 #'
 #' @return
-#' A [`data.frame`] inheriting from class `GCOD_df` with variables
-#' "key", "last_modified", "e_tag", "size", "owner_id",
-#' "owner_display_name", "storage_class", "bucket", and "athlete_id".
+#' A [`list`] also inheriting from class `gcod_db` with components `remote_db` (of class `gcod_remote_db`) and `local_db` (of class `gcod_local_db`). `remote_db` and `local_db` are [`data.frame`]s, also inheriting from classes `gcod_remote_db` and `gcod_local_db`, respectively. `local_db` has variables "path", "last_modified", "size", "extracted", "downloaded", "athlete_id"m and `remote_db` has variables "key", "last_modified", "e_tag", "size", "owner_id", "owner_display_name", "storage_class", "bucket", and "athlete_id".
 #'
-#' @seealso [`print.GCOD_df()`] [`min_size.GCOD_df()`] [`max_size.GCOD_df()`] [`total_size.GCOD_df()`] [`mean_size.GCOD_df()`] [`n_ids.GCOD_df()`]
+#' @details
+#'
+#'
+#' @seealso [`print.gcod_db()`] [`min_size.gcod_db()`] [`max_size.gcod_db()`] [`total_size.gcod_db()`] [`mean_size.gcod_db()`] [`n_ids.gcod_db()`]
 #'
 #' @references
 #' Liversedge, M. (2020). GoldenCheetah OpenData Project. OSF. \url{https://doi.org/10.17605/OSF.IO/6HFPZ}
@@ -49,68 +50,43 @@ get_athlete_ids <- function(n_ids = Inf,
     if (isTRUE(mirror == "S3")) {
         gc_bucket <- 'goldencheetah-opendata'
         athlete_prefix <- paste0("data/", prefix)
-        out <- get_bucket(bucket = gc_bucket,
-                          prefix = athlete_prefix,
-                          max = n_ids + 1,
-                          ...)
-        out <- as.data.frame(out, stringsAsFactors = FALSE)
+        remote_db <- get_bucket(bucket = gc_bucket,
+                                prefix = athlete_prefix,
+                                max = n_ids + 1,
+                                ...)
+        remote_db <- as.data.frame(remote_db, stringsAsFactors = FALSE)
         ## Get athlete id's
-        athlete <- gsub(".zip|data/", "", out[, 1])
+        athlete <- gsub(".zip|data/", "", remote_db[, 1])
         base_dir_index <- match("", athlete, nomatch = 0)
-        out$athlete_id <- athlete
+        remote_db$athlete_id <- athlete
         ## Assuming tz in amazon S3 is UTC
-        out$LastModified <- as.POSIXct(out$LastModified, tz = "UTC",
+        remote_db$LastModified <- as.POSIXct(remote_db$LastModified, tz = "UTC",
                                        format = "%Y-%m-%dT%H:%M:%S.000Z")
         if (base_dir_index) {
-            out <- out[-base_dir_index, ]
+            remote_db <- remote_db[-base_dir_index, ]
         }
-        names(out) <- c("key", "last_modified", "e_tag", "size", "owner_id", "owner_display_name", "storage_class", "bucket", "athlete_id")
-        out$size <- as.numeric(out$size)
-        attr(out, "mirror") <- "S3"
-        if (isTRUE(nrow(out))) {
-            rownames(out) <- seq.int(nrow(out))
+        names(remote_db) <- c("key", "last_modified", "e_tag", "size", "owner_id", "owner_display_name", "storage_class", "bucket", "athlete_id")
+        remote_db$size <- as.numeric(remote_db$size)
+        attr(remote_db, "mirror") <- "S3"
+        if (isTRUE(nrow(remote_db))) {
+            rownames(remote_db) <- seq.int(nrow(remote_db))
         }
     }
     if (isTRUE(mirror == "OSF")) {
         stop("OSF is not implemented yet")
     }
-    class(out) <- c("GCOD_df", class(out))
-    out
-}
-
-#' Print method for objects of class `GCOD_df`, as produced by [`get_athlete_ids()`].
-#'
-#' @param object an object of class `GCOD_df`.
-#' @param txtplot logical indicating whether or not a text barplot should be printed of the percent of athlete ID records modified per year quarter. Default is `FALSE`.
-#' @param ... currently not used.
- #'
-#' @export
-print.GCOD_df <- function(object, txtplot = FALSE, ...) {
-    n_ids <- nrow(object)
-    if (isTRUE(n_ids == 0)) {
-        cat("Number of athlete IDs:", 0, "\n")
-    }
-    else {
-        sizes <- object$size
-        ## Not using the min_size, max_size, etc, methods here
-        total_size <- sum(sizes)
-        min_size <- min(sizes)
-        max_size <- max(sizes)
-        date_range <- range(object$last_modified)
-        cat("Mirror:", attr(object, "mirror"), "\n")
-        cat("Number of athlete IDs:", n_ids, "\n")
-        cat("File sizes:",
-            "min =", format_object_size(min_size), "|",
-            "max =", format_object_size(max_size), "|",
-            "total =", format_object_size(total_size), "\n")
-        cat("Last modified: between", paste(format(date_range), collapse = " and "), "\n")
-        if (isTRUE(txtplot)) {
-            cat("Athlete ID records modified per year quarter:\n")
-            tabs <- cut(object$last_modified, breaks = "quarter", ordered_result = TRUE)
-            txtplot::txtbarchart(tabs, ylab = "Athletes %",
-                                 width = round(options()$width), pch = "=")
-        }
-    }
+    ## Dummy data to get the classes right
+    local_db <- data.frame(path = "a",
+                           last_modified = as.POSIXct("2000-01-01"),
+                           size = 1,
+                           extracted = FALSE,
+                           downloaded = FALSE,
+                           athlete_id = "a",
+                           stringsAsFactors = FALSE)
+    class(remote_db) <- c("gcod_remote_db", class(remote_db))
+    class(local_db) <- c("gcod_local_db", class(local_db))
+    ## Local is always empty when `get_athelte_ids` is called
+    construct_gcod_db(remote_db, local_db[-1, ])
 }
 
 

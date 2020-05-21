@@ -1,13 +1,13 @@
 #' Extract workouts from the archives downloaded using [`download_workouts()`].
 #'
 #' @rdname extract_workouts
-#' @param object an object of class `GCOD_files` as produced from [`download_workouts()`].
+#' @param object an object of class `gcod_db` as produced from [`download_workouts()`].
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
 #' @param clean_up logical determining whether the workout directories should be deleted before extraction, if they already exist. Default is `FALSE`.
 #' @param overwrite logical determining whether the workout directories should be overwritten, if they already exist. Default is `TRUE`.
 #'
 #' @return
-#' An object of class `GCOD_files` which is the same as `object` except that `object$extracted = TRUE`.
+#' An object of class `gcod_db` which is the same as `object` except that `object$extracted = TRUE`.
 #'
 #' The workouts are extracted and put in sub-directories in the same directory as the original archive (i.e. where the files `object$path` are). These sub-directories have exactly the same name as the archives (excluding the file extension).
 #'
@@ -18,11 +18,14 @@
 #' [`download_workouts()`]
 #'
 #' @export
-extract_workouts.GCOD_files <- function(object,
-                                        verbose = FALSE,
-                                        clean_up = FALSE,
-                                        overwrite = TRUE) {
-    path <- object$path
+extract_workouts.gcod_db <- function(object,
+                                     verbose = FALSE,
+                                     clean_up = FALSE,
+                                     overwrite = TRUE) {
+    path <- local_path(object)
+    if (length(path) == 0) {
+        stop("The are no references to local files in `object`. Run `download_workouts(object)` first.")
+    }
     n_paths <- length(path)
     athlete_id <- gsub(".zip", "", basename(path))
     for (j in seq.int(n_paths)) {
@@ -47,6 +50,6 @@ extract_workouts.GCOD_files <- function(object,
             message("Done.\n")
         }
     }
-    object$extracted <- TRUE
+    object$local_db$extracted <- TRUE
     object
 }

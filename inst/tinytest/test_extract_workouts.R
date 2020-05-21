@@ -18,8 +18,8 @@ expect_error(extract_workouts(out, verbose = FALSE, clean_up = FALSE, overwrite 
 expect_true(all(grepl("007", list.dirs(tempdir(), recursive = FALSE))))
 
 ## Test that extracted is TRUE
-expect_true(out1$extracted)
+expect_true(all(out1$local_db$extracted))
 
 ## Clean up
 expect_true(all(file.remove(out$path)))
-unlink(gsub(".zip", "", out$path), recursive = TRUE)
+unlink(gsub(".zip", "", out$local_db$path), recursive = TRUE)

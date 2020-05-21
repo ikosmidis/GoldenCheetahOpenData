@@ -9,21 +9,21 @@ get_athlete_ids(n_ids = Inf, mirror = "S3", prefix = NULL, ...)
 \arguments{
 \item{n_ids}{integer indicating the maximum number of athlete IDs to return. Default is \code{Inf}, which will return all available athelte IDs.}
 
-\item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating the GoldeCheetah OpenData mirror to use. Default and recommended is "S3". See Details.}
+\item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating which GoldeCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.}
 
 \item{prefix}{character string that limits the response to athlete IDs that begin with it. Default is \code{NULL}, which does not limit responses.}
 
 \item{...}{further options to be passed to \verb{[aws.s3::get_bucket_df()]}.}
 }
 \value{
-A \code{\link{data.frame}} inheriting from class \code{GCOD_df} with variables
-"key", "last_modified", "e_tag", "size", "owner_id",
-"owner_display_name", "storage_class", "bucket", and "athlete_id".
+A \code{\link{list}} also inheriting from class \code{gcod_db} with components \code{remote_db} (of class \code{gcod_remote_db}) and \code{local_db} (of class \code{gcod_local_db}). \code{remote_db} and \code{local_db} are \code{\link{data.frame}}s, also inheriting from classes \code{gcod_remote_db} and \code{gcod_local_db}, respectively. \code{local_db} has variables "path", "last_modified", "size", "extracted", "downloaded", "athlete_id"m and \code{remote_db} has variables "key", "last_modified", "e_tag", "size", "owner_id", "owner_display_name", "storage_class", "bucket", and "athlete_id".
 }
 \description{
 Retrieve information for athlete IDs that are available in the GoldenCheetah OpenData project.
 }
 \details{
+
+
 
 }
 \examples{
@@ -55,5 +55,5 @@ subset(ids, grepl("007", ids$athlete_id))
 Liversedge, M. (2020). GoldenCheetah OpenData Project. OSF. \url{https://doi.org/10.17605/OSF.IO/6HFPZ}
 }
 \seealso{
-\code{\link[=print.GCOD_df]{print.GCOD_df()}} \code{\link[=min_size.GCOD_df]{min_size.GCOD_df()}} \code{\link[=max_size.GCOD_df]{max_size.GCOD_df()}} \code{\link[=total_size.GCOD_df]{total_size.GCOD_df()}} \code{\link[=mean_size.GCOD_df]{mean_size.GCOD_df()}} \code{\link[=n_ids.GCOD_df]{n_ids.GCOD_df()}}
+\code{\link[=print.gcod_db]{print.gcod_db()}} \code{\link[=min_size.gcod_db]{min_size.gcod_db()}} \code{\link[=max_size.gcod_db]{max_size.gcod_db()}} \code{\link[=total_size.gcod_db]{total_size.gcod_db()}} \code{\link[=mean_size.gcod_db]{mean_size.gcod_db()}} \code{\link[=n_ids.gcod_db]{n_ids.gcod_db()}}
 }

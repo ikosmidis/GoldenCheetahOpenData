@@ -21,28 +21,33 @@ read_workouts <- function(object, ...) {
 
 
 #' @export
-n_ids <- function(object) {
+n_ids <- function(object, ...) {
     UseMethod("n_ids")
 }
 
 
 #' @export
-min_size <- function(object) {
+min_size <- function(object, ...) {
     UseMethod("min_size")
 }
 
 
 #' @export
-max_size <- function(object) {
+max_size <- function(object, ...) {
     UseMethod("max_size")
 }
 
 #' @export
-total_size <- function(object) {
+total_size <- function(object, ...) {
     UseMethod("total_size")
 }
 
 #' @export
-mean_size <- function(object) {
+mean_size <- function(object, ...) {
     UseMethod("mean_size")
+}
+
+#' @export
+local_path <- function(object, ...) {
+    UseMethod("local_path")
 }

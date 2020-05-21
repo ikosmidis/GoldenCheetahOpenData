@@ -1,9 +1,9 @@
 #' Download and, optionally, extract the archive with the workouts for a particular athlete ID in the GoldenCheetah OpenData project.
 #'
 #' @inheritParams get_athlete_ids
-#' @param athlete_id a character string with the athlete ID or the first few characters of it, or an object of class `GCOD_df` as constructed by [`get_athlete_ids()`].
-#' @param dir the directory to download the zip files for the selected athleted IDs.
-#' @param pattern character string containing a regular expression to be matched with the athlete IDs in `athlete_id`. Only applicable if `athlete_id` is an object of class `GCOD_df`. Default is `NULL`, which selects all IDs in `athlete_id`.
+#' @param athlete_id a character string with the athlete ID or the first few characters of it, or alternatively an object of class `gcod_db` as constructed by [`get_athlete_ids()`].
+#' @param dir the directory to download the zip files for the selected athlete IDs.
+#' @param pattern character string containing a regular expression to be matched with the athlete IDs in `athlete_id`. Only applicable if `athlete_id` is an object of class `gcod_db`. Default is `NULL`, which selects all IDs in `athlete_id`.
 #' @param extract logical determining whether the workout files in the downloaded archives should be extracted. Default is `FALSE`. If `TRUE`, then the archives are extractred in sub-directories unded `dir`. The sub-directories are named according to the athlete ID. See Details.
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
 #' @param confirm logical determining whether the user should be asked whether they should continue with the download or not. Default is `TRUE`.
@@ -26,7 +26,7 @@
 #'    files_007_1 <- download_workouts("007", confirm = TRUE)
 #' }
 #'
-#' ## Using a `GCOD_df` object and fitering using regex
+#' ## Using a `gcod_db` object and fitering using regex
 #' ids_00 <- get_athlete_ids(prefix = "00")
 #' if (interactive) {
 #'    files_007_2 <- download_workouts(ids_00, pattern = "007", confirm = TRUE)
@@ -34,7 +34,7 @@
 #'
 #' }
 download_workouts <- function(object,
-                              dir = tempdir(),
+                              local_dir = tempdir(),
                               pattern = NULL,
                               extract = FALSE,
                               mirror = "S3",
@@ -43,17 +43,17 @@ download_workouts <- function(object,
                               overwrite = FALSE,
                               ...) {
     mirror <- match.arg(mirror, c("OSF", "S3"))
-    if (!dir.exists(dir)) {
-        stop("'", dir, "' does not exist.")
+    if (!dir.exists(local_dir)) {
+        stop("'", local_dir, "' does not exist.")
     }
-    if (inherits(object, "GCOD_df")) {
-        sizes <- object$size
-        athlete_id <- object$athlete_id
+    if (inherits(object, "gcod_db")) {
+        sizes <- object$remote_db$size
+        athlete_id <- object$remote_db$athlete_id
         if (!is.null(pattern)) {
             inds <- grepl(pattern, athlete_id)
             sizes <- sizes[inds]
             athlete_id <- athlete_id[inds]
-            object <- object[inds, ]
+            object$remote_db <- object$remote_db[inds, ]
         }
     }
     else {
@@ -61,10 +61,9 @@ download_workouts <- function(object,
             stop("Vectors of character strings are not supported for `object`.")
         }
         object <- get_athlete_ids(mirror = mirror, prefix = object)
-        sizes <- object$size
-        athlete_id <- object$athlete_id
+        sizes <- object$remote_db$size
+        athlete_id <- object$remote_db$athlete_id
     }
-
     ## Download
     n_ids <- length(athlete_id)
     if (n_ids == 0) {
@@ -81,8 +80,12 @@ download_workouts <- function(object,
         gc_bucket <- 'goldencheetah-opendata'
         s3_path <- paste0("data/", athlete_id, ".zip")
         file_names <- basename(s3_path)
-        path <- file.path(dir, file_names)
+        path <- file.path(local_dir, file_names)
         for (j in seq.int(n_ids)) {
+            if (file.exists(path[j]) & !overwrite) {
+                message(file_names[j], " exists and `overwrite = FALSE`. Skipping.")
+                next
+            }
             if (verbose) {
                 current_size <- to_object_size(sizes[j])
                 message(paste("Downloading", file_names[j],
@@ -92,7 +95,7 @@ download_workouts <- function(object,
             save_object(s3_path[j],
                         bucket = gc_bucket,
                         file = path[j],
-                        overwrite = overwrite,
+                        overwrite = TRUE,
                         ...)
             if (verbose) {
                 message("Done.")
@@ -103,9 +106,17 @@ download_workouts <- function(object,
         stop("OSF is not implemented yet.")
     }
 
-    out <- construct_GCOD_files(path, FALSE, TRUE, mirror, object)
+    finfo <- file.info(path)
+    object$local_db <- data.frame(path = path,
+                                  last_modified = finfo$mtime,
+                                  size = finfo$size,
+                                  extracted = FALSE,
+                                  downloaded = TRUE,
+                                  athlete_id = athlete_id,
+                                  stringsAsFactors = FALSE)
+
     if (isTRUE(extract)) {
-        out <- extract_workouts.GCOD_files(out, verbose, clean_up = TRUE, overwrite = TRUE)
+        object <- extract_workouts(object, verbose, clean_up = TRUE, overwrite = TRUE)
     }
-    out
+    object
 }
