@@ -13,7 +13,7 @@
 \method{print}{gcod_local_db}(object, txtplot = FALSE, ...)
 }
 \arguments{
-\item{object}{an object of class \code{gcod_db}, \code{gcod_db} or \code{gcod_db}}
+\item{object}{an object of class \code{gcod_db}}
 
 \item{txtplot}{logical indicating whether or not text barplots should be printed for the remote and local databases showing the percentage of athlete ID records modified per year quarter. Default is \code{FALSE}.}
 

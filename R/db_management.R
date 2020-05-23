@@ -1,8 +1,39 @@
+#' Subset the local or remote perspective of a `gcod_db` object
+#'
+#' @param x an object of class `gcod_db`
+#' @param subset logical expression indicating records to keep in either `remote(x)` or `local(x)` according to the value of `perspective`;  missing values are taken as `FALSE`.
+#' @param perspective either `"remote"` (default) or `"local"`, for the perspective to subset.
+#' @param ... currently not used.
+#'
+#' @details
+#' See [`get_athlete_ids()`] for the variables each perspective holds.
+#'
+#' @export
+#' @examples
+#' \donttest{
+#' db <- get_athlete_ids()
+#' ## Return athletes from the remote perspective of db with "b7-9" in
+#' ## their IDs
+#' db79 <- subset(db, subset = grepl("b7-9", remote(db)$athlete_id), perspective = "remote")
+#' athlete_id(db79, perspective = "remote")
+#' }
+subset.gcod_db <- function(x, subset, perspective = "remote") {
+
+    switch(perspective,
+        "remote" = within(x, {
+            remote_db <- subset(x$remote_db, subset = subset)
+        }),
+        "local" = within(x, {
+            x$local_db <- subset(x$local_db, subset = subset)
+        }),
+        stop("`perspective` should be one of 'remote', 'local'"))
+}
 
 #' Checks whether the files in the remote paths of a `gcod_db` exist in `local_dir'
 #' @param object asd
 #' @param local_dir the directory to check zip files for the selected athlete IDs.
 #'
+#' @export
 exist_in.gcod_db <- function(object, local_dir) {
     ## Find out what is in local_dir
     local_ids <- athlete_id(object, db = "local")

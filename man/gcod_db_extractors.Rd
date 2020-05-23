@@ -41,7 +41,7 @@
 \arguments{
 \item{object}{an object of class \code{gcod_db}, as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
 
-\item{db}{Either \code{"remote"} (default) or \code{"local"}, for the database to use for the extractor function.}
+\item{db}{either \code{"remote"} (default) or \code{"local"}, for the database to use for the extractor function.}
 }
 \description{
 Extract information from an object of class \code{gcod_db}, as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.

@@ -1,7 +1,7 @@
 #' Print methods for objects of class `gcod_db`, as produced by [`get_athlete_ids()`].
 #'
 #' @name print.gcod_db
-#' @param object an object of class `gcod_db`, `gcod_db` or `gcod_db`
+#' @param object an object of class `gcod_db`
 #' @param txtplot logical indicating whether or not text barplots should be printed for the remote and local databases showing the percentage of athlete ID records modified per year quarter. Default is `FALSE`.
 #' @param ... currently not used.
 #'
@@ -78,7 +78,7 @@ print.gcod_local_db <- function(object, txtplot = FALSE, ...) {
 #' Extract information from an object of class `gcod_db`, as produced by [`get_athlete_ids()`].
 #' @name gcod_db_extractors
 #' @param object an object of class `gcod_db`, as produced by [`get_athlete_ids()`].
-#' @param db Either `"remote"` (default) or `"local"`, for the database to use for the extractor function.
+#' @param db either `"remote"` (default) or `"local"`, for the database to use for the extractor function.
 #'
 #' @details
 #' File sizes are reported in bytes but inherit from class `object_size`. So, `format.object_size()` can be used for pretty units, etc.
