@@ -6,7 +6,7 @@
 #' @rdname read_workouts
 #'
 #' @details
-#' If `object$extracted` is `FALSE`, then the workout files are extracted automatically using [`extract_workouts()`].
+#' If any of `local(object)$extracted` is `FALSE`, then the workout files are extracted automatically using [`extract_workouts()`].
 #'
 #' It is assumed that the filename for each workout corresponds to the timestamp where the first observation is made for the session. Timestamps are in UTC.
 #'
@@ -26,7 +26,7 @@
 #' 1--29. [doi:10.18637/jss.v082.i07](https://doi.org/10.18637/jss.v082.i07)
 #'
 #' @export
-read_workouts.gcod_db <- function(object, verbose = FALSE, delete = FALSE, ...) {
+read_workouts.gcod_db <- function(object, verbose = FALSE, ...) {
     if (any(!object$local_db$extracted)) {
         extract_workouts(object, verbose = verbose,
                          overwrite = FALSE, clean_up = FALSE)

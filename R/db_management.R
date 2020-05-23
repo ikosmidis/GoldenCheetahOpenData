@@ -3,15 +3,11 @@
 #' @param object asd
 #' @param local_dir the directory to check zip files for the selected athlete IDs.
 #'
-#' @details
-#' Will update local_db accordingly
-#' Ignores the contents of local_db, and rebuilds it according to the contents of local_dir
-check_local_dir.gcod_db <- function(object, local_dir) {
+exist_in.gcod_db <- function(object, local_dir) {
     ## Find out what is in local_dir
-    zip_paths <- dir(local_dir, pattern = ".zip", full.names = TRUE)
     local_ids <- athlete_id(object, db = "local")
     remote_ids <- athlete_id(object, db = "remote")
-    match(local_ids, remote_ids, nomatch = 0)
+    all(remote_ids %in% local_ids)
 }
 
 #' Attempts to rebuild a `gcod_db` from the contents of a local directory
@@ -43,13 +39,14 @@ rebuild_gcod_db.character <- function(object, mirror = "S3") {
     ids <- ids[inds]
     finfo <- file.info(zip_paths)
     ## Check whether the athelte_ids have been extracted
-    json_file <- paste0(ids, "/{", ids, "}.json")
+    json_file <- if (length(ids)) paste0(ids, "/{", ids, "}.json") else character(0)
     extracted <- file.exists(file.path(object, json_file))
+    downloaded <- rep(TRUE, length(ids))
     local_db <- data.frame(path = zip_paths,
                            last_modified = finfo$mtime,
                            size = finfo$size,
                            extracted = extracted,
-                           downloaded = TRUE,
+                           downloaded = downloaded,
                            athlete_id = ids,
                            stringsAsFactors = FALSE)
     make_gcod_db(remote_db, local_db)
