@@ -39,7 +39,9 @@ extract_workouts.gcod_db <- function(object,
         }
         if (!isTRUE(overwrite)) {
             if (file.exists(extraction_dir)) {
-                message("Exists.", appendLF = TRUE)
+                if (verbose) {
+                    message("Exists.", appendLF = TRUE)
+                }
                 next
             }
         }

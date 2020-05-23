@@ -196,10 +196,7 @@ check_local_dir.gcod_db <- function(object, local_dir) {
     zip_paths <- dir(local_dir, pattern = ".zip", full.names = TRUE)
     local_ids <- athlete_id(object, db = "local")
     remote_ids <- athlete_id(object, db = "remote")
-
     match(local_ids, remote_ids, nomatch = 0)
-
-    ## INCOMPLETE
 }
 
 #' Attempts to rebuild a `gcod_db` from the contents of a local directory
