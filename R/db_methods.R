@@ -78,7 +78,7 @@ print.gcod_local_db <- function(object, txtplot = FALSE, ...) {
 #' Extract information from an object of class `gcod_db`, as produced by [`get_athlete_ids()`].
 #' @name gcod_db_extractors
 #' @param object an object of class `gcod_db`, as produced by [`get_athlete_ids()`].
-#' @param db either `"remote"` (default) or `"local"`, for the database to use for the extractor function.
+#' @param perspective either `"remote"` (default) or `"local"`, for the perspective to use for the extractor function.
 #'
 #' @details
 #' File sizes are reported in bytes but inherit from class `object_size`. So, `format.object_size()` can be used for pretty units, etc.
@@ -91,74 +91,74 @@ NULL
 
 #' @rdname gcod_db_extractors
 #' @export
-n_ids.gcod_db <- function(object, db = "remote") {
-    switch(db,
+n_ids.gcod_db <- function(object, perspective = "remote") {
+    switch(perspective,
            "remote" = nrow(remote(object)),
            "local" = nrow(local(object)),
-           "`db` should be one of 'remote', 'local'")
+           "`perspective` should be one of 'remote', 'local'")
 }
 
 #' @rdname gcod_db_extractors
 #' @export
-min_size.gcod_db <- function(object, db = "remote") {
-    n <- n_ids(object, db = db)
-    out <- switch(db,
+min_size.gcod_db <- function(object, perspective = "remote") {
+    n <- n_ids(object, perspective = perspective)
+    out <- switch(perspective,
                   "remote" = ifelse(n > 0, min(remote(object)$size), 0),
                   "local" = ifelse(n > 0, min(local(object)$size), 0),
-                  "`db` should be one of 'remote', 'local'")
+                  "`perspective` should be one of 'remote', 'local'")
     to_object_size(out)
 }
 
 #' @rdname gcod_db_extractors
 #' @export
-max_size.gcod_db <- function(object, db = "remote") {
-    n <- n_ids(object, db = db)
-    out <- switch(db,
+max_size.gcod_db <- function(object, perspective = "remote") {
+    n <- n_ids(object, perspective = perspective)
+    out <- switch(perspective,
                   "remote" = ifelse(n > 0, max(remote(object)$size), 0),
                   "local" = ifelse(n > 0, max(local(object)$size), 0),
-                  "`db` should be one of 'remote', 'local'")
+                  "`perspective` should be one of 'remote', 'local'")
     to_object_size(out)
 }
 
 #' @rdname gcod_db_extractors
 #' @export
-total_size.gcod_db <- function(object, db = "remote") {
-    n <- n_ids(object, db = db)
-    out <- switch(db,
+total_size.gcod_db <- function(object, perspective = "remote") {
+    n <- n_ids(object, perspective = perspective)
+    out <- switch(perspective,
                   "remote" = ifelse(n > 0, sum(remote(object)$size), 0),
                   "local" = ifelse(n > 0, sum(local(object)$size), 0),
-                  "`db` should be one of 'remote', 'local'")
+                  "`perspective` should be one of 'remote', 'local'")
     to_object_size(out)
 }
 
 
 #' @rdname gcod_db_extractors
 #' @export
-total_size.gcod_db <- function(object, db = "remote") {
-    n <- n_ids(object, db = db)
-    out <- switch(db,
+total_size.gcod_db <- function(object, perspective = "remote") {
+    n <- n_ids(object, perspective = perspective)
+    out <- switch(perspective,
                   "remote" = ifelse(n > 0, sum(remote(object)$size), 0),
                   "local" = ifelse(n > 0, sum(local(object)$size), 0),
-                  "`db` should be one of 'remote', 'local'")
+                  "`perspective` should be one of 'remote', 'local'")
     to_object_size(out)
 }
 
 
 #' @rdname gcod_db_extractors
 #' @export
-mean_size.gcod_db <- function(object, db = "remote") {
-    n <- n_ids(object, db = db)
-    out <- switch(db,
+mean_size.gcod_db <- function(object, perspective = "remote") {
+    n <- n_ids(object, perspective = perspective)
+    out <- switch(perspective,
                   "remote" = ifelse(n > 0, mean(remote(object)$size), 0),
                   "local" = ifelse(n > 0, mean(local(object)$size), 0),
-                  "`db` should be one of 'remote', 'local'")
+                  "`perspective` should be one of 'remote', 'local'")
     to_object_size(out)
 }
 
 #' @rdname gcod_db_extractors
 #' @export
 local_path.gcod_db <- function(object, ...) {
-    object$local_db$path
+    local(object)$path
 }
 
 #' @rdname gcod_db_extractors
@@ -175,9 +175,9 @@ local.gcod_db <- function(object, ...) {
 
 #' @rdname gcod_db_extractors
 #' @export
-athlete_id.gcod_db <- function(object, db = "remote") {
-    switch(db,
+athlete_id.gcod_db <- function(object, perspective = "remote") {
+    switch(perspective,
            "remote" = remote(object)$athlete_id,
            "local" = local(object)$athlete_id,
-           "`db` should be one of 'remote', 'local'")
+           "`perspective` should be one of 'remote', 'local'")
 }

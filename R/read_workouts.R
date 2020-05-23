@@ -27,12 +27,12 @@
 #'
 #' @export
 read_workouts.gcod_db <- function(object, verbose = FALSE, ...) {
-    if (any(!object$local_db$extracted)) {
+    if (any(!local(object)$extracted)) {
         extract_workouts(object, verbose = verbose,
                          overwrite = FALSE, clean_up = FALSE)
     }
     path <- local_path(object)
-    athlete_id <- athlete_id(object, db = "local")
+    athlete_id <- athlete_id(object, perspective = "local")
     n_ids <- length(athlete_id)
     extraction_dir <- paste0(dirname(path), "/", athlete_id)
     units0 <- trackeR::generate_units(

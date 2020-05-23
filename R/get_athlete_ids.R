@@ -67,7 +67,6 @@ get_athlete_ids <- function(n_ids = Inf,
         }
         names(remote_db) <- c("key", "last_modified", "e_tag", "size", "owner_id", "owner_display_name", "storage_class", "bucket", "athlete_id")
         remote_db$size <- as.numeric(remote_db$size)
-        attr(remote_db, "mirror") <- "S3"
         if (isTRUE(nrow(remote_db))) {
             rownames(remote_db) <- seq.int(nrow(remote_db))
         }
@@ -84,7 +83,7 @@ get_athlete_ids <- function(n_ids = Inf,
                            athlete_id = "a",
                            stringsAsFactors = FALSE)
     ## Local is always empty when `get_athelte_ids` is called
-    make_gcod_db(remote_db, local_db[-1, ])
+    make_gcod_db(remote_db, local_db[-1, ], mirror = mirror)
 }
 
 

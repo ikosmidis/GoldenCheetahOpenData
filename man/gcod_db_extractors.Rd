@@ -18,17 +18,17 @@
 \alias{athlete_id.gcod_db}
 \title{Extract information from an object of class \code{gcod_db}, as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
 \usage{
-\method{n_ids}{gcod_db}(object, db = "remote")
+\method{n_ids}{gcod_db}(object, perspective = "remote")
 
-\method{min_size}{gcod_db}(object, db = "remote")
+\method{min_size}{gcod_db}(object, perspective = "remote")
 
-\method{max_size}{gcod_db}(object, db = "remote")
+\method{max_size}{gcod_db}(object, perspective = "remote")
 
-\method{total_size}{gcod_db}(object, db = "remote")
+\method{total_size}{gcod_db}(object, perspective = "remote")
 
-\method{total_size}{gcod_db}(object, db = "remote")
+\method{total_size}{gcod_db}(object, perspective = "remote")
 
-\method{mean_size}{gcod_db}(object, db = "remote")
+\method{mean_size}{gcod_db}(object, perspective = "remote")
 
 \method{local_path}{gcod_db}(object, ...)
 
@@ -36,12 +36,12 @@
 
 \method{local}{gcod_db}(object, ...)
 
-\method{athlete_id}{gcod_db}(object, db = "remote")
+\method{athlete_id}{gcod_db}(object, perspective = "remote")
 }
 \arguments{
 \item{object}{an object of class \code{gcod_db}, as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
 
-\item{db}{either \code{"remote"} (default) or \code{"local"}, for the database to use for the extractor function.}
+\item{perspective}{either \code{"remote"} (default) or \code{"local"}, for the perspective to use for the extractor function.}
 }
 \description{
 Extract information from an object of class \code{gcod_db}, as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.

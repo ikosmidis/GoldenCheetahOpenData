@@ -47,13 +47,15 @@ download_workouts <- function(object,
         stop("'", local_dir, "' does not exist.")
     }
     if (inherits(object, "gcod_db")) {
-        sizes <- object$remote_db$size
-        athlete_id <- object$remote_db$athlete_id
+
+        sizes <- remote(object)$size
+        athlete_id <- remote(object)$athlete_id
         if (!is.null(pattern)) {
             inds <- grepl(pattern, athlete_id)
             sizes <- sizes[inds]
             athlete_id <- athlete_id[inds]
             object$remote_db <- object$remote_db[inds, ]
+            attr(object$remote_db, "mirror") <- mirror
         }
     }
     else {
@@ -61,8 +63,8 @@ download_workouts <- function(object,
             stop("Vectors of character strings are not supported for `object`.")
         }
         object <- get_athlete_ids(mirror = mirror, prefix = object)
-        sizes <- object$remote_db$size
-        athlete_id <- athlete_id(object, db = "remote")
+        sizes <- remote(object)$size
+        athlete_id <- athlete_id(object, perspective = "remote")
     }
     ## Download
     n_ids <- length(athlete_id)
@@ -133,7 +135,8 @@ download_workouts <- function(object,
                            athlete_id = athlete_id,
                            stringsAsFactors = FALSE)
 
-    object <- make_gcod_db(object$remote_db, local_db)
+    object <- make_gcod_db(remote(object), local_db,
+                           attr(remote(object), "mirror"))
 
     if (isTRUE(extract)) {
         object <- extract_workouts(object, verbose, clean_up = TRUE, overwrite = TRUE)

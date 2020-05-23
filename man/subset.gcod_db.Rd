@@ -26,6 +26,7 @@ See \code{\link[=get_athlete_ids]{get_athlete_ids()}} for the variables each per
 db <- get_athlete_ids()
 ## Return athletes from the remote perspective of db with "b7-9" in
 ## their IDs
-subset(db, subset = grepl("b7-9", remote(db)$athlete_id), perspective = "remote")
+db79 <- subset(db, subset = grepl("b7-9", remote(db)$athlete_id), perspective = "remote")
+athlete_id(db79, perspective = "remote")
 }
 }

@@ -1,4 +1,4 @@
-make_gcod_db <- function(remote_db, local_db) {
+make_gcod_db <- function(remote_db, local_db, mirror) {
     if (!inherits(local_db, "gcod_local_db")) {
         class(local_db) <- c("gcod_local_db", class(local_db))
     }
@@ -8,6 +8,7 @@ make_gcod_db <- function(remote_db, local_db) {
     rownames(remote_db) <- rownames(local_db) <- NULL
     out <- list(remote_db = remote_db, local_db = local_db)
     class(out) <- c("gcod_db", class(out))
+    attr(out$remote_db, "mirror") <- mirror
     out
 }
 

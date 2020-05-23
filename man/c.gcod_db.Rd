@@ -4,19 +4,22 @@
 \alias{c.gcod_db}
 \title{Concatanate gcod_db objects}
 \usage{
-\method{c}{gcod_db}(..., db = "remote")
+\method{c}{gcod_db}(..., perspective = "remote")
 }
 \description{
 Concatanate gcod_db objects
 }
 \details{
-If \code{db = "remote"}, then \code{...$remote} are concatanated and
-\code{...$local_db} from the first object is used. If \code{db = "local"},
+If \code{perspective = "remote"}, then \code{...$remote} are concatanated and
+\code{...$local_db} from the first object is used. If \code{perspective = "local"},
 then \code{...$local} are concatanated and \code{...$remote_db} from the
-first object is used. If \code{db = "both"} then both  from \code{...$remote} and
+first object is used. If \code{perspective = "both"} then both  from \code{...$remote} and
 \code{...$local_db} are concatanated.
 
 Records with duplicated athlete IDs in the objects being
 concatenated are replaced, in the concatanated object, by a single
 record with the most recently modified entry.
+
+The mirror is inheritted from the first object supplied for
+concatenation.
 }

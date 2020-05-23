@@ -29,7 +29,7 @@ extract_workouts.gcod_db <- function(object,
         stop("The are no references to local files in `object`. Run `download_workouts(object)` first.")
     }
     n_paths <- length(path)
-    athlete_id <- athlete_id(object, db = "local")
+    athlete_id <- athlete_id(object, perspective = "local")
     for (j in seq.int(n_paths)) {
         current_path <- path[j]
         current_dir <- dirname(current_path)
