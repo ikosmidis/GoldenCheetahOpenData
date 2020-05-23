@@ -7,6 +7,9 @@ out <- download_workouts("007", dir = tempdir(), overwrite = TRUE)
 expect_message(extract_workouts(out, verbose = TRUE, clean_up = FALSE, overwrite = TRUE),
                "Extracting")
 
+expect_message(extract_workouts(out, verbose = TRUE, clean_up = FALSE, overwrite = FALSE),
+               "*Exists")
+
 ## Extract the files
 out1 <- extract_workouts(out)
 
@@ -21,5 +24,5 @@ expect_true(all(grepl("007", list.dirs(tempdir(), recursive = FALSE))))
 expect_true(all(out1$local_db$extracted))
 
 ## Clean up
-expect_true(all(file.remove(out$path)))
+expect_true(all(file.remove(local(out)$path)))
 unlink(gsub(".zip", "", out$local_db$path), recursive = TRUE)

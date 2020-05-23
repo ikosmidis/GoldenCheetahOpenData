@@ -14,20 +14,22 @@
 #' @details
 #' Athlete IDs are infered from `object$path`.
 #'
+#' Only modifies `local(object)$extracted` depending on whether the workout archives, were extracted successfully or not.
+#'
 #' @seealso
 #' [`download_workouts()`]
 #'
 #' @export
 extract_workouts.gcod_db <- function(object,
                                      verbose = FALSE,
-                                     clean_up = FALSE,
+                                     clean_up = TRUE,
                                      overwrite = TRUE) {
     path <- local_path(object)
     if (length(path) == 0) {
         stop("The are no references to local files in `object`. Run `download_workouts(object)` first.")
     }
     n_paths <- length(path)
-    athlete_id <- gsub(".zip", "", basename(path))
+    athlete_id <- athlete_id(object, db = "local")
     for (j in seq.int(n_paths)) {
         current_path <- path[j]
         current_dir <- dirname(current_path)
@@ -37,19 +39,36 @@ extract_workouts.gcod_db <- function(object,
         }
         if (!isTRUE(overwrite)) {
             if (file.exists(extraction_dir)) {
-                stop("Directory", extraction_dir, "exists. Use `overwrite = TRUE` to overwrite.")
+                message("Exists.", appendLF = TRUE)
+                next
             }
         }
         if (isTRUE(clean_up)) {
             unlink(extraction_dir, recursive = TRUE, force = TRUE)
         }
-        unzip(current_path,
-              overwrite = overwrite,
-              exdir = extraction_dir)
-        if (verbose) {
-            message("Done.\n")
+        unzip_attempt <- tryCatch({
+            unzip(current_path,
+                  overwrite = overwrite,
+                  exdir = extraction_dir)
+        },
+        warning = function(w) {
+            w
+        })
+
+        if (inherits(unzip_attempt, "warning")) {
+            object$local_db[athlete_id == athlete_id[j], "extracted"] <- FALSE
+            if (verbose) {
+                message("Failed.", appendLF = TRUE)
+            }
+            warning(unzip_attempt)
+            next
+        }
+        else {
+            object$local_db[athlete_id == athlete_id[j], "extracted"] <- TRUE
+            if (verbose) {
+                message("Done.", appendLF = TRUE)
+            }
         }
     }
-    object$local_db$extracted <- TRUE
     object
 }

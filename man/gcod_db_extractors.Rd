@@ -12,7 +12,10 @@
 \alias{max_size.gcod_db}
 \alias{total_size.gcod_db}
 \alias{mean_size.gcod_db}
-\alias{local_path}
+\alias{local_path.gcod_db}
+\alias{remote.gcod_db}
+\alias{local.gcod_db}
+\alias{athlete_id.gcod_db}
 \title{Extract information from an object of class \code{gcod_db}, as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
 \usage{
 \method{n_ids}{gcod_db}(object, db = "remote")
@@ -27,16 +30,26 @@
 
 \method{mean_size}{gcod_db}(object, db = "remote")
 
-local_path(object)
+\method{local_path}{gcod_db}(object, ...)
+
+\method{remote}{gcod_db}(object, ...)
+
+\method{local}{gcod_db}(object, ...)
+
+\method{athlete_id}{gcod_db}(object, db = "remote")
 }
 \arguments{
 \item{object}{an object of class \code{gcod_db}, as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
+
+\item{db}{Either \code{"remote"} (default) or \code{"local"}, for the database to use for the extractor function.}
 }
 \description{
 Extract information from an object of class \code{gcod_db}, as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.
 }
 \details{
 File sizes are reported in bytes but inherit from class \code{object_size}. So, \code{format.object_size()} can be used for pretty units, etc.
+
+\code{local_path()} extracts the local paths from the \code{gcod_db} file. \code{remote(object)} and \code{local(object)} are equivalent to \code{object$remote_db} and \code{object$local_db}, respectively.
 }
 \seealso{
 \code{\link[=get_athlete_ids]{get_athlete_ids()}}

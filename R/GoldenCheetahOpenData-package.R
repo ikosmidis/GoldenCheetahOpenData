@@ -51,3 +51,24 @@ mean_size <- function(object, ...) {
 local_path <- function(object, ...) {
     UseMethod("local_path")
 }
+
+
+#' @export
+remote <- function(object, ...) {
+    UseMethod("remote")
+}
+
+#' @export
+local <- function(object, ...) {
+    UseMethod("local")
+}
+
+#' @export
+athlete_id <- function(object, ...) {
+    UseMethod("athlete_id")
+}
+
+#' @export
+rebuild_gcod_db <- function(object, ...) {
+    UseMethod("rebuild_gcod_db")
+}

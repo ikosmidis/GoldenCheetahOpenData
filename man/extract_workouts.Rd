@@ -4,7 +4,7 @@
 \alias{extract_workouts.gcod_db}
 \title{Extract workouts from the archives downloaded using \code{\link[=download_workouts]{download_workouts()}}.}
 \usage{
-\method{extract_workouts}{gcod_db}(object, verbose = FALSE, clean_up = FALSE, overwrite = TRUE)
+\method{extract_workouts}{gcod_db}(object, verbose = FALSE, clean_up = TRUE, overwrite = TRUE)
 }
 \arguments{
 \item{object}{an object of class \code{gcod_db} as produced from \code{\link[=download_workouts]{download_workouts()}}.}
@@ -25,6 +25,8 @@ Extract workouts from the archives downloaded using \code{\link[=download_workou
 }
 \details{
 Athlete IDs are infered from \code{object$path}.
+
+Only modifies \code{local(object)$extracted} depending on whether the workout archives, were extracted successfully or not.
 }
 \seealso{
 \code{\link[=download_workouts]{download_workouts()}}

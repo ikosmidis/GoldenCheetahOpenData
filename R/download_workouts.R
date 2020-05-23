@@ -1,8 +1,8 @@
 #' Download and, optionally, extract the archive with the workouts for a particular athlete ID in the GoldenCheetah OpenData project.
 #'
 #' @inheritParams get_athlete_ids
-#' @param athlete_id a character string with the athlete ID or the first few characters of it, or alternatively an object of class `gcod_db` as constructed by [`get_athlete_ids()`].
-#' @param dir the directory to download the zip files for the selected athlete IDs.
+#' @param athlete_id a character string with the athlete ID or the first few characters of it, or alternatively an object of class `gcod_db` as produced by [`get_athlete_ids()`].
+#' @param local_dir the directory to download the zip files for the selected athlete IDs.
 #' @param pattern character string containing a regular expression to be matched with the athlete IDs in `athlete_id`. Only applicable if `athlete_id` is an object of class `gcod_db`. Default is `NULL`, which selects all IDs in `athlete_id`.
 #' @param extract logical determining whether the workout files in the downloaded archives should be extracted. Default is `FALSE`. If `TRUE`, then the archives are extractred in sub-directories unded `dir`. The sub-directories are named according to the athlete ID. See Details.
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
@@ -62,16 +62,17 @@ download_workouts <- function(object,
         }
         object <- get_athlete_ids(mirror = mirror, prefix = object)
         sizes <- object$remote_db$size
-        athlete_id <- object$remote_db$athlete_id
+        athlete_id <- athlete_id(object, db = "remote")
     }
     ## Download
     n_ids <- length(athlete_id)
+    downloaded <- logical(n_ids)
     if (n_ids == 0) {
         stop("There are no athlete IDs to download.")
     }
     if (isTRUE(confirm)) {
         total_size <- sum(sizes)
-        out <- askYesNo(paste("Continue downloading", format_object_size(total_size), "of workout data for", n_ids, "athlete IDs?"))
+        out <- askYesNo(paste("Attempting to download", format_object_size(total_size), "of workout data for", n_ids, "athlete IDs. Procced?"))
         if (!isTRUE(out)) {
             return(NULL)
         }
@@ -83,7 +84,10 @@ download_workouts <- function(object,
         path <- file.path(local_dir, file_names)
         for (j in seq.int(n_ids)) {
             if (file.exists(path[j]) & !overwrite) {
-                message(file_names[j], " exists and `overwrite = FALSE`. Skipping.")
+                if (verbose) {
+                    message(paste(file_names[j], "exists and `overwrite = FALSE`. Skipping."),
+                            appendLF = TRUE)
+                }
                 next
             }
             if (verbose) {
@@ -92,13 +96,27 @@ download_workouts <- function(object,
                               paste0("(", format_object_size(sizes[j]),")"), "... "),
                         appendLF = FALSE)
             }
-            save_object(s3_path[j],
-                        bucket = gc_bucket,
-                        file = path[j],
-                        overwrite = TRUE,
-                        ...)
+            ## Test object exists
+            s3_attempt <- try(object_exists(s3_path[j],
+                                            bucket = gc_bucket),
+                              silent = TRUE)
+            if (inherits(s3_attempt, "try-error")) {
+                warning(paste("Failed to download", file_names[j]))
+                if (verbose) {
+                    message("Failed.", appendLF = TRUE)
+                }
+                next
+            }
+            else {
+                save_object(s3_path[j],
+                            bucket = gc_bucket,
+                            file = path[j],
+                            overwrite = TRUE,
+                            ...)
+                downloaded[j] <- TRUE
+            }
             if (verbose) {
-                message("Done.")
+                message("Done.", appendLF = TRUE)
             }
         }
     }
@@ -107,16 +125,19 @@ download_workouts <- function(object,
     }
 
     finfo <- file.info(path)
-    object$local_db <- data.frame(path = path,
-                                  last_modified = finfo$mtime,
-                                  size = finfo$size,
-                                  extracted = FALSE,
-                                  downloaded = TRUE,
-                                  athlete_id = athlete_id,
-                                  stringsAsFactors = FALSE)
+    local_db <- data.frame(path = path,
+                           last_modified = finfo$mtime,
+                           size = finfo$size,
+                           extracted = FALSE,
+                           downloaded = downloaded,
+                           athlete_id = athlete_id,
+                           stringsAsFactors = FALSE)
+
+    object <- make_gcod_db(object$remote_db, local_db)
 
     if (isTRUE(extract)) {
         object <- extract_workouts(object, verbose, clean_up = TRUE, overwrite = TRUE)
     }
+
     object
 }

@@ -17,6 +17,8 @@ download_workouts(
 )
 }
 \arguments{
+\item{local_dir}{the directory to download the zip files for the selected athlete IDs.}
+
 \item{pattern}{character string containing a regular expression to be matched with the athlete IDs in \code{athlete_id}. Only applicable if \code{athlete_id} is an object of class \code{gcod_db}. Default is \code{NULL}, which selects all IDs in \code{athlete_id}.}
 
 \item{extract}{logical determining whether the workout files in the downloaded archives should be extracted. Default is \code{FALSE}. If \code{TRUE}, then the archives are extractred in sub-directories unded \code{dir}. The sub-directories are named according to the athlete ID. See Details.}
@@ -31,9 +33,7 @@ download_workouts(
 
 \item{...}{extra arguments to be passed to \code{\link[aws.s3:save_object]{aws.s3::save_object()}}.}
 
-\item{athlete_id}{a character string with the athlete ID or the first few characters of it, or alternatively an object of class \code{gcod_db} as constructed by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
-
-\item{dir}{the directory to download the zip files for the selected athlete IDs.}
+\item{athlete_id}{a character string with the athlete ID or the first few characters of it, or alternatively an object of class \code{gcod_db} as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
 }
 \description{
 Download and, optionally, extract the archive with the workouts for a particular athlete ID in the GoldenCheetah OpenData project.

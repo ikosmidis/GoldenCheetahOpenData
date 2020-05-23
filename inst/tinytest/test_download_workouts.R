@@ -28,7 +28,8 @@ expect_true(all(file.exists(out$local_db$path)))
 
 
 ## Check that overwrite works
-expect_message(out <- download_workouts("002", local_dir = tempdir(),
+expect_message(out <- download_workouts("0027fd", local_dir = tempdir(),
+                                        verbose = TRUE,
                                         extract = TRUE, overwrite = FALSE),
                pattern = "Skipping")
 
@@ -39,7 +40,7 @@ expect_true(file.exists(out$local_db$path))
 expect_true(dir.exists(dirname(out$local_db$path)))
 
 ## Clean up
-expect_true(all(file.remove(out$local_db$path)))
+system(paste("rm", file.path(tempdir(), "*.zip")))
 unlink(gsub(".zip", "", out$local_db$path), recursive = TRUE)
 
 

@@ -26,15 +26,15 @@
 #' 1--29. [doi:10.18637/jss.v082.i07](https://doi.org/10.18637/jss.v082.i07)
 #'
 #' @export
-read_workouts.GCOD_files <- function(object, verbose = FALSE, delete = FALSE, ...) {
-    if (!isTRUE(object$extracted)) {
-        extract_workouts.GCOD_files(object, verbose = FALSE, ...)
+read_workouts.gcod_db <- function(object, verbose = FALSE, delete = FALSE, ...) {
+    if (any(!object$local_db$extracted)) {
+        extract_workouts(object, verbose = verbose,
+                         overwrite = FALSE, clean_up = FALSE)
     }
-    path <- object$path
-    athlete_id <- gsub(".zip", "", basename(path))
+    path <- local_path(object)
+    athlete_id <- athlete_id(object, db = "local")
     n_ids <- length(athlete_id)
     extraction_dir <- paste0(dirname(path), "/", athlete_id)
-
     units0 <- trackeR::generate_units(
                            variable = c(rep(c("distance", "speed", "pace", "altitude"), 3),  "cadence_running"),
                            unit = c(rep(c("km", "km_per_h", "min_per_km", "m"), 3), "steps_per_min"),
@@ -65,23 +65,21 @@ read_workouts.GCOD_files <- function(object, verbose = FALSE, delete = FALSE, ..
         sports <- sapply(js$RIDES, function(x) trackeR:::guess_sport(x$sport))
         sports <- sports[o_json_dates]
         spec <- readr::cols(
-            secs = readr::col_double(),
-            km = readr::col_double(),
-            power = readr::col_double(),
-            hr = readr::col_double(),
-            cad = readr::col_double(),
-            alt = readr::col_double())
+                           secs = readr::col_double(),
+                           km = readr::col_double(),
+                           power = readr::col_double(),
+                           hr = readr::col_double(),
+                           cad = readr::col_double(),
+                           alt = readr::col_double())
         nsess <- length(sports)
-        sessions <- as.list(numeric(nsess))
+        sessions <- as.list(rep(NA, nsess))
         ## If js rides are more than files stop
-
         ## Read the files sequentially
         for (j in seq_along(sports)) {
             if (is.na(sports[j])) {
                 warning("missing sport information for ",
                         paste("ID", athlete_id), " file ",
                         csv_files[j], ". Skipping.")
-
                 next
             }
             if (verbose) {
@@ -92,7 +90,7 @@ read_workouts.GCOD_files <- function(object, verbose = FALSE, delete = FALSE, ..
             }
             csv_file <- file.path(extraction_dir, csv_files[j])
             current_data <- readr::read_csv(csv_file,
-                                     col_types = spec)
+                                            col_types = spec)
             n <- nrow(current_data)
             current_data <- with(current_data, {
                 data.frame(
@@ -113,11 +111,12 @@ read_workouts.GCOD_files <- function(object, verbose = FALSE, delete = FALSE, ..
             sessions[[j]] <- current_session
         }
 
-        inds <- identical(sessions, as.list(numeric(nsess)))
-        if (inds) {
+        inds <- is.na(sessions)
+        if (all(inds)) {
             return(NA)
         }
         else {
+            ## DO WE NEED inds here?m
             return(do.call("c", sessions[!inds]))
         }
     }

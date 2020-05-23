@@ -83,10 +83,8 @@ get_athlete_ids <- function(n_ids = Inf,
                            downloaded = FALSE,
                            athlete_id = "a",
                            stringsAsFactors = FALSE)
-    class(remote_db) <- c("gcod_remote_db", class(remote_db))
-    class(local_db) <- c("gcod_local_db", class(local_db))
     ## Local is always empty when `get_athelte_ids` is called
-    construct_gcod_db(remote_db, local_db[-1, ])
+    make_gcod_db(remote_db, local_db[-1, ])
 }
 
 
