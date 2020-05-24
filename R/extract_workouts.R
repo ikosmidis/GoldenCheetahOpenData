@@ -63,6 +63,7 @@ extract_workouts.gcod_db <- function(object,
                 message("Failed.", appendLF = TRUE)
             }
             warning(unzip_attempt)
+            unlink(extraction_dir, recursive = TRUE)
             next
         }
         else {
