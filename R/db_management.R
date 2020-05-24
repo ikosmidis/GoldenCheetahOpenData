@@ -151,4 +151,6 @@ clean_db.gcod_db <- function(object, confirm = TRUE, verbose = TRUE) {
     sub_dirs <- gsub(".zip", "", sub_dirs)
     ids <- basename(sub_dirs)
     do_clean_db(sub_dirs, ids, confirm, verbose)
+    object$local_db$extracted <- FALSE
+    object
 }

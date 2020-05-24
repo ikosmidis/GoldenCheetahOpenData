@@ -80,7 +80,12 @@ rebuild_gcod_db <- function(object, ...) {
 #' @param verbose
 #'
 #' @details
-#' If `object` is an object of class `gcod_db`, then `clean_db` looks for sub-directories with the same name as the zip files `local_path(object)`.
+#' If `object` is an object of class `gcod_db`, then `clean_db`, looks for sub-directories with the same name as the zip files `local_path(object)`.
+#'
+#' @return
+#'
+#' If `object` is a character string, then nothing is returned. If `object` is a `gcod_db` object, then the object is returned, with all elements of `local(object)$extracted` being `FALSE`.
+#'
 #' @aliases clean_db.character clean_db.gcod_db
 #' @export
 clean_db <- function(object, confirm = TRUE, verbose = TRUE) {

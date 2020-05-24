@@ -20,9 +20,12 @@ clean_db(object, confirm = TRUE, verbose = TRUE)
 
 \item{verbose}{}
 }
+\value{
+If \code{object} is a character string, then nothing is returned. If \code{object} is a \code{gcod_db} object, then the object is returned, with all elements of \code{local(object)$extracted} being \code{FALSE}.
+}
 \description{
 Clean up a directory from extracted subdirectories
 }
 \details{
-If \code{object} is an object of class \code{gcod_db}, then \code{clean_db} looks for sub-directories with the same name as the zip files \code{local_path(object)}.
+If \code{object} is an object of class \code{gcod_db}, then \code{clean_db}, looks for sub-directories with the same name as the zip files \code{local_path(object)}.
 }
