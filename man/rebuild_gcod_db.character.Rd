@@ -7,7 +7,7 @@
 \method{rebuild_gcod_db}{character}(object, mirror = "S3")
 }
 \arguments{
-\item{local_dir}{a character string giving the path to the directory to use for extracting athlete IDs.}
+\item{object}{a character string giving the path to the directory to use for extracting athlete IDs.}
 }
 \description{
 Attempts to rebuild a \code{gcod_db} from the contents of a local directory

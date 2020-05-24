@@ -43,7 +43,7 @@ exist_in.gcod_db <- function(object, local_dir) {
 
 #' Attempts to rebuild a `gcod_db` from the contents of a local directory
 #'
-#' @param local_dir a character string giving the path to the directory to use for extracting athlete IDs.
+#' @param object a character string giving the path to the directory to use for extracting athlete IDs.
 #' @export
 rebuild_gcod_db.character <- function(object, mirror = "S3") {
     if (!dir.exists(object)) {
@@ -131,4 +131,24 @@ c.gcod_db <- function(..., perspective = "remote") {
         remote_db <- rm_duplicates(remote_db)
     }
     make_gcod_db(remote_db, local_db, mirror)
+}
+
+#' @rdname clean_db
+#' @export
+clean_db.character <- function(object, confirm = TRUE, verbose = TRUE) {
+    if (!dir.exists(object)) {
+        stop(paste(object, "is either not a directory or does not exist."))
+    }
+    sub_dirs <- list.dirs(object, full.names = TRUE, recursive = FALSE)
+    ids <- basename(sub_dirs)
+    do_clean_db(sub_dirs, ids, confirm, verbose)
+}
+
+#' @rdname clean_db
+#' @export
+clean_db.gcod_db <- function(object, confirm = TRUE, verbose = TRUE) {
+    sub_dirs <- local_path(object)
+    sub_dirs <- gsub(".zip", "", sub_dirs)
+    ids <- basename(sub_dirs)
+    do_clean_db(sub_dirs, ids, confirm, verbose)
 }
