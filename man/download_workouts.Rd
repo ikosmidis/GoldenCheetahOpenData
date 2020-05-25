@@ -17,9 +17,11 @@ download_workouts(
 )
 }
 \arguments{
+\item{object}{a character string with the athlete ID or the first few characters of that, or alternatively an object of class \code{gcod_db} as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
+
 \item{local_dir}{the directory to download the workout archives for the selected athlete IDs.}
 
-\item{pattern}{character string containing a regular expression to be matched with the athlete IDs in \code{athlete_id}. Only applicable if \code{athlete_id} is an object of class \code{gcod_db}. Default is \code{NULL}, which selects all IDs in \code{athlete_id}.}
+\item{pattern}{character string containing a regular expression to be matched with the athlete IDs in \code{object}. Only applicable if \code{object} is an object of class \code{gcod_db}. Default is \code{NULL}, which selects all IDs in \code{object}.}
 
 \item{extract}{logical determining whether the workout files in the downloaded archives should be extracted. Default is \code{FALSE}. If \code{TRUE}, then the archives are extractred in sub-directories unded \code{local_dir}, named according to the athlete IDs. See Details.}
 
@@ -32,13 +34,11 @@ download_workouts(
 \item{overwrite}{logical determining whether existing archives with the same names as the ones selected for download should be overwritten. Default is \code{TRUE}.}
 
 \item{...}{extra arguments to be passed to \code{\link[aws.s3:save_object]{aws.s3::save_object()}}.}
-
-\item{athlete_id}{a character string with the athlete ID or the first few characters of that, or alternatively an object of class \code{gcod_db} as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
 }
 \value{
-If \code{athlete_id} is a character string then a \code{gcod_db} object is
+If \code{object} is a character string then a \code{gcod_db} object is
 return with corresponding remote and local perspective. If
-\code{athlete_id} is an object of class \code{gcod_db}, then \code{athlete_id} is
+\code{object} is an object of class \code{gcod_db}, then \code{object} is
 returned with the elements of \code{local(object)$downloaded} set to
 \code{TRUE} or \code{FALSE} depending on whether the corresponding workout
 archives were downloaded successfully or not.
@@ -54,13 +54,13 @@ If \code{extract = TRUE}, then \code{\link[=extract_workouts]{extract_workouts()
 \examples{
 \donttest{
 ## Using the first few letters of the athlete ID
-if (interactive) {
+if (interactive()) {
    files_007_1 <- download_workouts("007", confirm = TRUE)
 }
 
 ## Using a `gcod_db` object and fitering using regex
 ids_00 <- get_athlete_ids(prefix = "00")
-if (interactive) {
+if (interactive()) {
    files_007_2 <- download_workouts(ids_00, pattern = "007", confirm = TRUE)
 }
 

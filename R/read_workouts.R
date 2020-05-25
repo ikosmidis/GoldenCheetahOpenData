@@ -28,18 +28,18 @@
 #'
 #' @examples
 #'
-#' \donttest{
-#'
 #' ## Get the two IDs starting with "000e" and "000d" and concatenate
 #' ## them into a single `gcod_db` object
 #' ids000 <- lapply(c("000e", "000d"), function(x) get_athlete_ids(prefix = x))
 #' ids000 <- c(ids000[[1]], ids000[[2]])
 #'
+#' \donttest{
 #' ## Download the workout archives in tempdir()
 #' ids000 <- download_workouts(ids000, verbose = TRUE, overwrite = TRUE)
 #'
 #' ## Read the workouts. This will create a list of two `trackeRdata`
 #' ## objects with 2 and 56 workouts
+#' library("trackeR")
 #' w000 <- read_workouts(ids000, clean_db = TRUE, verbose = TRUE)
 #'
 #' ## Now we can use methods from the trackeR R package
@@ -53,7 +53,6 @@
 #' plot(summary(w000[[2]]), what = c("avgSpeed", "avgPower", "wrRatio"))
 #'
 #' }
-#'
 #'
 #' @export
 read_workouts.gcod_db <- function(object, verbose = FALSE, clean_db = TRUE, ...) {

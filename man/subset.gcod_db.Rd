@@ -4,7 +4,7 @@
 \alias{subset.gcod_db}
 \title{Subset the local or remote perspective of a \code{gcod_db} object}
 \usage{
-\method{subset}{gcod_db}(x, subset, perspective = "remote")
+\method{subset}{gcod_db}(x, subset, perspective = "remote", ...)
 }
 \arguments{
 \item{x}{an object of class \code{gcod_db}}

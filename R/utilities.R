@@ -8,7 +8,7 @@ do_clean_db <- function(sub_dirs, ids, confirm, verbose) {
         stop(paste("No workout directories found"))
     }
     if (isTRUE(confirm)) {
-        out <- askYesNo(paste0("Attempting to delete\n", paste(sub_dirs, collapse = "\n"),  "\nProcced?"))
+        out <- utils::askYesNo(paste0("Attempting to delete\n", paste(sub_dirs, collapse = "\n"),  "\nProcced?"))
         if (!isTRUE(out)) {
             return(NULL)
         }

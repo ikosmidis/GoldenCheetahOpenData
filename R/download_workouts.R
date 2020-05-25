@@ -1,9 +1,10 @@
 #' Download and, optionally, extract the workout archives the athlete IDs in the remote perspective of a `gcod_id` object.
 #'
+#' @rdname download_workouts
 #' @inheritParams get_athlete_ids
-#' @param athlete_id a character string with the athlete ID or the first few characters of that, or alternatively an object of class `gcod_db` as produced by [`get_athlete_ids()`].
+#' @param object a character string with the athlete ID or the first few characters of that, or alternatively an object of class `gcod_db` as produced by [`get_athlete_ids()`].
 #' @param local_dir the directory to download the workout archives for the selected athlete IDs.
-#' @param pattern character string containing a regular expression to be matched with the athlete IDs in `athlete_id`. Only applicable if `athlete_id` is an object of class `gcod_db`. Default is `NULL`, which selects all IDs in `athlete_id`.
+#' @param pattern character string containing a regular expression to be matched with the athlete IDs in `object`. Only applicable if `object` is an object of class `gcod_db`. Default is `NULL`, which selects all IDs in `object`.
 #' @param extract logical determining whether the workout files in the downloaded archives should be extracted. Default is `FALSE`. If `TRUE`, then the archives are extractred in sub-directories unded `local_dir`, named according to the athlete IDs. See Details.
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
 #' @param confirm logical determining whether the user should be asked whether they should continue with the download or not. Default is `TRUE`.
@@ -17,9 +18,9 @@
 #'
 #' @return
 #'
-#' If `athlete_id` is a character string then a `gcod_db` object is
+#' If `object` is a character string then a `gcod_db` object is
 #' return with corresponding remote and local perspective. If
-#' `athlete_id` is an object of class `gcod_db`, then `athlete_id` is
+#' `object` is an object of class `gcod_db`, then `object` is
 #' returned with the elements of `local(object)$downloaded` set to
 #' `TRUE` or `FALSE` depending on whether the corresponding workout
 #' archives were downloaded successfully or not.
@@ -33,17 +34,18 @@
 #' @examples
 #' \donttest{
 #' ## Using the first few letters of the athlete ID
-#' if (interactive) {
+#' if (interactive()) {
 #'    files_007_1 <- download_workouts("007", confirm = TRUE)
 #' }
 #'
 #' ## Using a `gcod_db` object and fitering using regex
 #' ids_00 <- get_athlete_ids(prefix = "00")
-#' if (interactive) {
+#' if (interactive()) {
 #'    files_007_2 <- download_workouts(ids_00, pattern = "007", confirm = TRUE)
 #' }
 #'
 #' }
+#' @export
 download_workouts <- function(object,
                               local_dir = tempdir(),
                               pattern = NULL,
@@ -85,7 +87,7 @@ download_workouts <- function(object,
     }
     if (isTRUE(confirm)) {
         total_size <- sum(sizes)
-        out <- askYesNo(paste("Attempting to download", format_object_size(total_size), "of workout data for", n_ids, "athlete IDs. Procced?"))
+        out <- utils::askYesNo(paste("Attempting to download", format_object_size(total_size), "of workout data for", n_ids, "athlete IDs. Procced?"))
         if (!isTRUE(out)) {
             return(NULL)
         }

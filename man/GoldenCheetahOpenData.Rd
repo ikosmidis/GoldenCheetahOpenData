@@ -3,4 +3,21 @@
 \docType{package}
 \name{GoldenCheetahOpenData}
 \alias{GoldenCheetahOpenData}
-\title{GoldenCheetahOpenData: R API to the GoldenCheetah OpenData Project and Management of Local Workout Database}
+\title{GoldenCheetahOpenData: R API to the GoldenCheetah OpenData Project
+and Management of Local Workout Databases}
+\description{
+GoldenCheetahOpenData provides an R API to the GoldenCheetah
+OpenData Project <doi: 10.17605/OSF.IO/6HFPZ>. Methods are provided
+to download workout data from the AWS S3 mirror of the
+GoldenCheetah OpenData Project and to wrangle the workout data and
+organize them into \code{trackeRdata} objects for further processing
+using the infrastructure of the \code{trackeR} R package.
+}
+\references{
+Liversedge, M. (2020). GoldenCheetah OpenData Project. OSF. \url{https://doi.org/10.17605/OSF.IO/6HFPZ}
+
+Frick, H., Kosmidis, I. (2017). trackeR: Infrastructure for Running
+and Cycling Data from GPS-Enabled Tracking Devices in R. \emph{Journal
+of Statistical Software}, \strong{82}(7),
+1--29. \href{https://doi.org/10.18637/jss.v082.i07}{doi:10.18637/jss.v082.i07}
+}

@@ -4,22 +4,28 @@
 \alias{rebuild_gcod_db.character}
 \title{Attempts to rebuild a \code{gcod_db} from the contents of a local directory}
 \usage{
-\method{rebuild_gcod_db}{character}(object, mirror = "S3")
+\method{rebuild_gcod_db}{character}(object, mirror = "S3", ...)
 }
 \arguments{
 \item{object}{a character string giving the path to the directory to use for extracting athlete IDs.}
+
+\item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating which GoldeCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.}
+
+\item{...}{currently not used.}
 }
 \value{
 An object of class \code{gcod_db}.
-\subsection{Download the workouts in tempdir()}{
-}
 }
 \description{
 Attempts to rebuild a \code{gcod_db} from the contents of a local directory
 }
+\details{
+\code{mirror = OSF} currently returns an error and will be supported in future versions.
+}
 \examples{
 \donttest{
 ids007 <- get_athlete_ids(prefix = "007")
+## Download the workouts in tempdir()
 ids007 <- download_workouts(ids007)
 ## Test that the rebuild `gcod_db` object is identical to ids007
 identical(ids007, rebuild_gcod_db(tempdir()))

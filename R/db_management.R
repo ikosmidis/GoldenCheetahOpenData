@@ -20,7 +20,7 @@
 #' db79 <- subset(db, subset = grepl("b7-9", athlete_id(db)), perspective = "remote")
 #' athlete_id(db79, perspective = "remote")
 #' }
-subset.gcod_db <- function(x, subset, perspective = "remote") {
+subset.gcod_db <- function(x, subset, perspective = "remote", ...) {
 
     switch(perspective,
         "remote" = within(x, {
@@ -38,12 +38,13 @@ subset.gcod_db <- function(x, subset, perspective = "remote") {
 #' @param object an object of class `gcod_db`.
 #' @param local_dir the directory to check for the workout archives
 #'     for `athlete_id(object, perspective = "remote")`.
+#' @param ... currently not used.
 #'
 #' @return
 #' A vector of the same length as `n_ids(object, perspective = "remote")`.
 #'
 #' @examples
-#' \dontest{
+#' \donttest{
 #' ids007 <- get_athlete_ids(prefix = "007")
 #' ## Download the workouts for the first athlete in tempdir()
 #' id <- subset(ids007, athlete_id(ids007) == athlete_id(ids007)[2])
@@ -53,7 +54,7 @@ subset.gcod_db <- function(x, subset, perspective = "remote") {
 #' exist_in(ids007, tempdir())
 #' }
 #' @export
-exist_in.gcod_db <- function(object, local_dir) {
+exist_in.gcod_db <- function(object, local_dir, ...) {
     ## Find out what is in local_dir
     remote_files <- gsub("data/", "", remote(object)$key)
     local_files <- file.exists(paste0(local_dir, "/", remote_files))
@@ -64,20 +65,25 @@ exist_in.gcod_db <- function(object, local_dir) {
 #' Attempts to rebuild a `gcod_db` from the contents of a local directory
 #'
 #' @param object a character string giving the path to the directory to use for extracting athlete IDs.
+#' @param mirror either `"S3"` or `"OSF"`, indicating which GoldeCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.
+#' @param ... currently not used.
+#'
+#' @details
+#' `mirror = OSF` currently returns an error and will be supported in future versions.
 #'
 #' @return
 #' An object of class `gcod_db`.
-#' ## Download the workouts in tempdir()
 #'
 #' @examples
 #' \donttest{
 #' ids007 <- get_athlete_ids(prefix = "007")
+#' ## Download the workouts in tempdir()
 #' ids007 <- download_workouts(ids007)
 #' ## Test that the rebuild `gcod_db` object is identical to ids007
 #' identical(ids007, rebuild_gcod_db(tempdir()))
 #' }
 #' @export
-rebuild_gcod_db.character <- function(object, mirror = "S3") {
+rebuild_gcod_db.character <- function(object, mirror = "S3", ...) {
     if (!dir.exists(object)) {
         stop(paste(object, "is either not a directory or does not exist."))
     }

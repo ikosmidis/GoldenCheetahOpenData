@@ -18,7 +18,7 @@ clean_db(object, confirm = TRUE, verbose = TRUE)
 
 \item{confirm}{logical determining whether the user should be prompted to confirm whether they should continue with the deletion. Default is \code{TRUE}.}
 
-\item{verbose}{}
+\item{verbose}{logical determining whether progress information should be printed. Default is \code{TRUE}.}
 }
 \value{
 If \code{object} is a character string, then nothing is returned. If \code{object} is a \code{gcod_db} object, then the object is returned, with all elements of \code{local(object)$extracted} set to \code{FALSE}.

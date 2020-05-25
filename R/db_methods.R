@@ -1,37 +1,36 @@
 #' Print methods for objects of class `gcod_db`, as produced by [`get_athlete_ids()`].
 #'
-#' @param object an object of class `gcod_db`
+#' @param x an object of class `gcod_db`
 #' @param txtplot logical indicating whether or not text barplots should be printed for the remote and local perspectives showing the percentage of athlete ID records modified per year quarter. Default is `FALSE`.
 #' @param ... currently not used.
 #'
 #' @aliases print.gcod_remote_db print.gcod_local_db
 #'
-#' @seealso [`get_athlete_ids()`] [`download_athlete_ids()`] [`extract_athlete_ids()`]
+#' @seealso [`get_athlete_ids()`] [`download_workouts()`] [`extract_workouts()`]
 #' @export
-print.gcod_db <- function(object, txtplot = FALSE, ...) {
+print.gcod_db <- function(x, txtplot = FALSE, ...) {
     cat("Remote perspective\n")
-    print.gcod_remote_db(remote(object), txtplot, ...)
+    print.gcod_remote_db(remote(x), txtplot, ...)
     cat("\n")
     cat("Local perspective\n")
-    print.gcod_local_db(local(object), txtplot, ...)
+    print.gcod_local_db(local(x), txtplot, ...)
 }
 
 #' @rdname print.gcod_db
 #' @export
-print.gcod_remote_db <- function(object, txtplot = FALSE, ...) {
-    object <- object
-    n_ids <- nrow(object)
+print.gcod_remote_db <- function(x, txtplot = FALSE, ...) {
+    n_ids <- nrow(x)
     if (isTRUE(n_ids == 0)) {
         cat("Number of athlete IDs:", 0, "\n")
     }
     else {
-        sizes <- object$size
+        sizes <- x$size
         ## Not using the min_size, max_size, etc, methods here
         total_size <- sum(sizes)
         min_size <- min(sizes)
         max_size <- max(sizes)
-        date_range <- range(object$last_modified)
-        cat("Mirror:", attr(object, "mirror"), "\n")
+        date_range <- range(x$last_modified)
+        cat("Mirror:", attr(x, "mirror"), "\n")
         cat("Number of athlete IDs:", n_ids, "\n")
         cat("File sizes:",
             "min =", format_object_size(min_size), "|",
@@ -40,7 +39,7 @@ print.gcod_remote_db <- function(object, txtplot = FALSE, ...) {
         cat("Last modified: between", paste(format(date_range), collapse = " and "), "\n")
         if (isTRUE(txtplot)) {
             cat("Athlete ID records modified per year quarter:\n")
-            tabs <- cut(object$last_modified, breaks = "quarter", ordered_result = TRUE)
+            tabs <- cut(x$last_modified, breaks = "quarter", ordered_result = TRUE)
             txtplot::txtbarchart(tabs, ylab = "Athletes %",
                                  width = round(options()$width), pch = "=")
         }
@@ -49,18 +48,18 @@ print.gcod_remote_db <- function(object, txtplot = FALSE, ...) {
 
 #' @rdname print.gcod_db
 #' @export
-print.gcod_local_db <- function(object, txtplot = FALSE, ...) {
-    n_ids <- nrow(object)
+print.gcod_local_db <- function(x, txtplot = FALSE, ...) {
+    n_ids <- nrow(x)
     if (isTRUE(n_ids == 0)) {
         cat("Number of athlete IDs:", 0, "\n")
     }
     else {
-        sizes <- object$size
+        sizes <- x$size
         ## Not using the min_size, max_size, etc, methods here
         total_size <- sum(sizes)
         min_size <- min(sizes)
         max_size <- max(sizes)
-        date_range <- range(object$last_modified)
+        date_range <- range(x$last_modified)
         cat("Number of athlete IDs:", n_ids, "\n")
         cat("File sizes:",
             "min =", format_object_size(min_size), "|",
@@ -69,7 +68,7 @@ print.gcod_local_db <- function(object, txtplot = FALSE, ...) {
         cat("Last modified: between", paste(format(date_range), collapse = " and "), "\n")
         if (isTRUE(txtplot)) {
             cat("Athlete ID records modified per year quarter:\n")
-            tabs <- cut(object$last_modified, breaks = "quarter", ordered_result = TRUE)
+            tabs <- cut(x$last_modified, breaks = "quarter", ordered_result = TRUE)
             txtplot::txtbarchart(tabs, ylab = "Athletes %",
                                  width = round(options()$width), pch = "=")
         }
@@ -78,12 +77,14 @@ print.gcod_local_db <- function(object, txtplot = FALSE, ...) {
 
 #' Extract information from an object of class `gcod_db`, as produced
 #' by [`get_athlete_ids()`].
+#'
 #' @name gcod_db_extractors
 #'
 #' @param object an object of class `gcod_db`, as produced by
 #'     [`get_athlete_ids()`].
 #' @param perspective either `"remote"` (default) or `"local"`, for
 #'     the perspective to use for the extractor function.
+#' @param ... currently not used.
 #' 
 #' @details
 #'
@@ -101,12 +102,11 @@ print.gcod_local_db <- function(object, txtplot = FALSE, ...) {
 #' perspective, and `athlete_id()` the athlete IDs themselves.
 #' 
 #' @seealso [`get_athlete_ids()`]
-#' @aliases min_size max_size mean_size total_size n_ids
 NULL
 
 #' @rdname gcod_db_extractors
 #' @export
-n_ids.gcod_db <- function(object, perspective = "remote") {
+n_ids.gcod_db <- function(object, perspective = "remote", ...) {
     switch(perspective,
            "remote" = nrow(remote(object)),
            "local" = nrow(local(object)),
@@ -115,7 +115,7 @@ n_ids.gcod_db <- function(object, perspective = "remote") {
 
 #' @rdname gcod_db_extractors
 #' @export
-min_size.gcod_db <- function(object, perspective = "remote") {
+min_size.gcod_db <- function(object, perspective = "remote", ...) {
     n <- n_ids(object, perspective = perspective)
     out <- switch(perspective,
                   "remote" = ifelse(n > 0, min(remote(object)$size), 0),
@@ -126,7 +126,7 @@ min_size.gcod_db <- function(object, perspective = "remote") {
 
 #' @rdname gcod_db_extractors
 #' @export
-max_size.gcod_db <- function(object, perspective = "remote") {
+max_size.gcod_db <- function(object, perspective = "remote", ...) {
     n <- n_ids(object, perspective = perspective)
     out <- switch(perspective,
                   "remote" = ifelse(n > 0, max(remote(object)$size), 0),
@@ -137,7 +137,7 @@ max_size.gcod_db <- function(object, perspective = "remote") {
 
 #' @rdname gcod_db_extractors
 #' @export
-total_size.gcod_db <- function(object, perspective = "remote") {
+total_size.gcod_db <- function(object, perspective = "remote", ...) {
     n <- n_ids(object, perspective = perspective)
     out <- switch(perspective,
                   "remote" = ifelse(n > 0, sum(remote(object)$size), 0),
@@ -149,7 +149,7 @@ total_size.gcod_db <- function(object, perspective = "remote") {
 
 #' @rdname gcod_db_extractors
 #' @export
-mean_size.gcod_db <- function(object, perspective = "remote") {
+mean_size.gcod_db <- function(object, perspective = "remote", ...) {
     n <- n_ids(object, perspective = perspective)
     out <- switch(perspective,
                   "remote" = ifelse(n > 0, mean(remote(object)$size), 0),
@@ -178,7 +178,7 @@ local.gcod_db <- function(object, ...) {
 
 #' @rdname gcod_db_extractors
 #' @export
-athlete_id.gcod_db <- function(object, perspective = "remote") {
+athlete_id.gcod_db <- function(object, perspective = "remote", ...) {
     switch(perspective,
            "remote" = remote(object)$athlete_id,
            "local" = local(object)$athlete_id,

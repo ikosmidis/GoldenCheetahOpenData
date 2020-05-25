@@ -4,6 +4,7 @@
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
 #' @param clean_up logical determining whether the workout directories should be deleted before extraction, if they already exist. Default is `FALSE`.
 #' @param overwrite logical determining whether the workout directories should be overwritten, if they already exist. Default is `TRUE`.
+#' @param ... currently not used.
 #'
 #' @return
 #' An object of class `gcod_db` which is the same as `object` except
@@ -26,7 +27,8 @@
 extract_workouts.gcod_db <- function(object,
                                      verbose = FALSE,
                                      clean_up = TRUE,
-                                     overwrite = TRUE) {
+                                     overwrite = TRUE,
+                                     ...) {
     path <- local_path(object)
     if (length(path) == 0) {
         stop("The are no references to local files in `object`. Run `download_workouts(object)` first.")
@@ -53,9 +55,9 @@ extract_workouts.gcod_db <- function(object,
             unlink(extraction_dir, recursive = TRUE, force = TRUE)
         }
         unzip_attempt <- tryCatch({
-            unzip(current_path,
-                  overwrite = overwrite,
-                  exdir = extraction_dir)
+            utils::unzip(current_path,
+                         overwrite = overwrite,
+                         exdir = extraction_dir)
         },
         warning = function(w) {
             w
