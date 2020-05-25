@@ -22,7 +22,7 @@ expect_error(download_workouts("abcdefg", local_dir = tempdir(), confirm = TRUE)
 out <- download_workouts("002", local_dir = tempdir())
 expect_true(grepl("0027fd73-2e77", out$local_db$path))
 expect_false(out$local_db$extracted)
-expect_identical(attr(remote(out), "mirror"), "S3")
+expect_identical(attr(remote_perspective(out), "mirror"), "S3")
 expect_true(inherits(out, "gcod_db"))
 expect_true(all(file.exists(out$local_db$path)))
 

@@ -8,7 +8,7 @@
 #'
 #' @return
 #' An object of class `gcod_db` which is the same as `object` except
-#' that the elements of `local(object)$extracted` are set to `TRUE` or
+#' that the elements of `local_perspective(object)$extracted` are set to `TRUE` or
 #' `FALSE` depending on whether the corresponding workout archives
 #' were extracted successfully or not.
 #'

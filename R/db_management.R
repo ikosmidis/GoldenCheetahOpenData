@@ -1,7 +1,7 @@
 #' Subset the local or remote perspective of a `gcod_db` object
 #'
 #' @param x an object of class `gcod_db`
-#' @param subset logical expression indicating records to keep in either `remote(x)` or `local(x)` according to the value of `perspective`;  missing values are taken as `FALSE`.
+#' @param subset logical expression indicating records to keep in either `remote_perspective(x)` or `local_perspective(x)` according to the value of `perspective`;  missing values are taken as `FALSE`.
 #' @param perspective either `"remote"` (default) or `"local"`, for the perspective to subset.
 #' @param ... currently not used.
 #'
@@ -24,10 +24,10 @@ subset.gcod_db <- function(x, subset, perspective = "remote", ...) {
 
     switch(perspective,
         "remote" = within(x, {
-            remote_db <- subset(remote(x), subset = subset)
+            remote_db <- subset(remote_perspective(x), subset = subset)
         }),
         "local" = within(x, {
-            local_db <- subset(local(x), subset = subset)
+            local_db <- subset(local_perspective(x), subset = subset)
         }),
         stop("`perspective` should be one of 'remote', 'local'"))
 }
@@ -56,7 +56,7 @@ subset.gcod_db <- function(x, subset, perspective = "remote", ...) {
 #' @export
 exist_in.gcod_db <- function(object, local_dir, ...) {
     ## Find out what is in local_dir
-    remote_files <- gsub("data/", "", remote(object)$key)
+    remote_files <- gsub("data/", "", remote_perspective(object)$key)
     local_files <- file.exists(paste0(local_dir, "/", remote_files))
     names(local_files) <- remote_files
     local_files
@@ -100,7 +100,7 @@ rebuild_gcod_db.character <- function(object, mirror = "S3", ...) {
     ## same dir, so no duplicates can result in the remotes from c
     gcod_dbs <- lapply(prefix, function(x) get_athlete_ids(prefix = x, mirror = mirror))
     inds <- sapply(gcod_dbs, n_ids) > 0
-    remote_db <- remote(do.call(function(...) {
+    remote_db <- remote_perspective(do.call(function(...) {
         c.gcod_db(..., perspective = "remote")
     }, gcod_dbs))
     ## local_db
@@ -152,7 +152,7 @@ c.gcod_db <- function(..., perspective = "remote") {
     input <- list(...)
     input <- input[!unlist(lapply(input, is.null))]
     ninput <- length(input)
-    mirror <- attr(remote(input[[1]]), "mirror")
+    mirror <- attr(remote_perspective(input[[1]]), "mirror")
     rm_duplicates <- function(db) {
         ## Keeps the most recent file for each athlete id
         db <- db[order(db$last_modified, decreasing = TRUE), ]
@@ -161,18 +161,18 @@ c.gcod_db <- function(..., perspective = "remote") {
     }
     if (isTRUE(perspective == "remote")) {
         local_db <- input[[1]]$local_db
-        remote_db <- do.call("rbind", lapply(input, remote))
+        remote_db <- do.call("rbind", lapply(input, remote_perspective))
         remote_db <- rm_duplicates(remote_db)
     }
     if (isTRUE(perspective == "local")) {
-        local_db <- do.call("rbind", lapply(input, local))
+        local_db <- do.call("rbind", lapply(input, local_perspective))
         local_db <- rm_duplicates(local_db)
         remote_db <- input[[1]]$remote_db
     }
     if (isTRUE(perspective == "both")) {
-        local_db <- do.call("rbind", lapply(input, local))
+        local_db <- do.call("rbind", lapply(input, local_perspective))
         local_db <- rm_duplicates(local_db)
-        remote_db <- do.call("rbind", lapply(input, remote))
+        remote_db <- do.call("rbind", lapply(input, remote_perspective))
         remote_db <- rm_duplicates(remote_db)
     }
     make_gcod_db(remote_db, local_db, mirror)

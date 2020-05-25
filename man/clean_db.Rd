@@ -21,7 +21,7 @@ clean_db(object, confirm = TRUE, verbose = TRUE)
 \item{verbose}{logical determining whether progress information should be printed. Default is \code{TRUE}.}
 }
 \value{
-If \code{object} is a character string, then nothing is returned. If \code{object} is a \code{gcod_db} object, then the object is returned, with all elements of \code{local(object)$extracted} set to \code{FALSE}.
+If \code{object} is a character string, then nothing is returned. If \code{object} is a \code{gcod_db} object, then the object is returned, with all elements of \code{local_perspective(object)$extracted} set to \code{FALSE}.
 }
 \description{
 Clean up a directory from extracted workout sub-directories.

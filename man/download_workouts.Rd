@@ -39,7 +39,7 @@ download_workouts(
 If \code{object} is a character string then a \code{gcod_db} object is
 return with corresponding remote and local perspective. If
 \code{object} is an object of class \code{gcod_db}, then \code{object} is
-returned with the elements of \code{local(object)$downloaded} set to
+returned with the elements of \code{local_perspective(object)$downloaded} set to
 \code{TRUE} or \code{FALSE} depending on whether the corresponding workout
 archives were downloaded successfully or not.
 }

@@ -10,5 +10,5 @@ expect_true(is.na(res[[2]]))
 expect_true(is(res[[1]], "trackeRdata"))
 
 ## Clean up
-file.remove(local(out)$path)
+file.remove(local_perspective(out)$path)
 unlink(gsub(".zip", "", out$path), recursive = TRUE)

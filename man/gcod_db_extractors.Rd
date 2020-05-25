@@ -8,8 +8,8 @@
 \alias{total_size}
 \alias{mean_size}
 \alias{local_path}
-\alias{remote}
-\alias{local}
+\alias{remote_perspective}
+\alias{local_perspective}
 \alias{athlete_id}
 \alias{rebuild_gcod_db}
 \alias{gcod_db_extractors}
@@ -19,8 +19,8 @@
 \alias{total_size.gcod_db}
 \alias{mean_size.gcod_db}
 \alias{local_path.gcod_db}
-\alias{remote.gcod_db}
-\alias{local.gcod_db}
+\alias{remote_perspective.gcod_db}
+\alias{local_perspective.gcod_db}
 \alias{athlete_id.gcod_db}
 \title{Extract information from an object of class \code{gcod_db}, as produced
 by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
@@ -39,9 +39,9 @@ mean_size(object, ...)
 
 local_path(object, ...)
 
-remote(object, ...)
+remote_perspective(object, ...)
 
-local(object, ...)
+local_perspective(object, ...)
 
 athlete_id(object, ...)
 
@@ -59,9 +59,9 @@ rebuild_gcod_db(object, ...)
 
 \method{local_path}{gcod_db}(object, ...)
 
-\method{remote}{gcod_db}(object, ...)
+\method{remote_perspective}{gcod_db}(object, ...)
 
-\method{local}{gcod_db}(object, ...)
+\method{local_perspective}{gcod_db}(object, ...)
 
 \method{athlete_id}{gcod_db}(object, perspective = "remote", ...)
 }
@@ -86,7 +86,7 @@ directly for pretty units, etc.
 
 \code{local_path()} extracts the local paths from the \code{gcod_db} file.
 
-\code{remote(object)} and \code{local(object)} are equivalent to
+\code{remote_perspective(object)} and \code{local_perspective(object)} are equivalent to
 \code{object$remote_db} and \code{object$local_db}, respectively.
 
 \code{n_ids()} returns the number of athlete ids in the specified

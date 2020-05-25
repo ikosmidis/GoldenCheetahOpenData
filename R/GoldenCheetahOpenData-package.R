@@ -76,14 +76,14 @@ local_path <- function(object, ...) {
 
 #' @rdname gcod_db_extractors
 #' @export
-remote <- function(object, ...) {
-    UseMethod("remote")
+remote_perspective <- function(object, ...) {
+    UseMethod("remote_perspective")
 }
 
 #' @rdname gcod_db_extractors
 #' @export
-local <- function(object, ...) {
-    UseMethod("local")
+local_perspective <- function(object, ...) {
+    UseMethod("local_perspective")
 }
 
 #' @rdname gcod_db_extractors
@@ -109,7 +109,7 @@ rebuild_gcod_db <- function(object, ...) {
 #'
 #' @return
 #'
-#' If `object` is a character string, then nothing is returned. If `object` is a `gcod_db` object, then the object is returned, with all elements of `local(object)$extracted` set to `FALSE`.
+#' If `object` is a character string, then nothing is returned. If `object` is a `gcod_db` object, then the object is returned, with all elements of `local_perspective(object)$extracted` set to `FALSE`.
 #'
 #' @aliases clean_db.character clean_db.gcod_db
 #' @export

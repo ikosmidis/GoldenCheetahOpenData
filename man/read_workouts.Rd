@@ -22,7 +22,7 @@ A list of \code{\link[trackeR:trackeRdata]{trackeR::trackeRdata}} objects.
 Read the workout files, and wrangle and organize them into lists of \code{\link[trackeR:trackeRdata]{trackeR::trackeRdata}} objects for further processing into the \code{trackeR} R package.
 }
 \details{
-If any of \code{local(object)$extracted} is \code{FALSE}, then the workout files are extracted automatically using \code{\link[=extract_workouts]{extract_workouts()}}.
+If any of \code{local_perspective(object)$extracted} is \code{FALSE}, then the workout files are extracted automatically using \code{\link[=extract_workouts]{extract_workouts()}}.
 
 It is assumed that the filename for each workout corresponds to the timestamp where the first observation is made for the session. Timestamps are in UTC.
 

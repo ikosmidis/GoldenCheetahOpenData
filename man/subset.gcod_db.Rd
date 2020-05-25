@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{an object of class \code{gcod_db}}
 
-\item{subset}{logical expression indicating records to keep in either \code{remote(x)} or \code{local(x)} according to the value of \code{perspective};  missing values are taken as \code{FALSE}.}
+\item{subset}{logical expression indicating records to keep in either \code{remote_perspective(x)} or \code{local_perspective(x)} according to the value of \code{perspective};  missing values are taken as \code{FALSE}.}
 
 \item{perspective}{either \code{"remote"} (default) or \code{"local"}, for the perspective to subset.}
 

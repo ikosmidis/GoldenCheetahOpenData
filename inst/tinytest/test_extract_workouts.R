@@ -38,5 +38,5 @@ expect_true(any(grepl("007", list.dirs(tempdir(), recursive = FALSE))))
 expect_true(all(out1$local_db$extracted))
 
 ## Clean up
-expect_true(all(file.remove(local(out)$path)))
+expect_true(all(file.remove(local_perspective(out)$path)))
 unlink(gsub(".zip", "", out$local_db$path), recursive = TRUE)

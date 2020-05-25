@@ -7,7 +7,7 @@
 #' @rdname read_workouts
 #'
 #' @details
-#' If any of `local(object)$extracted` is `FALSE`, then the workout files are extracted automatically using [`extract_workouts()`].
+#' If any of `local_perspective(object)$extracted` is `FALSE`, then the workout files are extracted automatically using [`extract_workouts()`].
 #'
 #' It is assumed that the filename for each workout corresponds to the timestamp where the first observation is made for the session. Timestamps are in UTC.
 #'
@@ -56,7 +56,7 @@
 #'
 #' @export
 read_workouts.gcod_db <- function(object, verbose = FALSE, clean_db = TRUE, ...) {
-    if (any(!local(object)$extracted)) {
+    if (any(!local_perspective(object)$extracted)) {
         object <- extract_workouts(object, verbose = verbose,
                                    overwrite = FALSE, clean_up = FALSE)
     }
@@ -152,7 +152,7 @@ read_workouts.gcod_db <- function(object, verbose = FALSE, clean_db = TRUE, ...)
     out <- list()
 
     for (k in seq.int(n_ids)) {
-        if (!isTRUE(local(object)$extracted[k])) {
+        if (!isTRUE(local_perspective(object)$extracted[k])) {
             if (isTRUE(verbose)) {
                 message(paste("ID", athlete_id[k], "|", "No data is available. Skipping."), appendLF = TRUE)
             }

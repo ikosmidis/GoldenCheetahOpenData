@@ -29,7 +29,7 @@ extract_workouts(object, ...)
 }
 \value{
 An object of class \code{gcod_db} which is the same as \code{object} except
-that the elements of \code{local(object)$extracted} are set to \code{TRUE} or
+that the elements of \code{local_perspective(object)$extracted} are set to \code{TRUE} or
 \code{FALSE} depending on whether the corresponding workout archives
 were extracted successfully or not.
 }

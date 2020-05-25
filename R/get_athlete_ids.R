@@ -13,7 +13,7 @@
 #'
 #' `mirror = OSF` currently returns an error and will be supported in future versions.
 #'
-#' @seealso [`print.gcod_db()`] [`min_size.gcod_db()`] [`max_size.gcod_db()`] [`total_size.gcod_db()`] [`mean_size.gcod_db()`] [`n_ids.gcod_db()`] [`remote.gcod_db()`] [`local.gcod_db()`]
+#' @seealso [`print.gcod_db()`] [`min_size.gcod_db()`] [`max_size.gcod_db()`] [`total_size.gcod_db()`] [`mean_size.gcod_db()`] [`n_ids.gcod_db()`] [`remote_perspective.gcod_db()`] [`local_perspective.gcod_db()`]
 #'
 #' @aliases
 #' `gcod_db`
@@ -38,9 +38,12 @@
 #' format(mean_size(ids), unit = "auto")
 #' format(total_size(ids), unit = "auto")
 #'
-#' ## remote(ids) and local(ids) inherit from `data.frame` so we can easily do stuff like
-#' ## find which IDshave the minimum/maximum sizes
-#' remote(ids)[which.min(remote(ids)$size), "athlete_id"]
+#' ## remote_perspective(ids) and local_perspective(ids) inherit from
+#' ## data.frame` so we can easily do stuff like
+#'
+#' ## find which IDs have the minimum/maximum sizes
+#' remote_ids <- remote_perspective(ids)
+#' remote_ids[which.min(remote_ids$size), "athlete_id"]
 #' ## find all IDs with the string "007"
 #' subset(athlete_id(ids), grepl("007", athlete_id(ids)))
 #' ## etc

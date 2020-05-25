@@ -21,7 +21,7 @@
 #' If `object` is a character string then a `gcod_db` object is
 #' return with corresponding remote and local perspective. If
 #' `object` is an object of class `gcod_db`, then `object` is
-#' returned with the elements of `local(object)$downloaded` set to
+#' returned with the elements of `local_perspective(object)$downloaded` set to
 #' `TRUE` or `FALSE` depending on whether the corresponding workout
 #' archives were downloaded successfully or not.
 #'
@@ -61,8 +61,8 @@ download_workouts <- function(object,
     }
     if (inherits(object, "gcod_db")) {
 
-        sizes <- remote(object)$size
-        athlete_id <- remote(object)$athlete_id
+        sizes <- remote_perspective(object)$size
+        athlete_id <- remote_perspective(object)$athlete_id
         if (!is.null(pattern)) {
             inds <- grepl(pattern, athlete_id)
             sizes <- sizes[inds]
@@ -76,7 +76,7 @@ download_workouts <- function(object,
             stop("Vectors of character strings are not supported for `object`.")
         }
         object <- get_athlete_ids(mirror = mirror, prefix = object)
-        sizes <- remote(object)$size
+        sizes <- remote_perspective(object)$size
         athlete_id <- athlete_id(object, perspective = "remote")
     }
     ## Download
@@ -149,8 +149,8 @@ download_workouts <- function(object,
                            athlete_id = athlete_id,
                            stringsAsFactors = FALSE)
 
-    object <- make_gcod_db(remote(object), local_db,
-                           attr(remote(object), "mirror"))
+    object <- make_gcod_db(remote_perspective(object), local_db,
+                           attr(remote_perspective(object), "mirror"))
 
     if (isTRUE(extract)) {
         object <- extract_workouts(object, verbose, clean_up = TRUE, overwrite = TRUE)
