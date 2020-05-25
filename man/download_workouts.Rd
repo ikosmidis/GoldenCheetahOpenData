@@ -2,7 +2,7 @@
 % Please edit documentation in R/download_workouts.R
 \name{download_workouts}
 \alias{download_workouts}
-\title{Download and, optionally, extract the archive with the workouts for a particular athlete ID in the GoldenCheetah OpenData project.}
+\title{Download and, optionally, extract the workout archives the athlete IDs in the remote perspective of a \code{gcod_id} object.}
 \usage{
 download_workouts(
   object,
@@ -17,11 +17,11 @@ download_workouts(
 )
 }
 \arguments{
-\item{local_dir}{the directory to download the zip files for the selected athlete IDs.}
+\item{local_dir}{the directory to download the workout archives for the selected athlete IDs.}
 
 \item{pattern}{character string containing a regular expression to be matched with the athlete IDs in \code{athlete_id}. Only applicable if \code{athlete_id} is an object of class \code{gcod_db}. Default is \code{NULL}, which selects all IDs in \code{athlete_id}.}
 
-\item{extract}{logical determining whether the workout files in the downloaded archives should be extracted. Default is \code{FALSE}. If \code{TRUE}, then the archives are extractred in sub-directories unded \code{dir}. The sub-directories are named according to the athlete ID. See Details.}
+\item{extract}{logical determining whether the workout files in the downloaded archives should be extracted. Default is \code{FALSE}. If \code{TRUE}, then the archives are extractred in sub-directories unded \code{local_dir}, named according to the athlete IDs. See Details.}
 
 \item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating which GoldeCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.}
 
@@ -29,17 +29,27 @@ download_workouts(
 
 \item{confirm}{logical determining whether the user should be asked whether they should continue with the download or not. Default is \code{TRUE}.}
 
-\item{overwrite}{logical determining whether existing archives with the same names as the ones to be downloaded should be overwritten. Default is \code{TRUE}.}
+\item{overwrite}{logical determining whether existing archives with the same names as the ones selected for download should be overwritten. Default is \code{TRUE}.}
 
 \item{...}{extra arguments to be passed to \code{\link[aws.s3:save_object]{aws.s3::save_object()}}.}
 
-\item{athlete_id}{a character string with the athlete ID or the first few characters of it, or alternatively an object of class \code{gcod_db} as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
+\item{athlete_id}{a character string with the athlete ID or the first few characters of that, or alternatively an object of class \code{gcod_db} as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
+}
+\value{
+If \code{athlete_id} is a character string then a \code{gcod_db} object is
+return with corresponding remote and local perspective. If
+\code{athlete_id} is an object of class \code{gcod_db}, then \code{athlete_id} is
+returned with the elements of \code{local(object)$downloaded} set to
+\code{TRUE} or \code{FALSE} depending on whether the corresponding workout
+archives were downloaded successfully or not.
 }
 \description{
-Download and, optionally, extract the archive with the workouts for a particular athlete ID in the GoldenCheetah OpenData project.
+Download and, optionally, extract the workout archives the athlete IDs in the remote perspective of a \code{gcod_id} object.
 }
 \details{
 If \code{extract = TRUE}, then \code{\link[=extract_workouts]{extract_workouts()}} is called with \code{clean_up = TRUE} and \code{overwrite = TRUE}.
+
+\code{mirror = OSF} currently returns an error and will be supported in future versions.
 }
 \examples{
 \donttest{
@@ -60,5 +70,5 @@ if (interactive) {
 Liversedge, M. (2020). GoldenCheetah OpenData Project. OSF. \url{https://doi.org/10.17605/OSF.IO/6HFPZ}
 }
 \seealso{
-\code{\link[=extract_workouts]{extract_workouts()}}
+\code{\link[=get_athlete_ids]{get_athlete_ids()}} \code{\link[=extract_workouts]{extract_workouts()}}
 }

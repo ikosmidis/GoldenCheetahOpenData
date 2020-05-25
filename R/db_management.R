@@ -8,13 +8,16 @@
 #' @details
 #' See [`get_athlete_ids()`] for the variables each perspective holds.
 #'
+#' @return
+#' An object of class `gcod_db` with the selected athlete IDs according to `subset` in its remote or local perspective.
+#'
 #' @export
 #' @examples
 #' \donttest{
+#' ## Get all available athelte IDs
 #' db <- get_athlete_ids()
-#' ## Return athletes from the remote perspective of db with "b7-9" in
-#' ## their IDs
-#' db79 <- subset(db, subset = grepl("b7-9", remote(db)$athlete_id), perspective = "remote")
+#' ## Return athletes from the remote perspective of db with "b7-9" in their IDs
+#' db79 <- subset(db, subset = grepl("b7-9", athlete_id(db)), perspective = "remote")
 #' athlete_id(db79, perspective = "remote")
 #' }
 subset.gcod_db <- function(x, subset, perspective = "remote") {
@@ -29,21 +32,50 @@ subset.gcod_db <- function(x, subset, perspective = "remote") {
         stop("`perspective` should be one of 'remote', 'local'"))
 }
 
-#' Checks whether the files in the remote paths of a `gcod_db` exist in `local_dir'
-#' @param object asd
-#' @param local_dir the directory to check zip files for the selected athlete IDs.
+#' Checks whether the workout archives referenced in the remote
+#' perspective of a `gcod_db` exist in `local_dir'
 #'
+#' @param object an object of class `gcod_db`.
+#' @param local_dir the directory to check for the workout archives
+#'     for `athlete_id(object, perspective = "remote")`.
+#'
+#' @return
+#' A vector of the same length as `n_ids(object, perspective = "remote")`.
+#'
+#' @examples
+#' \dontest{
+#' ids007 <- get_athlete_ids(prefix = "007")
+#' ## Download the workouts for the first athlete in tempdir()
+#' id <- subset(ids007, athlete_id(ids007) == athlete_id(ids007)[2])
+#' id <- download_workouts(id)
+#' ## Only the workout archive for athlete_id(ids007)[2] from the ones
+#' #in the remote perspective of ids007 exist in tempdir()
+#' exist_in(ids007, tempdir())
+#' }
 #' @export
 exist_in.gcod_db <- function(object, local_dir) {
     ## Find out what is in local_dir
-    local_ids <- athlete_id(object, perspective = "local")
-    remote_ids <- athlete_id(object, perspective = "remote")
-    all(remote_ids %in% local_ids)
+    remote_files <- gsub("data/", "", remote(object)$key)
+    local_files <- file.exists(paste0(local_dir, "/", remote_files))
+    names(local_files) <- remote_files
+    local_files
 }
 
 #' Attempts to rebuild a `gcod_db` from the contents of a local directory
 #'
 #' @param object a character string giving the path to the directory to use for extracting athlete IDs.
+#'
+#' @return
+#' An object of class `gcod_db`.
+#' ## Download the workouts in tempdir()
+#'
+#' @examples
+#' \donttest{
+#' ids007 <- get_athlete_ids(prefix = "007")
+#' ids007 <- download_workouts(ids007)
+#' ## Test that the rebuild `gcod_db` object is identical to ids007
+#' identical(ids007, rebuild_gcod_db(tempdir()))
+#' }
 #' @export
 rebuild_gcod_db.character <- function(object, mirror = "S3") {
     if (!dir.exists(object)) {
@@ -84,15 +116,19 @@ rebuild_gcod_db.character <- function(object, mirror = "S3") {
     make_gcod_db(remote_db, local_db, mirror = mirror)
 }
 
-#' Concatanate gcod_db objects
+#' Concatanate `gcod_db` objects
 #'
+#' @param ... objects to be concatenated.
+#' @param perspective @param perspective either `"remote"` (default) or `"local"` or `"both"`, for the perspective to use for the extractor function.
 #' @details
 #'
-#' If `perspective = "remote"`, then `...$remote` are concatanated and
-#' `...$local_db` from the first object is used. If `perspective = "local"`,
-#' then `...$local` are concatanated and `...$remote_db` from the
-#' first object is used. If `perspective = "both"` then both  from `...$remote` and
-#' `...$local_db` are concatanated.
+#' If `perspective = "remote"`, then the remote perspectives of `...`
+#' are concatanated and the local perspective the first object in
+#' `...` is used. If `perspective = "local"`, then the local
+#' perspectives of `...` are concatanated and the remote perspective
+#' from first object in `...` is used. If `perspective = "both"` then
+#' both the local and remote perspectives are concatenated to form the
+#' local and the remote perspective of the returned object.
 #'
 #' Records with duplicated athlete IDs in the objects being
 #' concatenated are replaced, in the concatanated object, by a single
@@ -100,6 +136,9 @@ rebuild_gcod_db.character <- function(object, mirror = "S3") {
 #'
 #' The mirror is inheritted from the first object supplied for
 #' concatenation.
+#'
+#' @return
+#' An object of class `gcod_db`
 #'
 #' @export
 c.gcod_db <- function(..., perspective = "remote") {

@@ -2,7 +2,8 @@
 % Please edit documentation in R/get_athlete_ids.R
 \name{get_athlete_ids}
 \alias{get_athlete_ids}
-\title{Retrieve information for athlete IDs that are available in the GoldenCheetah OpenData project.}
+\alias{`gcod_db`}
+\title{Get information for athlete IDs that are available in the GoldenCheetah OpenData project and organize it in a \code{gcod_db} object.}
 \usage{
 get_athlete_ids(n_ids = Inf, mirror = "S3", prefix = NULL, ...)
 }
@@ -16,15 +17,15 @@ get_athlete_ids(n_ids = Inf, mirror = "S3", prefix = NULL, ...)
 \item{...}{further options to be passed to \verb{[aws.s3::get_bucket_df()]}.}
 }
 \value{
-A \code{\link{list}} also inheriting from class \code{gcod_db} with components \code{remote_db} (of class \code{gcod_remote_db}) and \code{local_db} (of class \code{gcod_local_db}). \code{remote_db} and \code{local_db} are \code{\link{data.frame}}s, also inheriting from classes \code{gcod_remote_db} and \code{gcod_local_db}, respectively. \code{local_db} has variables "path", "last_modified", "size", "extracted", "downloaded", "athlete_id"m and \code{remote_db} has variables "key", "last_modified", "e_tag", "size", "owner_id", "owner_display_name", "storage_class", "bucket", and "athlete_id".
+A \code{\link{list}} also inheriting from class \code{gcod_db} with components \code{remote_db} (the "remote perspective"; of class \code{gcod_remote_db}) and \code{local_db} ("the local perspective"; of class \code{gcod_local_db}). \code{remote_db} and \code{local_db} are \code{\link{data.frame}}s, also inheriting from classes \code{gcod_remote_db} and \code{gcod_local_db}, respectively. \code{local_db} has variables "path", "last_modified", "size", "extracted", "downloaded", "athlete_id"m and \code{remote_db} has variables "key", "last_modified", "e_tag", "size", "owner_id", "owner_display_name", "storage_class", "bucket", and "athlete_id".
 }
 \description{
-Retrieve information for athlete IDs that are available in the GoldenCheetah OpenData project.
+Get information for athlete IDs that are available in the GoldenCheetah OpenData project and organize it in a \code{gcod_db} object.
 }
 \details{
 
 
-
+\code{mirror = OSF} currently returns an error and will be supported in future versions.
 }
 \examples{
 
@@ -55,5 +56,5 @@ subset(ids, grepl("007", ids$athlete_id))
 Liversedge, M. (2020). GoldenCheetah OpenData Project. OSF. \url{https://doi.org/10.17605/OSF.IO/6HFPZ}
 }
 \seealso{
-\code{\link[=print.gcod_db]{print.gcod_db()}} \code{\link[=min_size.gcod_db]{min_size.gcod_db()}} \code{\link[=max_size.gcod_db]{max_size.gcod_db()}} \code{\link[=total_size.gcod_db]{total_size.gcod_db()}} \code{\link[=mean_size.gcod_db]{mean_size.gcod_db()}} \code{\link[=n_ids.gcod_db]{n_ids.gcod_db()}}
+\code{\link[=print.gcod_db]{print.gcod_db()}} \code{\link[=min_size.gcod_db]{min_size.gcod_db()}} \code{\link[=max_size.gcod_db]{max_size.gcod_db()}} \code{\link[=total_size.gcod_db]{total_size.gcod_db()}} \code{\link[=mean_size.gcod_db]{mean_size.gcod_db()}} \code{\link[=n_ids.gcod_db]{n_ids.gcod_db()}} \code{\link[=remote.gcod_db]{remote.gcod_db()}} \code{\link[=local.gcod_db]{local.gcod_db()}}
 }

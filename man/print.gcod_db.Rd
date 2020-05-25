@@ -15,10 +15,13 @@
 \arguments{
 \item{object}{an object of class \code{gcod_db}}
 
-\item{txtplot}{logical indicating whether or not text barplots should be printed for the remote and local databases showing the percentage of athlete ID records modified per year quarter. Default is \code{FALSE}.}
+\item{txtplot}{logical indicating whether or not text barplots should be printed for the remote and local perspectives showing the percentage of athlete ID records modified per year quarter. Default is \code{FALSE}.}
 
 \item{...}{currently not used.}
 }
 \description{
 Print methods for objects of class \code{gcod_db}, as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.
+}
+\seealso{
+\code{\link[=get_athlete_ids]{get_athlete_ids()}} \code{\link[=download_athlete_ids]{download_athlete_ids()}} \code{\link[=extract_athlete_ids]{extract_athlete_ids()}}
 }

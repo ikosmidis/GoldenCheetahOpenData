@@ -1,20 +1,23 @@
-#' Extract workouts from the archives downloaded using [`download_workouts()`].
+#' Extract workouts from the workout archives downloaded using [`download_workouts()`].
 #'
-#' @rdname extract_workouts
 #' @param object an object of class `gcod_db` as produced from [`download_workouts()`].
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
 #' @param clean_up logical determining whether the workout directories should be deleted before extraction, if they already exist. Default is `FALSE`.
 #' @param overwrite logical determining whether the workout directories should be overwritten, if they already exist. Default is `TRUE`.
 #'
 #' @return
-#' An object of class `gcod_db` which is the same as `object` except that `object$extracted = TRUE`.
-#'
-#' The workouts are extracted and put in sub-directories in the same directory as the original archive (i.e. where the files `object$path` are). These sub-directories have exactly the same name as the archives (excluding the file extension).
+#' An object of class `gcod_db` which is the same as `object` except
+#' that the elements of `local(object)$extracted` are set to `TRUE` or
+#' `FALSE` depending on whether the corresponding workout archives
+#' were extracted successfully or not.
 #'
 #' @details
-#' Athlete IDs are infered from `object$path`.
+#' Athlete IDs are infered from `local_path(object)`.
 #'
-#' Only modifies `local(object)$extracted` depending on whether the workout archives, were extracted successfully or not.
+#' ' The workouts are extracted and put in sub-directories in the same
+#' directory as the workout archives (i.e. where the files
+#' `local_path(object)` are). These sub-directories have exactly the
+#' same name as the archives (excluding the file extension).
 #'
 #' @seealso
 #' [`download_workouts()`]
@@ -38,10 +41,11 @@ extract_workouts.gcod_db <- function(object,
             message(paste("Extracting", current_path, "... "), appendLF = FALSE)
         }
         if (!isTRUE(overwrite)) {
-            if (file.exists(extraction_dir)) {
+            if (file.exists(file.path(extraction_dir, paste0("/{", athlete_id[j], "}.json")))) {
                 if (verbose) {
                     message("Exists.", appendLF = TRUE)
                 }
+                object$local_db[athlete_id == athlete_id[j], "extracted"] <- TRUE
                 next
             }
         }

@@ -1,17 +1,18 @@
 #' Print methods for objects of class `gcod_db`, as produced by [`get_athlete_ids()`].
 #'
-#' @name print.gcod_db
 #' @param object an object of class `gcod_db`
-#' @param txtplot logical indicating whether or not text barplots should be printed for the remote and local databases showing the percentage of athlete ID records modified per year quarter. Default is `FALSE`.
+#' @param txtplot logical indicating whether or not text barplots should be printed for the remote and local perspectives showing the percentage of athlete ID records modified per year quarter. Default is `FALSE`.
 #' @param ... currently not used.
 #'
 #' @aliases print.gcod_remote_db print.gcod_local_db
+#'
+#' @seealso [`get_athlete_ids()`] [`download_athlete_ids()`] [`extract_athlete_ids()`]
 #' @export
 print.gcod_db <- function(object, txtplot = FALSE, ...) {
-    cat("Remote db\n")
+    cat("Remote perspective\n")
     print.gcod_remote_db(remote(object), txtplot, ...)
     cat("\n")
-    cat("Local db\n")
+    cat("Local perspective\n")
     print.gcod_local_db(local(object), txtplot, ...)
 }
 
@@ -75,16 +76,30 @@ print.gcod_local_db <- function(object, txtplot = FALSE, ...) {
     }
 }
 
-#' Extract information from an object of class `gcod_db`, as produced by [`get_athlete_ids()`].
+#' Extract information from an object of class `gcod_db`, as produced
+#' by [`get_athlete_ids()`].
 #' @name gcod_db_extractors
-#' @param object an object of class `gcod_db`, as produced by [`get_athlete_ids()`].
-#' @param perspective either `"remote"` (default) or `"local"`, for the perspective to use for the extractor function.
 #'
+#' @param object an object of class `gcod_db`, as produced by
+#'     [`get_athlete_ids()`].
+#' @param perspective either `"remote"` (default) or `"local"`, for
+#'     the perspective to use for the extractor function.
+#' 
 #' @details
-#' File sizes are reported in bytes but inherit from class `object_size`. So, `format.object_size()` can be used for pretty units, etc.
 #'
-#' `local_path()` extracts the local paths from the `gcod_db` file. `remote(object)` and `local(object)` are equivalent to `object$remote_db` and `object$local_db`, respectively.
+#' File sizes from the `min_size()`, `max_size()`, `total_size()`,
+#' `mean_size()` extractors are reported in bytes but inherit from
+#' class `object_size`. So, `format.object_size()` can be used
+#' directly for pretty units, etc.
 #'
+#' `local_path()` extracts the local paths from the `gcod_db` file.
+#'
+#' `remote(object)` and `local(object)` are equivalent to
+#' `object$remote_db` and `object$local_db`, respectively.
+#'
+#' `n_ids()` returns the number of athlete ids in the specified
+#' perspective, and `athlete_id()` the athlete IDs themselves.
+#' 
 #' @seealso [`get_athlete_ids()`]
 #' @aliases min_size max_size mean_size total_size n_ids
 NULL
@@ -119,18 +134,6 @@ max_size.gcod_db <- function(object, perspective = "remote") {
                   "`perspective` should be one of 'remote', 'local'")
     to_object_size(out)
 }
-
-#' @rdname gcod_db_extractors
-#' @export
-total_size.gcod_db <- function(object, perspective = "remote") {
-    n <- n_ids(object, perspective = perspective)
-    out <- switch(perspective,
-                  "remote" = ifelse(n > 0, sum(remote(object)$size), 0),
-                  "local" = ifelse(n > 0, sum(local(object)$size), 0),
-                  "`perspective` should be one of 'remote', 'local'")
-    to_object_size(out)
-}
-
 
 #' @rdname gcod_db_extractors
 #' @export

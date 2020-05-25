@@ -3,4 +3,4 @@
 \docType{package}
 \name{GoldenCheetahOpenData}
 \alias{GoldenCheetahOpenData}
-\title{GoldenCheetahOpenData: R API to the GoldenCheetah OpenData Project}
+\title{GoldenCheetahOpenData: R API to the GoldenCheetah OpenData Project and Management of Local Workout Database}

@@ -5,7 +5,7 @@
 \alias{clean_db}
 \alias{clean_db.character}
 \alias{clean_db.gcod_db}
-\title{Clean up a directory from extracted subdirectories}
+\title{Clean up a directory from extracted workout sub-directories.}
 \usage{
 clean_db(object, confirm = TRUE, verbose = TRUE)
 
@@ -14,17 +14,17 @@ clean_db(object, confirm = TRUE, verbose = TRUE)
 \method{clean_db}{gcod_db}(object, confirm = TRUE, verbose = TRUE)
 }
 \arguments{
-\item{object}{either a character string giving the path to the directory to clean or an object of class \code{gcod_db}.}
+\item{object}{either a character string giving the path to the directory to look for workout sub-directories or an object of class \code{gcod_db}.}
 
-\item{confirm}{logical determining whether the user should be asked whether they should continue with the deletion or not. Default is \code{TRUE}.}
+\item{confirm}{logical determining whether the user should be prompted to confirm whether they should continue with the deletion. Default is \code{TRUE}.}
 
 \item{verbose}{}
 }
 \value{
-If \code{object} is a character string, then nothing is returned. If \code{object} is a \code{gcod_db} object, then the object is returned, with all elements of \code{local(object)$extracted} being \code{FALSE}.
+If \code{object} is a character string, then nothing is returned. If \code{object} is a \code{gcod_db} object, then the object is returned, with all elements of \code{local(object)$extracted} set to \code{FALSE}.
 }
 \description{
-Clean up a directory from extracted subdirectories
+Clean up a directory from extracted workout sub-directories.
 }
 \details{
 If \code{object} is an object of class \code{gcod_db}, then \code{clean_db}, looks for sub-directories with the same name as the zip files \code{local_path(object)}.

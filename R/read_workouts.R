@@ -1,8 +1,9 @@
-#' Read the workout `.csv` files that have been extracted using [`extract_workouts()`] and organized them into lists of [`trackeR::trackeRdata`] objects for further processing into the `trackeR` R package.
+#' Read the workout files, and wrangle and organize them into lists of [`trackeR::trackeRdata`] objects for further processing into the `trackeR` R package.
 #'
-#' @param object an object of class `GCOD_files` as produced from [`download_workouts()`] or [`extract_workouts()`].
+#' @param object an object of class `gcod_db`, as produced from [`download_workouts()`] or [`extract_workouts()`].
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
-#' @param ... other arguments to be passed to [`extract_workouts()`]
+#' @param clean_db logical determining whether the workout sub-directories should be deleted after processing. Default is `TRUE`.
+#' @param ... other arguments to be passed to [`extract_workouts()`].
 #' @rdname read_workouts
 #'
 #' @details
@@ -16,7 +17,7 @@
 #' A list of [`trackeR::trackeRdata`] objects.
 #'
 #' @seealso
-#' [`trackeR::trackeRdata()`]
+#' [`trackeR::trackeRdata()`] [`extract_workouts()`]
 #'
 #' @references
 #'
@@ -25,11 +26,40 @@
 #' of Statistical Software*, **82**(7),
 #' 1--29. [doi:10.18637/jss.v082.i07](https://doi.org/10.18637/jss.v082.i07)
 #'
+#' @examples
+#'
+#' \donttest{
+#'
+#' ## Get the two IDs starting with "000e" and "000d" and concatenate
+#' ## them into a single `gcod_db` object
+#' ids000 <- lapply(c("000e", "000d"), function(x) get_athlete_ids(prefix = x))
+#' ids000 <- c(ids000[[1]], ids000[[2]])
+#'
+#' ## Download the workout archives in tempdir()
+#' ids000 <- download_workouts(ids000, verbose = TRUE, overwrite = TRUE)
+#'
+#' ## Read the workouts. This will create a list of two `trackeRdata`
+#' ## objects with 2 and 56 workouts
+#' w000 <- read_workouts(ids000, clean_db = TRUE, verbose = TRUE)
+#'
+#' ## Now we can use methods from the trackeR R package
+#' ## Plot the workouts
+#' plot(w000[[1]], what = "speed")
+#' plot(w000[[2]], session = 1:5, what = c("speed", "heart_rate"))
+#' ## Compute concentration profiles for speed and power
+#' cp <- concentration_profile(w000[[2]], what = c("speed", "power"))
+#' plot(cp, multiple = TRUE)
+#' ## Get summaries for speed, power and work-to-rest ration
+#' plot(summary(w000[[2]]), what = c("avgSpeed", "avgPower", "wrRatio"))
+#'
+#' }
+#'
+#'
 #' @export
-read_workouts.gcod_db <- function(object, verbose = FALSE, ...) {
+read_workouts.gcod_db <- function(object, verbose = FALSE, clean_db = TRUE, ...) {
     if (any(!local(object)$extracted)) {
-        extract_workouts(object, verbose = verbose,
-                         overwrite = FALSE, clean_up = FALSE)
+        object <- extract_workouts(object, verbose = verbose,
+                                   overwrite = FALSE, clean_up = FALSE)
     }
     path <- local_path(object)
     athlete_id <- athlete_id(object, perspective = "local")
@@ -39,7 +69,6 @@ read_workouts.gcod_db <- function(object, verbose = FALSE, ...) {
                            variable = c(rep(c("distance", "speed", "pace", "altitude"), 3),  "cadence_running"),
                            unit = c(rep(c("km", "km_per_h", "min_per_km", "m"), 3), "steps_per_min"),
                            sport = c(rep(c("cycling", "running", "swimming"), each = 4), "running"))
-
 
     process_id <- function(extraction_dir, athlete_id) {
         json <- paste0("{", athlete_id, "}.json")
@@ -82,7 +111,7 @@ read_workouts.gcod_db <- function(object, verbose = FALSE, ...) {
                         csv_files[j], ". Skipping.")
                 next
             }
-            if (verbose) {
+            if (isTRUE(verbose)) {
                 message(paste("ID", athlete_id, "|",
                               "reading", csv_files[j],
                               paste0("(", j, "/", nsess, ")"),
@@ -122,11 +151,22 @@ read_workouts.gcod_db <- function(object, verbose = FALSE, ...) {
     }
 
     out <- list()
-    for (k in seq.int(n_ids)) {
 
+    for (k in seq.int(n_ids)) {
+        if (!isTRUE(local(object)$extracted[k])) {
+            if (isTRUE(verbose)) {
+                message(paste("ID", athlete_id[k], "|", "No data is available. Skipping."), appendLF = TRUE)
+            }
+            out[[athlete_id[k]]] <- NA
+            next
+        }
         out[[athlete_id[k]]] <- process_id(extraction_dir[k], athlete_id[k])
     }
     names(out) <- athlete_id
-    out
 
+    if (isTRUE(clean_db)) {
+        clean_db(object, confirm = FALSE, verbose = verbose)
+    }
+
+    out
 }

@@ -9,6 +9,19 @@
 \arguments{
 \item{object}{a character string giving the path to the directory to use for extracting athlete IDs.}
 }
+\value{
+An object of class \code{gcod_db}.
+\subsection{Download the workouts in tempdir()}{
+}
+}
 \description{
 Attempts to rebuild a \code{gcod_db} from the contents of a local directory
+}
+\examples{
+\donttest{
+ids007 <- get_athlete_ids(prefix = "007")
+ids007 <- download_workouts(ids007)
+## Test that the rebuild `gcod_db` object is identical to ids007
+identical(ids007, rebuild_gcod_db(tempdir()))
+}
 }

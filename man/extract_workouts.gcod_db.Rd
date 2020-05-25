@@ -2,7 +2,7 @@
 % Please edit documentation in R/extract_workouts.R
 \name{extract_workouts.gcod_db}
 \alias{extract_workouts.gcod_db}
-\title{Extract workouts from the archives downloaded using \code{\link[=download_workouts]{download_workouts()}}.}
+\title{Extract workouts from the workout archives downloaded using \code{\link[=download_workouts]{download_workouts()}}.}
 \usage{
 \method{extract_workouts}{gcod_db}(object, verbose = FALSE, clean_up = TRUE, overwrite = TRUE)
 }
@@ -16,17 +16,21 @@
 \item{overwrite}{logical determining whether the workout directories should be overwritten, if they already exist. Default is \code{TRUE}.}
 }
 \value{
-An object of class \code{gcod_db} which is the same as \code{object} except that \code{object$extracted = TRUE}.
-
-The workouts are extracted and put in sub-directories in the same directory as the original archive (i.e. where the files \code{object$path} are). These sub-directories have exactly the same name as the archives (excluding the file extension).
+An object of class \code{gcod_db} which is the same as \code{object} except
+that the elements of \code{local(object)$extracted} are set to \code{TRUE} or
+\code{FALSE} depending on whether the corresponding workout archives
+were extracted successfully or not.
 }
 \description{
-Extract workouts from the archives downloaded using \code{\link[=download_workouts]{download_workouts()}}.
+Extract workouts from the workout archives downloaded using \code{\link[=download_workouts]{download_workouts()}}.
 }
 \details{
-Athlete IDs are infered from \code{object$path}.
+Athlete IDs are infered from \code{local_path(object)}.
 
-Only modifies \code{local(object)$extracted} depending on whether the workout archives, were extracted successfully or not.
+' The workouts are extracted and put in sub-directories in the same
+directory as the workout archives (i.e. where the files
+\code{local_path(object)} are). These sub-directories have exactly the
+same name as the archives (excluding the file extension).
 }
 \seealso{
 \code{\link[=download_workouts]{download_workouts()}}

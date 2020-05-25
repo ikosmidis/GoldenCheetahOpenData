@@ -16,15 +16,14 @@
 \alias{remote.gcod_db}
 \alias{local.gcod_db}
 \alias{athlete_id.gcod_db}
-\title{Extract information from an object of class \code{gcod_db}, as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
+\title{Extract information from an object of class \code{gcod_db}, as produced
+by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
 \usage{
 \method{n_ids}{gcod_db}(object, perspective = "remote")
 
 \method{min_size}{gcod_db}(object, perspective = "remote")
 
 \method{max_size}{gcod_db}(object, perspective = "remote")
-
-\method{total_size}{gcod_db}(object, perspective = "remote")
 
 \method{total_size}{gcod_db}(object, perspective = "remote")
 
@@ -39,17 +38,29 @@
 \method{athlete_id}{gcod_db}(object, perspective = "remote")
 }
 \arguments{
-\item{object}{an object of class \code{gcod_db}, as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
+\item{object}{an object of class \code{gcod_db}, as produced by
+\code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
 
-\item{perspective}{either \code{"remote"} (default) or \code{"local"}, for the perspective to use for the extractor function.}
+\item{perspective}{either \code{"remote"} (default) or \code{"local"}, for
+the perspective to use for the extractor function.}
 }
 \description{
-Extract information from an object of class \code{gcod_db}, as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.
+Extract information from an object of class \code{gcod_db}, as produced
+by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.
 }
 \details{
-File sizes are reported in bytes but inherit from class \code{object_size}. So, \code{format.object_size()} can be used for pretty units, etc.
+File sizes from the \code{min_size()}, \code{max_size()}, \code{total_size()},
+\code{mean_size()} extractors are reported in bytes but inherit from
+class \code{object_size}. So, \code{format.object_size()} can be used
+directly for pretty units, etc.
 
-\code{local_path()} extracts the local paths from the \code{gcod_db} file. \code{remote(object)} and \code{local(object)} are equivalent to \code{object$remote_db} and \code{object$local_db}, respectively.
+\code{local_path()} extracts the local paths from the \code{gcod_db} file.
+
+\code{remote(object)} and \code{local(object)} are equivalent to
+\code{object$remote_db} and \code{object$local_db}, respectively.
+
+\code{n_ids()} returns the number of athlete ids in the specified
+perspective, and \code{athlete_id()} the athlete IDs themselves.
 }
 \seealso{
 \code{\link[=get_athlete_ids]{get_athlete_ids()}}

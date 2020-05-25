@@ -1,4 +1,4 @@
-#' GoldenCheetahOpenData: R API to the GoldenCheetah OpenData Project
+#' GoldenCheetahOpenData: R API to the GoldenCheetah OpenData Project and Management of Local Workout Database
 #'
 #' @docType package
 #' @name GoldenCheetahOpenData
@@ -73,10 +73,10 @@ rebuild_gcod_db <- function(object, ...) {
     UseMethod("rebuild_gcod_db")
 }
 
-#' Clean up a directory from extracted subdirectories
+#' Clean up a directory from extracted workout sub-directories.
 #'
-#' @param object either a character string giving the path to the directory to clean or an object of class `gcod_db`.
-#' @param confirm logical determining whether the user should be asked whether they should continue with the deletion or not. Default is `TRUE`.
+#' @param object either a character string giving the path to the directory to look for workout sub-directories or an object of class `gcod_db`.
+#' @param confirm logical determining whether the user should be prompted to confirm whether they should continue with the deletion. Default is `TRUE`.
 #' @param verbose
 #'
 #' @details
@@ -84,10 +84,15 @@ rebuild_gcod_db <- function(object, ...) {
 #'
 #' @return
 #'
-#' If `object` is a character string, then nothing is returned. If `object` is a `gcod_db` object, then the object is returned, with all elements of `local(object)$extracted` being `FALSE`.
+#' If `object` is a character string, then nothing is returned. If `object` is a `gcod_db` object, then the object is returned, with all elements of `local(object)$extracted` set to `FALSE`.
 #'
 #' @aliases clean_db.character clean_db.gcod_db
 #' @export
 clean_db <- function(object, confirm = TRUE, verbose = TRUE) {
     UseMethod("clean_db")
+}
+
+#' @export
+exist_in <- function(object, ...) {
+    UseMethod("exist_in")
 }

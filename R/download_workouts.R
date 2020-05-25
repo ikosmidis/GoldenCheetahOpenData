@@ -1,20 +1,31 @@
-#' Download and, optionally, extract the archive with the workouts for a particular athlete ID in the GoldenCheetah OpenData project.
+#' Download and, optionally, extract the workout archives the athlete IDs in the remote perspective of a `gcod_id` object.
 #'
 #' @inheritParams get_athlete_ids
-#' @param athlete_id a character string with the athlete ID or the first few characters of it, or alternatively an object of class `gcod_db` as produced by [`get_athlete_ids()`].
-#' @param local_dir the directory to download the zip files for the selected athlete IDs.
+#' @param athlete_id a character string with the athlete ID or the first few characters of that, or alternatively an object of class `gcod_db` as produced by [`get_athlete_ids()`].
+#' @param local_dir the directory to download the workout archives for the selected athlete IDs.
 #' @param pattern character string containing a regular expression to be matched with the athlete IDs in `athlete_id`. Only applicable if `athlete_id` is an object of class `gcod_db`. Default is `NULL`, which selects all IDs in `athlete_id`.
-#' @param extract logical determining whether the workout files in the downloaded archives should be extracted. Default is `FALSE`. If `TRUE`, then the archives are extractred in sub-directories unded `dir`. The sub-directories are named according to the athlete ID. See Details.
+#' @param extract logical determining whether the workout files in the downloaded archives should be extracted. Default is `FALSE`. If `TRUE`, then the archives are extractred in sub-directories unded `local_dir`, named according to the athlete IDs. See Details.
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
 #' @param confirm logical determining whether the user should be asked whether they should continue with the download or not. Default is `TRUE`.
-#' @param overwrite logical determining whether existing archives with the same names as the ones to be downloaded should be overwritten. Default is `TRUE`.
+#' @param overwrite logical determining whether existing archives with the same names as the ones selected for download should be overwritten. Default is `TRUE`.
 #' @param ... extra arguments to be passed to [`aws.s3::save_object()`].
 #'
 #' @details
 #' If `extract = TRUE`, then [`extract_workouts()`] is called with `clean_up = TRUE` and `overwrite = TRUE`.
 #'
+#' `mirror = OSF` currently returns an error and will be supported in future versions.
+#'
+#' @return
+#'
+#' If `athlete_id` is a character string then a `gcod_db` object is
+#' return with corresponding remote and local perspective. If
+#' `athlete_id` is an object of class `gcod_db`, then `athlete_id` is
+#' returned with the elements of `local(object)$downloaded` set to
+#' `TRUE` or `FALSE` depending on whether the corresponding workout
+#' archives were downloaded successfully or not.
+#'
 #' @seealso
-#' [`extract_workouts()`]
+#' [`get_athlete_ids()`] [`extract_workouts()`]
 #'
 #' @references
 #' Liversedge, M. (2020). GoldenCheetah OpenData Project. OSF. \url{https://doi.org/10.17605/OSF.IO/6HFPZ}
@@ -90,6 +101,7 @@ download_workouts <- function(object,
                     message(paste(file_names[j], "exists and `overwrite = FALSE`. Skipping."),
                             appendLF = TRUE)
                 }
+                downloaded[j] <- TRUE
                 next
             }
             if (verbose) {
@@ -123,7 +135,7 @@ download_workouts <- function(object,
         }
     }
     if (isTRUE(mirror == "OSF")) {
-        stop("OSF is not implemented yet.")
+        stop("OSF is not implemented in the curretn version of GoldenCheetahOpenData.")
     }
 
     finfo <- file.info(path)

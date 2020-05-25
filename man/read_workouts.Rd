@@ -2,22 +2,24 @@
 % Please edit documentation in R/read_workouts.R
 \name{read_workouts.gcod_db}
 \alias{read_workouts.gcod_db}
-\title{Read the workout \code{.csv} files that have been extracted using \code{\link[=extract_workouts]{extract_workouts()}} and organized them into lists of \code{\link[trackeR:trackeRdata]{trackeR::trackeRdata}} objects for further processing into the \code{trackeR} R package.}
+\title{Read the workout files, and wrangle and organize them into lists of \code{\link[trackeR:trackeRdata]{trackeR::trackeRdata}} objects for further processing into the \code{trackeR} R package.}
 \usage{
-\method{read_workouts}{gcod_db}(object, verbose = FALSE, ...)
+\method{read_workouts}{gcod_db}(object, verbose = FALSE, clean_db = TRUE, ...)
 }
 \arguments{
-\item{object}{an object of class \code{GCOD_files} as produced from \code{\link[=download_workouts]{download_workouts()}} or \code{\link[=extract_workouts]{extract_workouts()}}.}
+\item{object}{an object of class \code{gcod_db}, as produced from \code{\link[=download_workouts]{download_workouts()}} or \code{\link[=extract_workouts]{extract_workouts()}}.}
 
 \item{verbose}{logical determining whether progress information should be printed. Default is \code{FALSE}.}
 
-\item{...}{other arguments to be passed to \code{\link[=extract_workouts]{extract_workouts()}}}
+\item{clean_db}{logical determining whether the workout sub-directories should be deleted after processing. Default is \code{TRUE}.}
+
+\item{...}{other arguments to be passed to \code{\link[=extract_workouts]{extract_workouts()}}.}
 }
 \value{
 A list of \code{\link[trackeR:trackeRdata]{trackeR::trackeRdata}} objects.
 }
 \description{
-Read the workout \code{.csv} files that have been extracted using \code{\link[=extract_workouts]{extract_workouts()}} and organized them into lists of \code{\link[trackeR:trackeRdata]{trackeR::trackeRdata}} objects for further processing into the \code{trackeR} R package.
+Read the workout files, and wrangle and organize them into lists of \code{\link[trackeR:trackeRdata]{trackeR::trackeRdata}} objects for further processing into the \code{trackeR} R package.
 }
 \details{
 If any of \code{local(object)$extracted} is \code{FALSE}, then the workout files are extracted automatically using \code{\link[=extract_workouts]{extract_workouts()}}.
@@ -26,6 +28,36 @@ It is assumed that the filename for each workout corresponds to the timestamp wh
 
 If the number of workout files in the archive of a particular athlete ID does not match the number of workouts recorded in the json files within that archive, then the workout files for the ID are not read.
 }
+\examples{
+
+\donttest{
+
+## Get the two IDs starting with "000e" and "000d" and concatenate
+## them into a single `gcod_db` object
+ids000 <- lapply(c("000e", "000d"), function(x) get_athlete_ids(prefix = x))
+ids000 <- c(ids000[[1]], ids000[[2]])
+
+## Download the workout archives in tempdir()
+ids000 <- download_workouts(ids000, verbose = TRUE, overwrite = TRUE)
+
+## Read the workouts. This will create a list of two `trackeRdata`
+## objects with 2 and 56 workouts
+w000 <- read_workouts(ids000, clean_db = TRUE, verbose = TRUE)
+
+## Now we can use methods from the trackeR R package
+## Plot the workouts
+plot(w000[[1]], what = "speed")
+plot(w000[[2]], session = 1:5, what = c("speed", "heart_rate"))
+## Compute concentration profiles for speed and power
+cp <- concentration_profile(w000[[2]], what = c("speed", "power"))
+plot(cp, multiple = TRUE)
+## Get summaries for speed, power and work-to-rest ration
+plot(summary(w000[[2]]), what = c("avgSpeed", "avgPower", "wrRatio"))
+
+}
+
+
+}
 \references{
 Frick, H., Kosmidis, I. (2017). trackeR: Infrastructure for Running
 and Cycling Data from GPS-Enabled Tracking Devices in R. \emph{Journal
@@ -33,5 +65,5 @@ of Statistical Software}, \strong{82}(7),
 1--29. \href{https://doi.org/10.18637/jss.v082.i07}{doi:10.18637/jss.v082.i07}
 }
 \seealso{
-\code{\link[trackeR:trackeRdata]{trackeR::trackeRdata()}}
+\code{\link[trackeR:trackeRdata]{trackeR::trackeRdata()}} \code{\link[=extract_workouts]{extract_workouts()}}
 }
