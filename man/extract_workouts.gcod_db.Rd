@@ -11,7 +11,7 @@ extract_workouts(object, ...)
 \method{extract_workouts}{gcod_db}(
   object,
   verbose = FALSE,
-  clean_up = TRUE,
+  clean_db = TRUE,
   overwrite = TRUE,
   ...
 )
@@ -23,7 +23,7 @@ extract_workouts(object, ...)
 
 \item{verbose}{logical determining whether progress information should be printed. Default is \code{FALSE}.}
 
-\item{clean_up}{logical determining whether the workout directories should be deleted before extraction, if they already exist. Default is \code{FALSE}.}
+\item{clean_db}{logical determining whether the workout directories should be deleted before extraction, if they already exist. Default is \code{TRUE}.}
 
 \item{overwrite}{logical determining whether the workout directories should be overwritten, if they already exist. Default is \code{TRUE}.}
 }

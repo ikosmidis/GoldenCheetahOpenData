@@ -13,7 +13,7 @@ expect_message(extract_workouts(out, verbose = TRUE, clean_up = FALSE, overwrite
 ## Test that we fail if zip cannot be extracted
 tmp <- file.path(tempdir(), "gibrish.zip")
 cat("gibrish", file = tmp)
-loc <- rebuild_gcod_db(tempdir())
+loc <- rebuild_db(tempdir())
 ## Hacking the gcod_db object
 loc$local_db <- rbind(loc$local_db[1, ], loc$local_db)
 loc$local_db$path[1] <- tmp

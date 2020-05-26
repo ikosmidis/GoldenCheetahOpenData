@@ -80,10 +80,10 @@ exist_in.gcod_db <- function(object, local_dir, ...) {
 #' ## Download the workouts in tempdir()
 #' ids007 <- download_workouts(ids007)
 #' ## Test that the rebuild `gcod_db` object is identical to ids007
-#' identical(ids007, rebuild_gcod_db(tempdir()))
+#' identical(ids007, rebuild_db(tempdir()))
 #' }
 #' @export
-rebuild_gcod_db.character <- function(object, mirror = "S3", ...) {
+rebuild_db.character <- function(object, mirror = "S3", ...) {
     if (!dir.exists(object)) {
         stop(paste(object, "is either not a directory or does not exist."))
     }

@@ -6,18 +6,21 @@
 \title{GoldenCheetahOpenData: R API to the GoldenCheetah OpenData Project
 and Management of Local Workout Databases}
 \description{
-GoldenCheetahOpenData provides an R API to the GoldenCheetah
-OpenData Project <doi: 10.17605/OSF.IO/6HFPZ>. Methods are provided
-to download workout data from the AWS S3 mirror of the
-GoldenCheetah OpenData Project and to wrangle the workout data and
-organize them into \code{trackeRdata} objects for further processing
-using the infrastructure of the \code{trackeR} R package.
+GoldenCheetahOpenData provides methods for querying the
+GoldenCheetah OpenData Project database <doi:
+10.17605/OSF.IO/6HFPZ>, downloading workout data from it and
+managing local workout databases. Methods are also provided for the
+organization of the workout data into 'trackeRdata' objects for
+further data analysis abd modelling in R using the infrastructure
+provided by the 'trackeR' R package
+\url{https://CRAN.R-project.org/package=trackeR}.
 }
 \references{
-Liversedge, M. (2020). GoldenCheetah OpenData Project. OSF. \url{https://doi.org/10.17605/OSF.IO/6HFPZ}
-
 Frick, H., Kosmidis, I. (2017). trackeR: Infrastructure for Running
 and Cycling Data from GPS-Enabled Tracking Devices in R. \emph{Journal
 of Statistical Software}, \strong{82}(7),
 1--29. \href{https://doi.org/10.18637/jss.v082.i07}{doi:10.18637/jss.v082.i07}
+
+Liversedge, M. (2020). GoldenCheetah OpenData
+Project. OSF. \url{https://doi.org/10.17605/OSF.IO/6HFPZ}
 }

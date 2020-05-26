@@ -60,7 +60,7 @@ expect_true(n_ids(ids, perspective = "local") == nrow(ids$local))
 expect_identical(local_path(ids), ids$local$path)
 
 ## Rebuild
-rids <- rebuild_gcod_db(tempdir())
+rids <- rebuild_db(tempdir())
 rids$local_db <- rids$local_db[order(rids$local_db$athlete_id), ]
 ids$local_db <- ids$local_db[order(ids$local_db$athlete_id), ]
 ids$local_db$downloaded <- TRUE

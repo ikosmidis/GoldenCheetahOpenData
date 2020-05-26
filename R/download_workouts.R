@@ -7,8 +7,8 @@
 #' @param pattern character string containing a regular expression to be matched with the athlete IDs in `object`. Only applicable if `object` is an object of class `gcod_db`. Default is `NULL`, which selects all IDs in `object`.
 #' @param extract logical determining whether the workout files in the downloaded archives should be extracted. Default is `FALSE`. If `TRUE`, then the archives are extracted in sub-directories under `local_dir`, named according to the athlete IDs. See Details.
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
-#' @param confirm logical determining whether the user should be asked whether they should continue with the download or not. Default is `TRUE`.
-#' @param overwrite logical determining whether existing archives with the same names as the ones selected for download should be overwritten. Default is `TRUE`.
+#' @param confirm logical determining whether the user should be asked whether they should continue with the download or not. Default is `FALSE`.
+#' @param overwrite logical determining whether existing archives with the same names as the ones selected for download should be overwritten. Default is `FALSE`.
 #' @param ... extra arguments to be passed to [`aws.s3::save_object()`].
 #'
 #' @details

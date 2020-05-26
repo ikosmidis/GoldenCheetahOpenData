@@ -29,9 +29,9 @@ download_workouts(
 
 \item{verbose}{logical determining whether progress information should be printed. Default is \code{FALSE}.}
 
-\item{confirm}{logical determining whether the user should be asked whether they should continue with the download or not. Default is \code{TRUE}.}
+\item{confirm}{logical determining whether the user should be asked whether they should continue with the download or not. Default is \code{FALSE}.}
 
-\item{overwrite}{logical determining whether existing archives with the same names as the ones selected for download should be overwritten. Default is \code{TRUE}.}
+\item{overwrite}{logical determining whether existing archives with the same names as the ones selected for download should be overwritten. Default is \code{FALSE}.}
 
 \item{...}{extra arguments to be passed to \code{\link[aws.s3:save_object]{aws.s3::save_object()}}.}
 }

@@ -1,0 +1,128 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# GoldenCheetahOpenData
+
+<!-- badges: start -->
+[![R build status](https://github.com/ikosmidis/GoldenCheetahOpenData/workflows/R-CMD-check/badge.svg)](https://github.com/ikosmidis/GoldenCheetahOpenData/actions)
+<!-- badges: end -->
+
+The **GoldeCheetahOpenData** R package provides methods for querying
+the GoldenCheetah OpenData Project database <doi:
+10.17605/OSF.IO/6HFPZ>, downloading workout data from it and managing
+local workout databases. Methods are also provided for the
+organization of the workout data into 'trackeRdata' objects for
+further data analysis abd modelling in R using the infrastructure
+provided by the 'trackeR' R package <https://CRAN.R-project.org/package=trackeR>.
+
+## Installation
+
+You can install the released version of GoldenCheetahOpenData from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("GoldenCheetahOpenData")
+```
+
+The development version can be installed directly from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("ikosmidis/GoldenCheetahOpenData")
+```
+## Workflow
+
+### Querying GoldenCheetah OpenData project's mirrors
+
+The first step in **GoldenCheetahOpenData**'s workflow is to query the mirrors of the GoldenCheetah OpenData project for the available IDs. This is done with a call to `get_athelte_ids()`, which will create a `gcod_db` object.
+```{r athletes, cache = TRUE}
+library("GoldenCheetahOpenData")
+ids <- get_athlete_ids()
+class(ids)
+```
+
+### `gcod_db` objects
+`gcod_db` objects have two perspectives: a remote perspective describing the state of the GoldenCheetah OpenData project's database, and a local describing the state of any local database (more on this later).
+
+`gcod_db` objects that are produced by `get_athlete_ids()` have no records in their local perspective because none have been downloaded.
+```{r output}
+print(ids, txtplot = TRUE)
+```
+
+The output above also gives us a quick snapshot of GoldenCheetah OpenData project's database. It currently has a massive
+```{r size}
+format(total_size(ids), unit = "auto")
+```
+worth of *compressed* workouts for
+```{r n_ids}
+n_ids(ids, perspective = "remote")
+```
+athletes. And it keeps growing!
+
+### Downloading workouts
+`gcod_db` objects can directly be passed into the `download_workouts()` function for getting the workouts for the athlete IDs in the remote perspective or at least a few of them. Below we only get the workouts for those athletes whose IDs contain **b7-9** (as a big fan of the [Star Trek Voyager series](https://en.wikipedia.org/wiki/Star_Trek:_Voyager), this choice made sense to me!). 
+```{r download, cache = TRUE}
+ids_b79 <- download_workouts(ids,
+                             pattern = "b7-9",
+                             local_dir = "~/Downloads/GCOD-db/",
+                             verbose = TRUE)
+```
+
+`download_workouts()` downloaded the requested workout data on my disk and placed them in the directory "~/Downloads/GCOD-db/"
+```{r dir}
+dir("~/Downloads/GCOD-db")
+```
+
+`download_workouts()` returns a new `gcod_db` object, updating the local and remote perspectives of the original `gcod_db` object
+```{r ids_be79}
+ids_b79
+```
+
+You may save your `gcod_db` files, but this is not really necessary. They can be reconstructed using the `rebuild_bd()` method, which reads the local workout database and makes appropriate queries to the GoldenCheetah OpenData project's mirrors:
+```{r re_ids_b79}
+ids_dir <- rebuild_db("~/Downloads/GCOD-db")
+ids_dir
+ids_b79
+athlete_id(ids_dir, perspective = "local")
+athlete_id(ids_b79, perspective = "local")
+athlete_id(ids_dir, perspective = "remote")
+athlete_id(ids_b79, perspective = "remote")
+```
+
+A carelless call to `download_workouts()` can easily instruct R to start downloading all workouts from the **GoldenCheetah OpenData** project, which is rarely what you want. Instead, I recommend downloading only a few at a time. This can be done in various ways, including using the `prefix` argument of `get_athlete_ids()`, the `pattern` argument of `download_workouts()` (as above) or --- a bit more advanced --- by directly subsetting the `gcod_db` object
+```{r subset}
+ids_sub <- subset(ids, subset = grepl("b7-9", athlete_id(ids)), perspective = "remote")
+athlete_id(ids_sub)
+```
+In this way, whenever you rebuild the `gcod_db` object form the local database you are getting access to all the workout files you have ever downloaded.
+
+## Reading workouts
+Reading workouts involves: extracting the workout archives for each athlete ID, reading all the csv files in the extracted directories, wrangling the information in them (e.g. inferring the workout timestamps, carrying out data quality checks, imputation, etc), and organizing the resulting data into objects that can be used for further analyses. The `read_workouts()` method can do all the above from a unified interface. For example (and this takes a while):
+```{r extract, warning = FALSE}
+b79 <- read_workouts(ids_b79)
+```
+By default, `read_workouts()`:
+- does not overwrite existing directories with extracted workouts (which can be bypassed by setting `overwrite = TRUE`) 
+- deletes the extracted directories after everything has been read (which can be bypassed by setting `clean_db = FALSE`)
+- writes the processed `trackeRdata` objects (see `?saveRDS`) in the same directory as the workout archives, using the convention `<athlete_id>.rds`.
+
+`b79` is now a list of `trackeRdata` objects, and `trackeR` can be used for further analyses.
+```{r trackeRdata}
+library("trackeR")
+athlete1 <- b79[[1]]
+plot(athlete1, session = 1:5, what = c("power", "heart_rate"))
+plot(summary(athlete1))
+plot(concentration_profile(athlete1, what = c("speed")), multiple = TRUE)
+```
+

@@ -11,7 +11,7 @@
 \alias{remote_perspective}
 \alias{local_perspective}
 \alias{athlete_id}
-\alias{rebuild_gcod_db}
+\alias{rebuild_db}
 \alias{gcod_db_extractors}
 \alias{n_ids.gcod_db}
 \alias{min_size.gcod_db}
@@ -45,7 +45,7 @@ local_perspective(object, ...)
 
 athlete_id(object, ...)
 
-rebuild_gcod_db(object, ...)
+rebuild_db(object, ...)
 
 \method{n_ids}{gcod_db}(object, perspective = "remote", ...)
 

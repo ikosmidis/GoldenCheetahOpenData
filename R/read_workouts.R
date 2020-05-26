@@ -3,11 +3,12 @@
 #' @param object an object of class `gcod_db`, as produced from [`download_workouts()`] or [`extract_workouts()`].
 #' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
 #' @param clean_db logical determining whether the workout sub-directories should be deleted after processing. Default is `TRUE`.
+#' @param write_rds logical determining whether the processed `trackeRdata` objects should be written in the workout archive directory. Default is `TRUE`.
 #' @param ... other arguments to be passed to [`extract_workouts()`].
 #' @rdname read_workouts
 #'
 #' @details
-#' If any of `local_perspective(object)$extracted` is `FALSE`, then the workout files are extracted automatically using [`extract_workouts()`].
+#' If any of `local_perspective(object)$extracted` is `FALSE`, then the workout files are extracted automatically using [`extract_workouts()`] with `overwirte = FALSE` and `clean_up = FALSE`.
 #'
 #' It is assumed that the filename for each workout corresponds to the timestamp where the first observation is made for the session. Timestamps are in UTC.
 #'
@@ -55,11 +56,8 @@
 #' }
 #'
 #' @export
-read_workouts.gcod_db <- function(object, verbose = FALSE, clean_db = TRUE, ...) {
-    if (any(!local_perspective(object)$extracted)) {
-        object <- extract_workouts(object, verbose = verbose,
-                                   overwrite = FALSE, clean_up = FALSE)
-    }
+read_workouts.gcod_db <- function(object, verbose = FALSE, clean_db = TRUE, write_rds = TRUE, ...) {
+    extract <- !local_perspective(object)$extracted
     path <- local_path(object)
     athlete_id <- athlete_id(object, perspective = "local")
     n_ids <- length(athlete_id)
@@ -69,7 +67,23 @@ read_workouts.gcod_db <- function(object, verbose = FALSE, clean_db = TRUE, ...)
                            unit = c(rep(c("km", "km_per_h", "min_per_km", "m"), 3), "steps_per_min"),
                            sport = c(rep(c("cycling", "running", "swimming"), each = 4), "running"))
 
-    process_id <- function(extraction_dir, athlete_id) {
+    process_id <- function(extraction_dir, athlete_id, extract) {
+        oo <- subset(object,
+                     subset = athlete_id(object, perspective = "local") == athlete_id,
+                     perspective = "local")
+
+        if (extract) {
+            oo <- extract_workouts(oo, verbose = verbose,
+                                   overwrite = FALSE, clean_up = FALSE, ...)
+        }
+
+        if (!isTRUE(local_perspective(oo)$extracted[1])) {
+            if (isTRUE(verbose)) {
+                message(paste("ID", athlete_id, "|", "No data is available. Skipping."), appendLF = TRUE)
+            }
+            return(NA)
+        }
+
         json <- paste0("{", athlete_id, "}.json")
         js <- jsonlite::read_json(file.path(extraction_dir, json))
         json_dates <- as.POSIXct(sapply(js$RIDES, function(x) x$date),
@@ -141,25 +155,23 @@ read_workouts.gcod_db <- function(object, verbose = FALSE, clean_db = TRUE, ...)
 
         inds <- is.na(sessions)
         if (all(inds)) {
-            return(NA)
+            out <- return(NA)
         }
         else {
-            ## DO WE NEED inds here?m
-            return(do.call("c", sessions[!inds]))
+            out <- return(do.call("c", sessions[!inds]))
         }
+        out
     }
 
     out <- list()
 
     for (k in seq.int(n_ids)) {
-        if (!isTRUE(local_perspective(object)$extracted[k])) {
-            if (isTRUE(verbose)) {
-                message(paste("ID", athlete_id[k], "|", "No data is available. Skipping."), appendLF = TRUE)
-            }
-            out[[athlete_id[k]]] <- NA
-            next
+        out[[athlete_id[k]]] <- process_id(extraction_dir[k], athlete_id[k], extract[k])
+        if (isTRUE(write_rds)) {
+            saveRDS(out[[athlete_id[k]]],
+                    file = file.path(dirname(extraction_dir[k]), paste0(athlete_id[k], ".rds")))
         }
-        out[[athlete_id[k]]] <- process_id(extraction_dir[k], athlete_id[k])
+
     }
     names(out) <- athlete_id
 

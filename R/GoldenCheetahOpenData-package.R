@@ -97,8 +97,8 @@ athlete_id <- function(object, ...) {
 
 #' @rdname gcod_db_extractors
 #' @export
-rebuild_gcod_db <- function(object, ...) {
-    UseMethod("rebuild_gcod_db")
+rebuild_db <- function(object, ...) {
+    UseMethod("rebuild_db")
 }
 
 #' Clean up a directory from extracted workout sub-directories.
