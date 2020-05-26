@@ -242,7 +242,7 @@ for further analyses.
 
     library("trackeR")
     athlete1 <- b79[[1]]
-    plot(athlete1, session = 1:5, what = c("power", "heart_rate"))
+    plot(athlete1, session = 80:84, what = c("power", "heart_rate"))
 
 <img src="man/figures/README-trackeRdata-1.png" width="100%" />
 

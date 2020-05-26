@@ -121,7 +121,7 @@ By default, `read_workouts()`:
 ```{r trackeRdata}
 library("trackeR")
 athlete1 <- b79[[1]]
-plot(athlete1, session = 1:5, what = c("power", "heart_rate"))
+plot(athlete1, session = 80:84, what = c("power", "heart_rate"))
 plot(summary(athlete1))
 plot(concentration_profile(athlete1, what = c("speed")), multiple = TRUE)
 ```
