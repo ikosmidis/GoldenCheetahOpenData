@@ -23,9 +23,9 @@ download_workouts(
 
 \item{pattern}{character string containing a regular expression to be matched with the athlete IDs in \code{object}. Only applicable if \code{object} is an object of class \code{gcod_db}. Default is \code{NULL}, which selects all IDs in \code{object}.}
 
-\item{extract}{logical determining whether the workout files in the downloaded archives should be extracted. Default is \code{FALSE}. If \code{TRUE}, then the archives are extractred in sub-directories unded \code{local_dir}, named according to the athlete IDs. See Details.}
+\item{extract}{logical determining whether the workout files in the downloaded archives should be extracted. Default is \code{FALSE}. If \code{TRUE}, then the archives are extracted in sub-directories under \code{local_dir}, named according to the athlete IDs. See Details.}
 
-\item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating which GoldeCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.}
+\item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating which GoldenCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.}
 
 \item{verbose}{logical determining whether progress information should be printed. Default is \code{FALSE}.}
 

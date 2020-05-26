@@ -13,7 +13,7 @@
 #' were extracted successfully or not.
 #'
 #' @details
-#' Athlete IDs are infered from `local_path(object)`.
+#' Athlete IDs are inferred from `local_path(object)`.
 #'
 #' ' The workouts are extracted and put in sub-directories in the same
 #' directory as the workout archives (i.e. where the files

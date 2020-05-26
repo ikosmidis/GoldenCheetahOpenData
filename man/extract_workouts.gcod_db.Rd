@@ -37,7 +37,7 @@ were extracted successfully or not.
 Extract workouts from the workout archives downloaded using \code{\link[=download_workouts]{download_workouts()}}.
 }
 \details{
-Athlete IDs are infered from \code{local_path(object)}.
+Athlete IDs are inferred from \code{local_path(object)}.
 
 ' The workouts are extracted and put in sub-directories in the same
 directory as the workout archives (i.e. where the files

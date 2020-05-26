@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{a character string giving the path to the directory to use for extracting athlete IDs.}
 
-\item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating which GoldeCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.}
+\item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating which GoldenCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.}
 
 \item{...}{currently not used.}
 }

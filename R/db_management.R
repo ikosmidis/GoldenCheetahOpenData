@@ -65,7 +65,7 @@ exist_in.gcod_db <- function(object, local_dir, ...) {
 #' Attempts to rebuild a `gcod_db` from the contents of a local directory
 #'
 #' @param object a character string giving the path to the directory to use for extracting athlete IDs.
-#' @param mirror either `"S3"` or `"OSF"`, indicating which GoldeCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.
+#' @param mirror either `"S3"` or `"OSF"`, indicating which GoldenCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.
 #' @param ... currently not used.
 #'
 #' @details
@@ -122,25 +122,25 @@ rebuild_gcod_db.character <- function(object, mirror = "S3", ...) {
     make_gcod_db(remote_db, local_db, mirror = mirror)
 }
 
-#' Concatanate `gcod_db` objects
+#' Concatenate `gcod_db` objects
 #'
 #' @param ... objects to be concatenated.
-#' @param perspective @param perspective either `"remote"` (default) or `"local"` or `"both"`, for the perspective to use for the extractor function.
+#' @param perspective either `"remote"` (default) or `"local"` or `"both"`, for the perspective to use for the extractor function.
 #' @details
 #'
 #' If `perspective = "remote"`, then the remote perspectives of `...`
-#' are concatanated and the local perspective the first object in
+#' are concatenated and the local perspective the first object in
 #' `...` is used. If `perspective = "local"`, then the local
-#' perspectives of `...` are concatanated and the remote perspective
+#' perspectives of `...` are concatenated and the remote perspective
 #' from first object in `...` is used. If `perspective = "both"` then
 #' both the local and remote perspectives are concatenated to form the
 #' local and the remote perspective of the returned object.
 #'
 #' Records with duplicated athlete IDs in the objects being
-#' concatenated are replaced, in the concatanated object, by a single
+#' concatenated are replaced, in the concatenated object, by a single
 #' record with the most recently modified entry.
 #'
-#' The mirror is inheritted from the first object supplied for
+#' The mirror is inherited from the first object supplied for
 #' concatenation.
 #'
 #' @return

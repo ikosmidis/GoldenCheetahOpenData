@@ -1,7 +1,7 @@
 #' Get information for athlete IDs that are available in the GoldenCheetah OpenData project and organize it in a `gcod_db` object.
 #'
-#' @param n_ids integer indicating the maximum number of athlete IDs to return. Default is `Inf`, which will return all available athelte IDs.
-#' @param mirror either `"S3"` or `"OSF"`, indicating which GoldeCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.
+#' @param n_ids integer indicating the maximum number of athlete IDs to return. Default is `Inf`, which will return all available athlete IDs.
+#' @param mirror either `"S3"` or `"OSF"`, indicating which GoldenCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.
 #' @param prefix character string that limits the response to athlete IDs that begin with it. Default is `NULL`, which does not limit responses.
 #' @param ... further options to be passed to `[aws.s3::get_bucket_df()]`.
 #' @details

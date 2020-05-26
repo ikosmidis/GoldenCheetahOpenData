@@ -8,9 +8,9 @@
 get_athlete_ids(n_ids = Inf, mirror = "S3", prefix = NULL, ...)
 }
 \arguments{
-\item{n_ids}{integer indicating the maximum number of athlete IDs to return. Default is \code{Inf}, which will return all available athelte IDs.}
+\item{n_ids}{integer indicating the maximum number of athlete IDs to return. Default is \code{Inf}, which will return all available athlete IDs.}
 
-\item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating which GoldeCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.}
+\item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating which GoldenCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.}
 
 \item{prefix}{character string that limits the response to athlete IDs that begin with it. Default is \code{NULL}, which does not limit responses.}
 

@@ -2,34 +2,34 @@
 % Please edit documentation in R/db_management.R
 \name{c.gcod_db}
 \alias{c.gcod_db}
-\title{Concatanate \code{gcod_db} objects}
+\title{Concatenate \code{gcod_db} objects}
 \usage{
 \method{c}{gcod_db}(..., perspective = "remote")
 }
 \arguments{
 \item{...}{objects to be concatenated.}
 
-\item{perspective}{@param perspective either \code{"remote"} (default) or \code{"local"} or \code{"both"}, for the perspective to use for the extractor function.}
+\item{perspective}{either \code{"remote"} (default) or \code{"local"} or \code{"both"}, for the perspective to use for the extractor function.}
 }
 \value{
 An object of class \code{gcod_db}
 }
 \description{
-Concatanate \code{gcod_db} objects
+Concatenate \code{gcod_db} objects
 }
 \details{
 If \code{perspective = "remote"}, then the remote perspectives of \code{...}
-are concatanated and the local perspective the first object in
+are concatenated and the local perspective the first object in
 \code{...} is used. If \code{perspective = "local"}, then the local
-perspectives of \code{...} are concatanated and the remote perspective
+perspectives of \code{...} are concatenated and the remote perspective
 from first object in \code{...} is used. If \code{perspective = "both"} then
 both the local and remote perspectives are concatenated to form the
 local and the remote perspective of the returned object.
 
 Records with duplicated athlete IDs in the objects being
-concatenated are replaced, in the concatanated object, by a single
+concatenated are replaced, in the concatenated object, by a single
 record with the most recently modified entry.
 
-The mirror is inheritted from the first object supplied for
+The mirror is inherited from the first object supplied for
 concatenation.
 }
