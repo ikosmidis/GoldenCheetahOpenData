@@ -124,5 +124,6 @@ athlete1 <- b79[[1]]
 plot(athlete1, session = 80:84, what = c("power", "heart_rate"))
 plot(summary(athlete1))
 plot(concentration_profile(athlete1, what = c("speed")), multiple = TRUE)
+
 ```
 
