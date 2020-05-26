@@ -2,7 +2,7 @@ Package: GoldenCheetahOpenData
 Title: R API to the GoldenCheetah OpenData Project and Management of Local Workout Databases
 Version: 0.0.0.9000
 Authors@R: person(given = "Ioannis", family = "Kosmidis", role = c("aut", "cre"), email = "ioannis.kosmidis@warwick.ac.uk", comment = c(ORCID = "0000-0003-1556-0302"))    
-Description: Provides an R API to the GoldenCheetah OpenData Project <doi: 10.17605/OSF.IO/6HFPZ>. Methods are provided to download workout data from the AWS S3 mirror of the GoldenCheetah OpenData Project and to wrangle the workout data and organize them into `trackeRdata` objects for further processing using the infrastructure of the `trackeR` R package.
+Description: Provides methods for querying the GoldenCheetah OpenData Project database <doi: 10.17605/OSF.IO/6HFPZ>, downloading workout data from it and managing local workout databases. Methods are also provided for the organization of the workout data into 'trackeRdata' objects for further data analysis abd modelling in R using the infrastructure provided by the 'trackeR' R package <https://CRAN.R-project.org/package=trackeR>.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

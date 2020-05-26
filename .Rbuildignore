@@ -6,3 +6,4 @@ inst/scratch
 ^codecov\.yml$
 ^CRAN-RELEASE$
 ^CODE_OF_CONDUCT\.md$
+^\.github$
