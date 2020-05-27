@@ -7,6 +7,12 @@ GoldenCheetahOpenData
 
 [![R build
 status](https://github.com/ikosmidis/GoldenCheetahOpenData/workflows/R-CMD-check/badge.svg)](https://github.com/ikosmidis/GoldenCheetahOpenData/actions)
+[![Travis build
+status](https://travis-ci.com/ikosmidis/GoldenCheetahOpenData.svg?branch=master)](https://travis-ci.com/ikosmidis/GoldenCheetahOpenData)
+[![Codecov test
+coverage](https://codecov.io/gh/ikosmidis/GoldenCheetahOpenData/branch/master/graph/badge.svg)](https://codecov.io/gh/ikosmidis/GoldenCheetahOpenData?branch=master)
+[![Licence](https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.en.html)
+[![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- badges: end -->
 
 Introduction
