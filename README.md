@@ -309,8 +309,9 @@ for details)
     ## Plot each feature longitudinally
     plot(athlete1_summaries, what = features)
 
-<img src="man/figures/README-trackeRdata2-1.png" width="80%" /> and
-explore the relationships between those summaries
+<img src="man/figures/README-trackeRdata2-1.png" width="80%" />
+
+and explore the relationships between those summaries
 
     ## Plot all pairs of features
     plot(data.frame(athlete1_summaries)[features])
@@ -326,8 +327,9 @@ ID are
     athlete1_cp <- concentration_profile(athlete1, what = c("power"))
     plot(athlete1_cp, multiple = TRUE)
 
-<img src="man/figures/README-trackeRdata3-1.png" width="80%" /> and a
-[functional
+<img src="man/figures/README-trackeRdata3-1.png" width="80%" />
+
+and a [functional
 PCA](https://en.wikipedia.org/wiki/Functional_principal_component_analysis)
 on them gives that the first 2 eigenfunctions of the concentration
 profiles explain about 90% of the variation in the concentration

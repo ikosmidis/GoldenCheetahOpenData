@@ -168,6 +168,7 @@ features <- c("duration", "distance", "avgPower", "avgHeartRate", "total_elevati
 ## Plot each feature longitudinally
 plot(athlete1_summaries, what = features)
 ```
+
 and explore the relationships between those summaries
 ```{r trackeRdata2.1}
 ## Plot all pairs of features
@@ -179,6 +180,7 @@ A bit more advanced analysis: The power concentration profiles (see, Section 5.5
 athlete1_cp <- concentration_profile(athlete1, what = c("power"))
 plot(athlete1_cp, multiple = TRUE)
 ```
+
 and a [functional PCA](https://en.wikipedia.org/wiki/Functional_principal_component_analysis) on them gives that the first 2 eigenfunctions of the concentration profiles explain about 90% of the variation in the concentration profiles
 ```{r}
 athlete1_fpca <- funPCA(athlete1_cp, what = "power", nharm = 5)
