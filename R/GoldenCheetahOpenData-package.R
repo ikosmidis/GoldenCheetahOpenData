@@ -31,73 +31,73 @@ NULL
 #' @rdname extract_workouts.gcod_db
 #' @export
 extract_workouts <- function(object, ...) {
-    UseMethod("extract_workouts")
+  UseMethod("extract_workouts")
 }
 
 #' @rdname gcod_db_extractors
 #' @export
 read_workouts <- function(object, ...) {
-    UseMethod("read_workouts")
+  UseMethod("read_workouts")
 }
 
 #' @rdname gcod_db_extractors
 #' @export
 n_ids <- function(object, ...) {
-    UseMethod("n_ids")
+  UseMethod("n_ids")
 }
 
 #' @rdname gcod_db_extractors
 #' @export
 min_size <- function(object, ...) {
-    UseMethod("min_size")
+  UseMethod("min_size")
 }
 
 #' @rdname gcod_db_extractors
 #' @export
 max_size <- function(object, ...) {
-    UseMethod("max_size")
+  UseMethod("max_size")
 }
 
 #' @rdname gcod_db_extractors
 #' @export
 total_size <- function(object, ...) {
-    UseMethod("total_size")
+  UseMethod("total_size")
 }
 
 #' @rdname gcod_db_extractors
 #' @export
 mean_size <- function(object, ...) {
-    UseMethod("mean_size")
+  UseMethod("mean_size")
 }
 
 #' @rdname gcod_db_extractors
 #' @export
 local_path <- function(object, ...) {
-    UseMethod("local_path")
+  UseMethod("local_path")
 }
 
 #' @rdname gcod_db_extractors
 #' @export
 remote_perspective <- function(object, ...) {
-    UseMethod("remote_perspective")
+  UseMethod("remote_perspective")
 }
 
 #' @rdname gcod_db_extractors
 #' @export
 local_perspective <- function(object, ...) {
-    UseMethod("local_perspective")
+  UseMethod("local_perspective")
 }
 
 #' @rdname gcod_db_extractors
 #' @export
 athlete_id <- function(object, ...) {
-    UseMethod("athlete_id")
+  UseMethod("athlete_id")
 }
 
 #' @rdname gcod_db_extractors
 #' @export
 rebuild_db <- function(object, ...) {
-    UseMethod("rebuild_db")
+  UseMethod("rebuild_db")
 }
 
 #' Clean up a directory from extracted workout sub-directories.
@@ -116,11 +116,11 @@ rebuild_db <- function(object, ...) {
 #' @aliases clean_db.character clean_db.gcod_db
 #' @export
 clean_db <- function(object, confirm = TRUE, verbose = TRUE) {
-    UseMethod("clean_db")
+  UseMethod("clean_db")
 }
 
 #' @rdname exist_in.gcod_db
 #' @export
 exist_in <- function(object, ...) {
-    UseMethod("exist_in")
+  UseMethod("exist_in")
 }

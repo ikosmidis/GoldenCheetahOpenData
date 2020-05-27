@@ -21,15 +21,15 @@
 #' athlete_id(db79, perspective = "remote")
 #' }
 subset.gcod_db <- function(x, subset, perspective = "remote", ...) {
-
-    switch(perspective,
-        "remote" = within(x, {
-            remote_db <- subset(remote_perspective(x), subset = subset)
-        }),
-        "local" = within(x, {
-            local_db <- subset(local_perspective(x), subset = subset)
-        }),
-        stop("`perspective` should be one of 'remote', 'local'"))
+  switch(perspective,
+    "remote" = within(x, {
+      remote_db <- subset(remote_perspective(x), subset = subset)
+    }),
+    "local" = within(x, {
+      local_db <- subset(local_perspective(x), subset = subset)
+    }),
+    stop("`perspective` should be one of 'remote', 'local'")
+  )
 }
 
 #' Checks whether the workout archives referenced in the remote
@@ -50,16 +50,16 @@ subset.gcod_db <- function(x, subset, perspective = "remote", ...) {
 #' id <- subset(ids007, athlete_id(ids007) == athlete_id(ids007)[2])
 #' id <- download_workouts(id)
 #' ## Only the workout archive for athlete_id(ids007)[2] from the ones
-#' #in the remote perspective of ids007 exist in tempdir()
+#' # in the remote perspective of ids007 exist in tempdir()
 #' exist_in(ids007, tempdir())
 #' }
 #' @export
 exist_in.gcod_db <- function(object, local_dir, ...) {
-    ## Find out what is in local_dir
-    remote_files <- gsub("data/", "", remote_perspective(object)$key)
-    local_files <- file.exists(paste0(local_dir, "/", remote_files))
-    names(local_files) <- remote_files
-    local_files
+  ## Find out what is in local_dir
+  remote_files <- gsub("data/", "", remote_perspective(object)$key)
+  local_files <- file.exists(paste0(local_dir, "/", remote_files))
+  names(local_files) <- remote_files
+  local_files
 }
 
 #' Attempts to rebuild a `gcod_db` from the contents of a local directory
@@ -84,42 +84,44 @@ exist_in.gcod_db <- function(object, local_dir, ...) {
 #' }
 #' @export
 rebuild_db.character <- function(object, mirror = "S3", ...) {
-    if (!dir.exists(object)) {
-        stop(paste(object, "is either not a directory or does not exist."))
-    }
-    zip_paths <- dir(object, pattern = ".zip", full.names = TRUE)
-    if (length(zip_paths) == 0) {
-        stop(paste("No zip files found in", object))
-    }
-    ## Here we keep the extension to avoid partial matching of non-id
-    ## filenames with prefix
-    prefix <- basename(zip_paths)
-    ids <- gsub(".zip", "", prefix)
-    ## remote_db
-    ## Assuming that we cannot get two files with the same name on the
-    ## same dir, so no duplicates can result in the remotes from c
-    gcod_dbs <- lapply(prefix, function(x) get_athlete_ids(prefix = x, mirror = mirror))
-    inds <- sapply(gcod_dbs, n_ids) > 0
-    remote_db <- remote_perspective(do.call(function(...) {
-        c.gcod_db(..., perspective = "remote")
-    }, gcod_dbs))
-    ## local_db
-    ## Keep only files for which get_athlete_ids returns something
-    zip_paths <- zip_paths[inds]
-    ids <- ids[inds]
-    finfo <- file.info(zip_paths)
-    ## Check whether the athelte_ids have been extracted
-    json_file <- if (length(ids)) paste0(ids, "/{", ids, "}.json") else character(0)
-    extracted <- file.exists(file.path(object, json_file))
-    downloaded <- rep(TRUE, length(ids))
-    local_db <- data.frame(path = zip_paths,
-                           last_modified = finfo$mtime,
-                           size = finfo$size,
-                           extracted = extracted,
-                           downloaded = downloaded,
-                           athlete_id = ids,
-                           stringsAsFactors = FALSE)
-    make_gcod_db(remote_db, local_db, mirror = mirror)
+  if (!dir.exists(object)) {
+    stop(paste(object, "is either not a directory or does not exist."))
+  }
+  zip_paths <- dir(object, pattern = ".zip", full.names = TRUE)
+  if (length(zip_paths) == 0) {
+    stop(paste("No zip files found in", object))
+  }
+  ## Here we keep the extension to avoid partial matching of non-id
+  ## filenames with prefix
+  prefix <- basename(zip_paths)
+  ids <- gsub(".zip", "", prefix)
+  ## remote_db
+  ## Assuming that we cannot get two files with the same name on the
+  ## same dir, so no duplicates can result in the remotes from c
+  gcod_dbs <- lapply(prefix, function(x) get_athlete_ids(prefix = x, mirror = mirror))
+  inds <- sapply(gcod_dbs, n_ids) > 0
+  remote_db <- remote_perspective(do.call(function(...) {
+    c.gcod_db(..., perspective = "remote")
+  }, gcod_dbs))
+  ## local_db
+  ## Keep only files for which get_athlete_ids returns something
+  zip_paths <- zip_paths[inds]
+  ids <- ids[inds]
+  finfo <- file.info(zip_paths)
+  ## Check whether the athelte_ids have been extracted
+  json_file <- if (length(ids)) paste0(ids, "/{", ids, "}.json") else character(0)
+  extracted <- file.exists(file.path(object, json_file))
+  downloaded <- rep(TRUE, length(ids))
+  local_db <- data.frame(
+    path = zip_paths,
+    last_modified = finfo$mtime,
+    size = finfo$size,
+    extracted = extracted,
+    downloaded = downloaded,
+    athlete_id = ids,
+    stringsAsFactors = FALSE
+  )
+  make_gcod_db(remote_db, local_db, mirror = mirror)
 }
 
 #' Concatenate `gcod_db` objects
@@ -148,54 +150,54 @@ rebuild_db.character <- function(object, mirror = "S3", ...) {
 #'
 #' @export
 c.gcod_db <- function(..., perspective = "remote") {
-    perspective <- match.arg(perspective, c("remote", "local", "both"))
-    input <- list(...)
-    input <- input[!unlist(lapply(input, is.null))]
-    ninput <- length(input)
-    mirror <- attr(remote_perspective(input[[1]]), "mirror")
-    rm_duplicates <- function(db) {
-        ## Keeps the most recent file for each athlete id
-        db <- db[order(db$last_modified, decreasing = TRUE), ]
-        db <- db[!duplicated(db$athlete_id), ]
-        db
-    }
-    if (isTRUE(perspective == "remote")) {
-        local_db <- input[[1]]$local_db
-        remote_db <- do.call("rbind", lapply(input, remote_perspective))
-        remote_db <- rm_duplicates(remote_db)
-    }
-    if (isTRUE(perspective == "local")) {
-        local_db <- do.call("rbind", lapply(input, local_perspective))
-        local_db <- rm_duplicates(local_db)
-        remote_db <- input[[1]]$remote_db
-    }
-    if (isTRUE(perspective == "both")) {
-        local_db <- do.call("rbind", lapply(input, local_perspective))
-        local_db <- rm_duplicates(local_db)
-        remote_db <- do.call("rbind", lapply(input, remote_perspective))
-        remote_db <- rm_duplicates(remote_db)
-    }
-    make_gcod_db(remote_db, local_db, mirror)
+  perspective <- match.arg(perspective, c("remote", "local", "both"))
+  input <- list(...)
+  input <- input[!unlist(lapply(input, is.null))]
+  ninput <- length(input)
+  mirror <- attr(remote_perspective(input[[1]]), "mirror")
+  rm_duplicates <- function(db) {
+    ## Keeps the most recent file for each athlete id
+    db <- db[order(db$last_modified, decreasing = TRUE), ]
+    db <- db[!duplicated(db$athlete_id), ]
+    db
+  }
+  if (isTRUE(perspective == "remote")) {
+    local_db <- input[[1]]$local_db
+    remote_db <- do.call("rbind", lapply(input, remote_perspective))
+    remote_db <- rm_duplicates(remote_db)
+  }
+  if (isTRUE(perspective == "local")) {
+    local_db <- do.call("rbind", lapply(input, local_perspective))
+    local_db <- rm_duplicates(local_db)
+    remote_db <- input[[1]]$remote_db
+  }
+  if (isTRUE(perspective == "both")) {
+    local_db <- do.call("rbind", lapply(input, local_perspective))
+    local_db <- rm_duplicates(local_db)
+    remote_db <- do.call("rbind", lapply(input, remote_perspective))
+    remote_db <- rm_duplicates(remote_db)
+  }
+  make_gcod_db(remote_db, local_db, mirror)
 }
 
 #' @rdname clean_db
 #' @export
 clean_db.character <- function(object, confirm = TRUE, verbose = TRUE) {
-    if (!dir.exists(object)) {
-        stop(paste(object, "is either not a directory or does not exist."))
-    }
-    sub_dirs <- list.dirs(object, full.names = TRUE, recursive = FALSE)
-    ids <- basename(sub_dirs)
-    do_clean_db(sub_dirs, ids, confirm, verbose)
+  if (!dir.exists(object)) {
+    stop(paste(object, "is either not a directory or does not exist."))
+  }
+  sub_dirs <- list.dirs(object, full.names = TRUE, recursive = FALSE)
+  ids <- basename(sub_dirs)
+  do_clean_db(sub_dirs, ids, confirm, verbose)
 }
 
 #' @rdname clean_db
 #' @export
 clean_db.gcod_db <- function(object, confirm = TRUE, verbose = TRUE) {
-    sub_dirs <- local_path(object)
-    sub_dirs <- gsub(".zip", "", sub_dirs)
-    ids <- basename(sub_dirs)
-    do_clean_db(sub_dirs, ids, confirm, verbose)
-    object$local_db$extracted <- FALSE
-    object
+  sub_dirs <- local_path(object)
+  sub_dirs <- gsub(".zip", "", sub_dirs)
+  ids <- basename(sub_dirs)
+  do_clean_db(sub_dirs, ids, confirm, verbose)
+  object$local_db$extracted <- FALSE
+  object
 }

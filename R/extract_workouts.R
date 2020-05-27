@@ -29,55 +29,58 @@ extract_workouts.gcod_db <- function(object,
                                      clean_db = TRUE,
                                      overwrite = TRUE,
                                      ...) {
-    path <- local_path(object)
-    if (length(path) == 0) {
-        stop("The are no references to local files in `object`. Run `download_workouts(object)` first.")
+  path <- local_path(object)
+  if (length(path) == 0) {
+    stop("The are no references to local files in `object`. Run `download_workouts(object)` first.")
+  }
+  n_paths <- length(path)
+  athlete_id <- athlete_id(object, perspective = "local")
+  for (j in seq.int(n_paths)) {
+    current_path <- path[j]
+    current_dir <- dirname(current_path)
+    extraction_dir <- paste0(current_dir, "/", athlete_id[j])
+    if (verbose) {
+      message(paste("Extracting", current_path, "... "), appendLF = FALSE)
     }
-    n_paths <- length(path)
-    athlete_id <- athlete_id(object, perspective = "local")
-    for (j in seq.int(n_paths)) {
-        current_path <- path[j]
-        current_dir <- dirname(current_path)
-        extraction_dir <- paste0(current_dir, "/", athlete_id[j])
+    if (!isTRUE(overwrite)) {
+      if (file.exists(file.path(extraction_dir, paste0("/{", athlete_id[j], "}.json")))) {
         if (verbose) {
-            message(paste("Extracting", current_path, "... "), appendLF = FALSE)
+          message("Exists.", appendLF = TRUE)
         }
-        if (!isTRUE(overwrite)) {
-            if (file.exists(file.path(extraction_dir, paste0("/{", athlete_id[j], "}.json")))) {
-                if (verbose) {
-                    message("Exists.", appendLF = TRUE)
-                }
-                object$local_db[athlete_id == athlete_id[j], "extracted"] <- TRUE
-                next
-            }
-        }
-        if (isTRUE(clean_db)) {
-            unlink(extraction_dir, recursive = TRUE, force = TRUE)
-        }
-        unzip_attempt <- tryCatch({
-            utils::unzip(current_path,
-                         overwrite = overwrite,
-                         exdir = extraction_dir)
-        },
-        warning = function(w) {
-            w
-        })
-
-        if (inherits(unzip_attempt, "warning")) {
-            object$local_db[athlete_id == athlete_id[j], "extracted"] <- FALSE
-            if (verbose) {
-                message("Failed.", appendLF = TRUE)
-            }
-            warning(unzip_attempt)
-            unlink(extraction_dir, recursive = TRUE)
-            next
-        }
-        else {
-            object$local_db[athlete_id == athlete_id[j], "extracted"] <- TRUE
-            if (verbose) {
-                message("Done.", appendLF = TRUE)
-            }
-        }
+        object$local_db[athlete_id == athlete_id[j], "extracted"] <- TRUE
+        next
+      }
     }
-    object
+    if (isTRUE(clean_db)) {
+      unlink(extraction_dir, recursive = TRUE, force = TRUE)
+    }
+    unzip_attempt <- tryCatch(
+      {
+        utils::unzip(current_path,
+          overwrite = overwrite,
+          exdir = extraction_dir
+        )
+      },
+      warning = function(w) {
+        w
+      }
+    )
+
+    if (inherits(unzip_attempt, "warning")) {
+      object$local_db[athlete_id == athlete_id[j], "extracted"] <- FALSE
+      if (verbose) {
+        message("Failed.", appendLF = TRUE)
+      }
+      warning(unzip_attempt)
+      unlink(extraction_dir, recursive = TRUE)
+      next
+    }
+    else {
+      object$local_db[athlete_id == athlete_id[j], "extracted"] <- TRUE
+      if (verbose) {
+        message("Done.", appendLF = TRUE)
+      }
+    }
+  }
+  object
 }

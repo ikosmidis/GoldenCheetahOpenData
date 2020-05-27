@@ -35,15 +35,14 @@
 #' \donttest{
 #' ## Using the first few letters of the athlete ID
 #' if (interactive()) {
-#'    files_007_1 <- download_workouts("007", confirm = TRUE)
+#'   files_007_1 <- download_workouts("007", confirm = TRUE)
 #' }
 #'
 #' ## Using a `gcod_db` object and fitering using regex
 #' ids_00 <- get_athlete_ids(prefix = "00")
 #' if (interactive()) {
-#'    files_007_2 <- download_workouts(ids_00, pattern = "007", confirm = TRUE)
+#'   files_007_2 <- download_workouts(ids_00, pattern = "007", confirm = TRUE)
 #' }
-#'
 #' }
 #' @export
 download_workouts <- function(object,
@@ -55,106 +54,116 @@ download_workouts <- function(object,
                               confirm = FALSE,
                               overwrite = FALSE,
                               ...) {
-    mirror <- match.arg(mirror, c("OSF", "S3"))
-    if (!dir.exists(local_dir)) {
-        stop("'", local_dir, "' does not exist.")
+  mirror <- match.arg(mirror, c("OSF", "S3"))
+  if (!dir.exists(local_dir)) {
+    stop("'", local_dir, "' does not exist.")
+  }
+  if (inherits(object, "gcod_db")) {
+    sizes <- remote_perspective(object)$size
+    athlete_id <- remote_perspective(object)$athlete_id
+    if (!is.null(pattern)) {
+      inds <- grepl(pattern, athlete_id)
+      sizes <- sizes[inds]
+      athlete_id <- athlete_id[inds]
+      object$remote_db <- object$remote_db[inds, ]
+      attr(object$remote_db, "mirror") <- mirror
     }
-    if (inherits(object, "gcod_db")) {
-
-        sizes <- remote_perspective(object)$size
-        athlete_id <- remote_perspective(object)$athlete_id
-        if (!is.null(pattern)) {
-            inds <- grepl(pattern, athlete_id)
-            sizes <- sizes[inds]
-            athlete_id <- athlete_id[inds]
-            object$remote_db <- object$remote_db[inds, ]
-            attr(object$remote_db, "mirror") <- mirror
+  }
+  else {
+    if (length(object) > 1) {
+      stop("Vectors of character strings are not supported for `object`.")
+    }
+    object <- get_athlete_ids(mirror = mirror, prefix = object)
+    sizes <- remote_perspective(object)$size
+    athlete_id <- athlete_id(object, perspective = "remote")
+  }
+  ## Download
+  n_ids <- length(athlete_id)
+  downloaded <- logical(n_ids)
+  if (n_ids == 0) {
+    stop("There are no athlete IDs to download.")
+  }
+  if (isTRUE(confirm)) {
+    total_size <- sum(sizes)
+    out <- utils::askYesNo(paste("Attempting to download", format_object_size(total_size), "of workout data for", n_ids, "athlete IDs. Procced?"))
+    if (!isTRUE(out)) {
+      return(NULL)
+    }
+  }
+  if (isTRUE(mirror == "S3")) {
+    gc_bucket <- "goldencheetah-opendata"
+    s3_path <- paste0("data/", athlete_id, ".zip")
+    file_names <- basename(s3_path)
+    path <- file.path(local_dir, file_names)
+    for (j in seq.int(n_ids)) {
+      if (file.exists(path[j]) & !overwrite) {
+        if (verbose) {
+          message(paste(file_names[j], "exists and `overwrite = FALSE`. Skipping."),
+            appendLF = TRUE
+          )
         }
-    }
-    else {
-        if (length(object) > 1) {
-            stop("Vectors of character strings are not supported for `object`.")
+        downloaded[j] <- TRUE
+        next
+      }
+      if (verbose) {
+        current_size <- to_object_size(sizes[j])
+        message(paste(
+          "Downloading", file_names[j],
+          paste0("(", format_object_size(sizes[j]), ")"), "... "
+        ),
+        appendLF = FALSE
+        )
+      }
+      ## Test object exists
+      s3_attempt <- try(object_exists(s3_path[j],
+        bucket = gc_bucket
+      ),
+      silent = TRUE
+      )
+      if (inherits(s3_attempt, "try-error")) {
+        warning(paste("Failed to download", file_names[j]))
+        if (verbose) {
+          message("Failed.", appendLF = TRUE)
         }
-        object <- get_athlete_ids(mirror = mirror, prefix = object)
-        sizes <- remote_perspective(object)$size
-        athlete_id <- athlete_id(object, perspective = "remote")
+        next
+      }
+      else {
+        save_object(s3_path[j],
+          bucket = gc_bucket,
+          file = path[j],
+          overwrite = TRUE,
+          ...
+        )
+        downloaded[j] <- TRUE
+      }
+      if (verbose) {
+        message("Done.", appendLF = TRUE)
+      }
     }
-    ## Download
-    n_ids <- length(athlete_id)
-    downloaded <- logical(n_ids)
-    if (n_ids == 0) {
-        stop("There are no athlete IDs to download.")
-    }
-    if (isTRUE(confirm)) {
-        total_size <- sum(sizes)
-        out <- utils::askYesNo(paste("Attempting to download", format_object_size(total_size), "of workout data for", n_ids, "athlete IDs. Procced?"))
-        if (!isTRUE(out)) {
-            return(NULL)
-        }
-    }
-    if (isTRUE(mirror == "S3")) {
-        gc_bucket <- 'goldencheetah-opendata'
-        s3_path <- paste0("data/", athlete_id, ".zip")
-        file_names <- basename(s3_path)
-        path <- file.path(local_dir, file_names)
-        for (j in seq.int(n_ids)) {
-            if (file.exists(path[j]) & !overwrite) {
-                if (verbose) {
-                    message(paste(file_names[j], "exists and `overwrite = FALSE`. Skipping."),
-                            appendLF = TRUE)
-                }
-                downloaded[j] <- TRUE
-                next
-            }
-            if (verbose) {
-                current_size <- to_object_size(sizes[j])
-                message(paste("Downloading", file_names[j],
-                              paste0("(", format_object_size(sizes[j]),")"), "... "),
-                        appendLF = FALSE)
-            }
-            ## Test object exists
-            s3_attempt <- try(object_exists(s3_path[j],
-                                            bucket = gc_bucket),
-                              silent = TRUE)
-            if (inherits(s3_attempt, "try-error")) {
-                warning(paste("Failed to download", file_names[j]))
-                if (verbose) {
-                    message("Failed.", appendLF = TRUE)
-                }
-                next
-            }
-            else {
-                save_object(s3_path[j],
-                            bucket = gc_bucket,
-                            file = path[j],
-                            overwrite = TRUE,
-                            ...)
-                downloaded[j] <- TRUE
-            }
-            if (verbose) {
-                message("Done.", appendLF = TRUE)
-            }
-        }
-    }
-    if (isTRUE(mirror == "OSF")) {
-        stop("OSF is not implemented in the curretn version of GoldenCheetahOpenData.")
-    }
+  }
+  if (isTRUE(mirror == "OSF")) {
+    stop("OSF is not implemented in the curretn version of GoldenCheetahOpenData.")
+  }
 
-    finfo <- file.info(path)
-    local_db <- data.frame(path = path,
-                           last_modified = finfo$mtime,
-                           size = finfo$size,
-                           extracted = FALSE,
-                           downloaded = downloaded,
-                           athlete_id = athlete_id,
-                           stringsAsFactors = FALSE)
+  finfo <- file.info(path)
+  local_db <- data.frame(
+    path = path,
+    last_modified = finfo$mtime,
+    size = finfo$size,
+    extracted = FALSE,
+    downloaded = downloaded,
+    athlete_id = athlete_id,
+    stringsAsFactors = FALSE
+  )
 
-    object <- make_gcod_db(remote_perspective(object), local_db,
-                           attr(remote_perspective(object), "mirror"))
+  object <- make_gcod_db(
+    remote_perspective(object), local_db,
+    attr(remote_perspective(object), "mirror")
+  )
 
-    if (isTRUE(extract)) {
-        object <- extract_workouts(object, verbose, clean_up = TRUE, overwrite = TRUE)
-    }
+  if (isTRUE(extract)) {
+    object <- extract_workouts(object, verbose, clean_up = TRUE, overwrite = TRUE)
+  }
 
-    object
+  object
 }

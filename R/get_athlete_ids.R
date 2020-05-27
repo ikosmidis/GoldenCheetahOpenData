@@ -54,44 +54,48 @@ get_athlete_ids <- function(n_ids = Inf,
                             mirror = "S3",
                             prefix = NULL,
                             ...) {
-    mirror <- match.arg(mirror, c("OSF", "S3"))
-    if (isTRUE(mirror == "S3")) {
-        gc_bucket <- 'goldencheetah-opendata'
-        athlete_prefix <- paste0("data/", prefix)
-        remote_db <- get_bucket(bucket = gc_bucket,
-                                prefix = athlete_prefix,
-                                max = n_ids + 1,
-                                ...)
-        remote_db <- as.data.frame(remote_db, stringsAsFactors = FALSE)
-        ## Get athlete id's
-        athlete <- gsub(".zip|data/", "", remote_db[, 1])
-        base_dir_index <- match("", athlete, nomatch = 0)
-        remote_db$athlete_id <- athlete
-        ## Assuming tz in amazon S3 is UTC
-        remote_db$LastModified <- as.POSIXct(remote_db$LastModified, tz = "UTC",
-                                       format = "%Y-%m-%dT%H:%M:%S.000Z")
-        if (base_dir_index) {
-            remote_db <- remote_db[-base_dir_index, ]
-        }
-        names(remote_db) <- c("key", "last_modified", "e_tag", "size", "owner_id", "owner_display_name", "storage_class", "bucket", "athlete_id")
-        remote_db$size <- as.numeric(remote_db$size)
-        if (isTRUE(nrow(remote_db))) {
-            rownames(remote_db) <- seq.int(nrow(remote_db))
-        }
+  mirror <- match.arg(mirror, c("OSF", "S3"))
+  if (isTRUE(mirror == "S3")) {
+    gc_bucket <- "goldencheetah-opendata"
+    athlete_prefix <- paste0("data/", prefix)
+    remote_db <- get_bucket(
+      bucket = gc_bucket,
+      prefix = athlete_prefix,
+      max = n_ids + 1,
+      ...
+    )
+    remote_db <- as.data.frame(remote_db, stringsAsFactors = FALSE)
+    ## Get athlete id's
+    athlete <- gsub(".zip|data/", "", remote_db[, 1])
+    base_dir_index <- match("", athlete, nomatch = 0)
+    remote_db$athlete_id <- athlete
+    ## Assuming tz in amazon S3 is UTC
+    remote_db$LastModified <- as.POSIXct(remote_db$LastModified,
+      tz = "UTC",
+      format = "%Y-%m-%dT%H:%M:%S.000Z"
+    )
+    if (base_dir_index) {
+      remote_db <- remote_db[-base_dir_index, ]
     }
-    if (isTRUE(mirror == "OSF")) {
-        stop("OSF is not implemented in the curretn version of GoldenCheetahOpenData")
+    names(remote_db) <- c("key", "last_modified", "e_tag", "size", "owner_id", "owner_display_name", "storage_class", "bucket", "athlete_id")
+    remote_db$size <- as.numeric(remote_db$size)
+    if (isTRUE(nrow(remote_db))) {
+      rownames(remote_db) <- seq.int(nrow(remote_db))
     }
-    ## Dummy data to get the classes right
-    local_db <- data.frame(path = "a",
-                           last_modified = as.POSIXct("2000-01-01"),
-                           size = 1,
-                           extracted = FALSE,
-                           downloaded = FALSE,
-                           athlete_id = "a",
-                           stringsAsFactors = FALSE)
-    ## Local is always empty when `get_athelte_ids` is called
-    make_gcod_db(remote_db, local_db[-1, ], mirror = mirror)
+  }
+  if (isTRUE(mirror == "OSF")) {
+    stop("OSF is not implemented in the curretn version of GoldenCheetahOpenData")
+  }
+  ## Dummy data to get the classes right
+  local_db <- data.frame(
+    path = "a",
+    last_modified = as.POSIXct("2000-01-01"),
+    size = 1,
+    extracted = FALSE,
+    downloaded = FALSE,
+    athlete_id = "a",
+    stringsAsFactors = FALSE
+  )
+  ## Local is always empty when `get_athelte_ids` is called
+  make_gcod_db(remote_db, local_db[-1, ], mirror = mirror)
 }
-
-
