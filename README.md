@@ -269,7 +269,7 @@ for exploration.
     #> e104e895-9ecc-40b7-9e62-c1c8823ae0d8 
     #>                             312.0400
 
-Let’s explore further some sessions for athlete ID
+Let’s explore further the workout sessions for athlete ID
 `af3ab0e9-fc82-43b7-9d5b-60d496b77d70`
 
     athlete1 <- b79[["af3ab0e9-fc82-43b7-9d5b-60d496b77d70"]]
@@ -280,34 +280,42 @@ Let’s explore further some sessions for athlete ID
     athlete1_duration <- session_duration(athlete1)
     sum(athlete1_duration)
     #> Time difference of 118.8053 hours
-    ## Make sure we only keep workout sessions with duration more than 10 min
+    ## Only keep workout sessions with duration more than 10 min
     athlete1 <- athlete1[athlete1_duration > 10/60]
+
+The workout timeline and some workout views can be easily produced using
+methods from the `trackeR` R package
+
     ## Training times
     timeline(athlete1)
 
-<img src="man/figures/README-trackeRdata1-1.png" width="100%" />
+<img src="man/figures/README-trackeRdata1.1-1.png" width="80%" />
 
     ## Power and heart_rate for the 80th to 84th workout
-    plot(athlete1, session = 40:47, what = c("power", "heart_rate"))
+    plot(athlete1, session = 40:45, what = c("power", "heart_rate"))
 
-<img src="man/figures/README-trackeRdata1-2.png" width="100%" />
+<img src="man/figures/README-trackeRdata1.1-2.png" width="80%" />
 
-Session summaries can also easily be extracted
+We can also compute and visualize the summaries for the workout sessions
+(see, [trackeR’s
+vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf)
+for details)
 
     athlete1_summaries <- summary(athlete1)
-    ## Let's choose some features (see `?trackeR::plot.trackeRdataSummary`
+    ##  Choose some features (see `?trackeR::plot.trackeRdataSummary`
     ##  for the names of the available summaries, or
     ##  names(data.frame(athlete1_summaries)))
     features <- c("duration", "distance", "avgPower", "avgHeartRate", "total_elevation_gain", "wrRatio")
     ## Plot each feature longitudinally
     plot(athlete1_summaries, what = features)
 
-<img src="man/figures/README-trackeRdata2-1.png" width="100%" />
+<img src="man/figures/README-trackeRdata2-1.png" width="80%" /> and
+explore the relationships between those summaries
 
     ## Plot all pairs of features
     plot(data.frame(athlete1_summaries)[features])
 
-<img src="man/figures/README-trackeRdata2-2.png" width="100%" />
+<img src="man/figures/README-trackeRdata2.1-1.png" width="80%" />
 
 A bit more advanced analytics: The power concentration profiles for the
 this athlete ID are
@@ -315,24 +323,27 @@ this athlete ID are
     athlete1_cp <- concentration_profile(athlete1, what = c("power"))
     plot(athlete1_cp, multiple = TRUE)
 
-<img src="man/figures/README-trackeRdata3-1.png" width="100%" /> and a
+<img src="man/figures/README-trackeRdata3-1.png" width="80%" /> and a
 functional PCA on them gives that the first 4 components explain about
 95% of the variability in the concentration profiles
 
     athlete1_fpca <- funPCA(athlete1_cp, what = "power", nharm = 5)
     round(athlete1_fpca$varprop[1:5] * 100, 2)
     #> [1] 63.94 24.89  5.24  2.56  1.41
-    ## Check which sessions have power datax
+
+The harmonics scores can then be used for further analyses
+
+    ## Check which sessions have power data
     has_power <- !is.na(athlete1_summaries$avgPower)
     ## Scatterplots of the first harmonic against session summaries (high correlation with distance and duration)
     plot(cbind(data.frame(athlete1_summaries)[has_power, features], PC1 = athlete1_fpca$scores[, 1]))
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="80%" />
 
     ## Scatterplots of the second harmonic against session summaries
     plot(cbind(data.frame(athlete1_summaries)[has_power, features], PC2 = athlete1_fpca$scores[, 2]))
 
-<img src="man/figures/README-unnamed-chunk-2-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-3-2.png" width="80%" />
 
     ## etc
 
@@ -356,3 +367,4 @@ Statistical Software*, **82**(7), 1–29.
 [doi:10.18637/jss.v082.i07](https://doi.org/10.18637/jss.v082.i07)
 
 Liversedge, M. (2020). GoldenCheetah OpenData Project. OSF.
+[doi:10.17605/OSF.IO/6HFPZ](https://doi.org/10.17605/OSF.IO/6HFPZ)
