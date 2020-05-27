@@ -27,9 +27,9 @@ The **GoldenCheetahOpenData** R package provides methods for querying
 the GoldenCheetah OpenData Project database <doi:
 10.17605/OSF.IO/6HFPZ>, downloading workout data from it and managing
 local workout databases. Methods are also provided for the
-organization of the workout data into 'trackeRdata' objects for
-further data analysis abd modelling in R using the infrastructure
-provided by the 'trackeR' R package <https://CRAN.R-project.org/package=trackeR>.
+organization of the workout data into `trackeRdata` objects for
+further data analysis and modelling in R using the infrastructure
+provided by the **trackeR** R package <https://CRAN.R-project.org/package=trackeR>.
 
 ## Installation
 
@@ -49,9 +49,9 @@ devtools::install_github("ikosmidis/GoldenCheetahOpenData")
 
 **GoldenCheetahOpenData** implements a simple query-download-read workflow, that allows users to gradually build a local workout repository.
 
-### Querying GoldenCheetah OpenData project's mirrors
+### Querying GoldenCheetah OpenData project mirrors
 
-The first step in **GoldenCheetahOpenData**'s workflow is to query the mirrors of the GoldenCheetah OpenData project for the available IDs. This is done with a call to `get_athelte_ids()`, which will create a `gcod_db` object.
+The first step in the **GoldenCheetahOpenData** R package's workflow is to query the mirrors of the GoldenCheetah OpenData project for the available IDs. This is done with a call to `get_athelte_ids()`, which will create a `gcod_db` object.
 ```{r athletes, cache = TRUE}
 library("GoldenCheetahOpenData")
 ids <- get_athlete_ids()
@@ -66,11 +66,11 @@ class(ids)
 print(ids, txtplot = TRUE)
 ```
 
-The output above also gives us a quick snapshot of GoldenCheetah OpenData project's database. It currently has a massive
+The output above also gives us a quick snapshot of GoldenCheetah OpenData project's database. It currently has 
 ```{r size}
 format(total_size(ids), unit = "auto")
 ```
-worth of *compressed* workouts for
+worth of *compressed* workout sessions for
 ```{r n_ids}
 n_ids(ids, perspective = "remote")
 ```
@@ -106,7 +106,7 @@ athlete_id(ids_dir, perspective = "remote")
 athlete_id(ids_b79, perspective = "remote")
 ```
 
-A carelless call to `download_workouts()` can easily instruct R to start downloading all workouts from the **GoldenCheetah OpenData** project, which is rarely what you want. Instead, I recommend downloading only a few at a time. This can be done in various ways, including using the `prefix` argument of `get_athlete_ids()`, the `pattern` argument of `download_workouts()` (as above) or --- a bit more advanced --- by directly subsetting the `gcod_db` object
+A careless call to `download_workouts()` can easily instruct R to start downloading all workouts from the **GoldenCheetah OpenData** project, which is rarely what you want. Instead, I recommend downloading only a few at a time. This can be done in various ways, including using the `prefix` argument of `get_athlete_ids()`, the `pattern` argument of `download_workouts()` (as above) or --- a bit more advanced --- by directly subsetting the `gcod_db` object
 ```{r subset}
 ids_sub <- subset(ids, subset = grepl("b7-9", athlete_id(ids)), perspective = "remote")
 athlete_id(ids_sub)
@@ -114,7 +114,7 @@ athlete_id(ids_sub)
 In this way, whenever you rebuild the `gcod_db` object form the local database you are getting access to all the workout files you have ever downloaded.
 
 ### Reading workouts
-Reading workouts involves: extracting the workout archives for each athlete ID, reading all the csv files in the extracted directories, wrangling the information in them (e.g. inferring the workout timestamps, carrying out data quality checks, imputation, etc), and organizing the resulting data into objects that can be used for further analyses. The `read_workouts()` method can do all the above from a unified interface. For example (and this takes a while):
+Reading workouts involves: extracting the workout archives for each athlete ID, reading all the `.csv` files in the extracted directories, wrangling the information in them (e.g. inferring the workout timestamps, carrying out data quality checks, imputation, etc), and organizing the resulting data into objects that can be used for further analyses. The `read_workouts()` method can do all the above from a unified interface. For example (and this takes a while):
 ```{r extract, warning = FALSE, cache = TRUE}
 b79 <- read_workouts(ids_b79)
 ```
@@ -125,7 +125,7 @@ By default, `read_workouts()`:
 
 
 ## Analyses of workout data using `trackeR`
-`b79` is now a list of `trackeRdata` objects, and `trackeR` can be used for exploration.
+`b79` is now a list of `trackeRdata` objects, and **trackeR** can be used for exploration.
 ```{r trackeRdata}
 library("trackeR")
 ## Reading was not possible for athlete ID (see `warnings`)
@@ -150,7 +150,7 @@ sum(athlete1_duration)
 athlete1 <- athlete1[athlete1_duration > 10/60]
 ```
 
-The workout timeline and some workout views can be easily produced using methods from the `trackeR` R package
+The workout timeline and some workout views can be easily produced using methods from the **trackeR** R package
 ```{r trackeRdata1.1}
 ## Training times
 timeline(athlete1)
@@ -158,7 +158,7 @@ timeline(athlete1)
 plot(athlete1, session = 40:45, what = c("power", "heart_rate"))
 ```
 
-We can also compute and visualize the summaries for the workout sessions (see, [trackeR's vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf) for details)
+We can also compute and visualize the summaries for the workout sessions (see, Section 5.2 of [**trackeR**'s vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf) for details)
 ```{r trackeRdata2, fig.height = 7}
 athlete1_summaries <- summary(athlete1)
 ##  Choose some features (see `?trackeR::plot.trackeRdataSummary`
@@ -174,17 +174,18 @@ and explore the relationships between those summaries
 plot(data.frame(athlete1_summaries)[features])
 ```
 
-A bit more advanced analytics: The power concentration profiles for the this athlete ID are
+A bit more advanced analysis: The power concentration profiles (see, Section 5.5 of [**trackeR**'s vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf) for details and definition of concentration profiles) for this athlete ID are
 ```{r trackeRdata3, fig.height = 7}
 athlete1_cp <- concentration_profile(athlete1, what = c("power"))
 plot(athlete1_cp, multiple = TRUE)
 ```
-and a functional PCA on them gives that the first 4 components explain about 95% of the variability in the concentration profiles
+and a [functional PCA](https://en.wikipedia.org/wiki/Functional_principal_component_analysis) on them gives that the first 2 eigenfunctions of the concentration profiles explain about 90% of the variation in the concentration profiles
 ```{r}
 athlete1_fpca <- funPCA(athlete1_cp, what = "power", nharm = 5)
-round(athlete1_fpca$varprop[1:5] * 100, 2)
+round(athlete1_fpca$varprop[1:2] * 100, 2)
 ```
-The harmonics scores can then be used for further analyses
+
+The principal components can then be used for further analyses or as features in further modelling
 ```{r}
 ## Check which sessions have power data
 has_power <- !is.na(athlete1_summaries$avgPower)
@@ -196,13 +197,13 @@ plot(cbind(data.frame(athlete1_summaries)[has_power, features], PC2 = athlete1_f
 ```
 
 ## Issues
-Please use **GoldenCheetahOpenData**'s [GitHib issue
+Please use **GoldenCheetahOpenData**'s [GitHub issue
 page](https://github.com/ikosmidis/GoldenCheetahOpenData/issues) to
-report any issues or suggest furth enhancements or improvements.
+report any issues or suggest enhancements or improvements.
 
 
 ## References and resources
-See the [trackeR R package CRAN
+See the [**trackeR** R package CRAN
 page](https://cran.r-project.org/package=trackeR) for vignettes on the
 use of trackeR.
 

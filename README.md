@@ -16,9 +16,9 @@ The **GoldenCheetahOpenData** R package provides methods for querying
 the GoldenCheetah OpenData Project database &lt;doi:
 10.17605/OSF.IO/6HFPZ&gt;, downloading workout data from it and managing
 local workout databases. Methods are also provided for the organization
-of the workout data into ‘trackeRdata’ objects for further data analysis
-abd modelling in R using the infrastructure provided by the ‘trackeR’ R
-package
+of the workout data into `trackeRdata` objects for further data analysis
+and modelling in R using the infrastructure provided by the **trackeR**
+R package
 <a href="https://CRAN.R-project.org/package=trackeR" class="uri">https://CRAN.R-project.org/package=trackeR</a>.
 
 Installation
@@ -42,12 +42,12 @@ Workflow
 workflow, that allows users to gradually build a local workout
 repository.
 
-### Querying GoldenCheetah OpenData project’s mirrors
+### Querying GoldenCheetah OpenData project mirrors
 
-The first step in **GoldenCheetahOpenData**’s workflow is to query the
-mirrors of the GoldenCheetah OpenData project for the available IDs.
-This is done with a call to `get_athelte_ids()`, which will create a
-`gcod_db` object.
+The first step in the **GoldenCheetahOpenData** R package’s workflow is
+to query the mirrors of the GoldenCheetah OpenData project for the
+available IDs. This is done with a call to `get_athelte_ids()`, which
+will create a `gcod_db` object.
 
     library("GoldenCheetahOpenData")
     ids <- get_athlete_ids()
@@ -97,12 +97,12 @@ records in their local perspective because none have been downloaded.
     #> Number of athlete IDs: 0
 
 The output above also gives us a quick snapshot of GoldenCheetah
-OpenData project’s database. It currently has a massive
+OpenData project’s database. It currently has
 
     format(total_size(ids), unit = "auto")
     #> [1] "107.2 Gb"
 
-worth of *compressed* workouts for
+worth of *compressed* workout sessions for
 
     n_ids(ids, perspective = "remote")
     #> [1] 6576
@@ -204,7 +204,7 @@ GoldenCheetah OpenData project’s mirrors:
     #> [3] "af3ab0e9-fc82-43b7-9d5b-60d496b77d70"
     #> [4] "e104e895-9ecc-40b7-9e62-c1c8823ae0d8"
 
-A carelless call to `download_workouts()` can easily instruct R to start
+A careless call to `download_workouts()` can easily instruct R to start
 downloading all workouts from the **GoldenCheetah OpenData** project,
 which is rarely what you want. Instead, I recommend downloading only a
 few at a time. This can be done in various ways, including using the
@@ -226,7 +226,7 @@ downloaded.
 ### Reading workouts
 
 Reading workouts involves: extracting the workout archives for each
-athlete ID, reading all the csv files in the extracted directories,
+athlete ID, reading all the `.csv` files in the extracted directories,
 wrangling the information in them (e.g. inferring the workout
 timestamps, carrying out data quality checks, imputation, etc), and
 organizing the resulting data into objects that can be used for further
@@ -246,8 +246,8 @@ directory as the workout archives, using the convention
 Analyses of workout data using `trackeR`
 ----------------------------------------
 
-`b79` is now a list of `trackeRdata` objects, and `trackeR` can be used
-for exploration.
+`b79` is now a list of `trackeRdata` objects, and **trackeR** can be
+used for exploration.
 
     library("trackeR")
     ## Reading was not possible for athlete ID (see `warnings`)
@@ -284,7 +284,7 @@ Let’s explore further the workout sessions for athlete ID
     athlete1 <- athlete1[athlete1_duration > 10/60]
 
 The workout timeline and some workout views can be easily produced using
-methods from the `trackeR` R package
+methods from the **trackeR** R package
 
     ## Training times
     timeline(athlete1)
@@ -297,7 +297,7 @@ methods from the `trackeR` R package
 <img src="man/figures/README-trackeRdata1.1-2.png" width="80%" />
 
 We can also compute and visualize the summaries for the workout sessions
-(see, [trackeR’s
+(see, Section 5.2 of [**trackeR**’s
 vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf)
 for details)
 
@@ -317,21 +317,28 @@ explore the relationships between those summaries
 
 <img src="man/figures/README-trackeRdata2.1-1.png" width="80%" />
 
-A bit more advanced analytics: The power concentration profiles for the
-this athlete ID are
+A bit more advanced analysis: The power concentration profiles (see,
+Section 5.5 of [**trackeR**’s
+vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf)
+for details and definition of concentration profiles) for this athlete
+ID are
 
     athlete1_cp <- concentration_profile(athlete1, what = c("power"))
     plot(athlete1_cp, multiple = TRUE)
 
 <img src="man/figures/README-trackeRdata3-1.png" width="80%" /> and a
-functional PCA on them gives that the first 4 components explain about
-95% of the variability in the concentration profiles
+[functional
+PCA](https://en.wikipedia.org/wiki/Functional_principal_component_analysis)
+on them gives that the first 2 eigenfunctions of the concentration
+profiles explain about 90% of the variation in the concentration
+profiles
 
     athlete1_fpca <- funPCA(athlete1_cp, what = "power", nharm = 5)
-    round(athlete1_fpca$varprop[1:5] * 100, 2)
-    #> [1] 63.94 24.89  5.24  2.56  1.41
+    round(athlete1_fpca$varprop[1:2] * 100, 2)
+    #> [1] 63.94 24.89
 
-The harmonics scores can then be used for further analyses
+The principal components can then be used for further analyses or as
+features in further modelling
 
     ## Check which sessions have power data
     has_power <- !is.na(athlete1_summaries$avgPower)
@@ -350,14 +357,14 @@ The harmonics scores can then be used for further analyses
 Issues
 ------
 
-Please use **GoldenCheetahOpenData**’s [GitHib issue
+Please use **GoldenCheetahOpenData**’s [GitHub issue
 page](https://github.com/ikosmidis/GoldenCheetahOpenData/issues) to
-report any issues or suggest furth enhancements or improvements.
+report any issues or suggest enhancements or improvements.
 
 References and resources
 ------------------------
 
-See the [trackeR R package CRAN
+See the [**trackeR** R package CRAN
 page](https://cran.r-project.org/package=trackeR) for vignettes on the
 use of trackeR.
 
