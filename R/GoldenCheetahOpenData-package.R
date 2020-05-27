@@ -1,8 +1,8 @@
-#' GoldenCheetahOpenData: R API and local database management for the
+#' GoldenCheetahOpenData: R API and Local Database Management for the
 #' GoldenCheetah OpenData Project
 #'
 #' GoldenCheetahOpenData provides methods for querying the GoldenCheetah
-#' OpenData Project database (Liversedge, 2020), downloading workout
+#' OpenData project database (Liversedge, 2020), downloading workout
 #' data from it and managing local workout databases. Methods are also
 #' provided for the organization of the workout data into
 #' 'trackeRdata' objects for further data analysis and modelling in R

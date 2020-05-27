@@ -5,6 +5,7 @@ GoldenCheetahOpenData
 
 <!-- badges: start -->
 
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/GoldenCheetahOpenData)](https://cran.r-project.org/package=GoldenCheetahOpenData)
 [![R build
 status](https://github.com/ikosmidis/GoldenCheetahOpenData/workflows/R-CMD-check/badge.svg)](https://github.com/ikosmidis/GoldenCheetahOpenData/actions)
 [![Travis build
@@ -19,7 +20,7 @@ Introduction
 ------------
 
 The **GoldenCheetahOpenData** R package provides methods for querying
-the GoldenCheetah OpenData Project database &lt;doi:
+the GoldenCheetah OpenData project database &lt;doi:
 10.17605/OSF.IO/6HFPZ&gt;, downloading workout data from it and managing
 local workout databases. Methods are also provided for the organization
 of the workout data into `trackeRdata` objects for further data analysis
@@ -370,6 +371,13 @@ Issues
 Please use the **GoldenCheetahOpenData** [GitHub issue
 page](https://github.com/ikosmidis/GoldenCheetahOpenData/issues) to
 report any issues or suggest enhancements or improvements.
+
+Code of Conduct
+---------------
+
+Please note that this project is released with a [Contributor Code of
+Conduct](https://github.com/ikosmidis/GoldenCheetahOpenData/blob/master/CODE_OF_CONDUCT.md).
+By participating in this project you agree to abide by its terms.
 
 References and resources
 ------------------------
