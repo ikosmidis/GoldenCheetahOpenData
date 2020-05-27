@@ -39,13 +39,13 @@ Workflow
 --------
 
 **GoldenCheetahOpenData** implements a simple query-download-read
-workflow, that allows users to gradually build a local workout
-repository.
+workflow, that allows users to gradually build and maintain a local
+repository with workouts from the GoldenCheetah OpenData project.
 
 ### Querying GoldenCheetah OpenData project mirrors
 
-The first step in the **GoldenCheetahOpenData** R package’s workflow is
-to query the mirrors of the GoldenCheetah OpenData project for the
+The first step in the **GoldenCheetahOpenData** R package workflow is to
+query the mirrors of the GoldenCheetah OpenData project for the
 available IDs. This is done with a call to `get_athelte_ids()`, which
 will create a `gcod_db` object.
 
@@ -297,7 +297,7 @@ methods from the **trackeR** R package
 <img src="man/figures/README-trackeRdata1.1-2.png" width="80%" />
 
 We can also compute and visualize the summaries for the workout sessions
-(see, Section 5.2 of [**trackeR**’s
+(see, Section 5.2 of the [**trackeR**
 vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf)
 for details)
 
@@ -318,7 +318,7 @@ explore the relationships between those summaries
 <img src="man/figures/README-trackeRdata2.1-1.png" width="80%" />
 
 A bit more advanced analysis: The power concentration profiles (see,
-Section 5.5 of [**trackeR**’s
+Section 5.5 of the [**trackeR**
 vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf)
 for details and definition of concentration profiles) for this athlete
 ID are
@@ -357,7 +357,7 @@ features in further modelling
 Issues
 ------
 
-Please use **GoldenCheetahOpenData**’s [GitHub issue
+Please use the **GoldenCheetahOpenData** [GitHub issue
 page](https://github.com/ikosmidis/GoldenCheetahOpenData/issues) to
 report any issues or suggest enhancements or improvements.
 

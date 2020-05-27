@@ -47,11 +47,11 @@ devtools::install_github("ikosmidis/GoldenCheetahOpenData")
 ```
 ## Workflow
 
-**GoldenCheetahOpenData** implements a simple query-download-read workflow, that allows users to gradually build a local workout repository.
+**GoldenCheetahOpenData** implements a simple query-download-read workflow, that allows users to gradually build and maintain a local repository with workouts from the GoldenCheetah OpenData project.
 
 ### Querying GoldenCheetah OpenData project mirrors
 
-The first step in the **GoldenCheetahOpenData** R package's workflow is to query the mirrors of the GoldenCheetah OpenData project for the available IDs. This is done with a call to `get_athelte_ids()`, which will create a `gcod_db` object.
+The first step in the **GoldenCheetahOpenData** R package workflow is to query the mirrors of the GoldenCheetah OpenData project for the available IDs. This is done with a call to `get_athelte_ids()`, which will create a `gcod_db` object.
 ```{r athletes, cache = TRUE}
 library("GoldenCheetahOpenData")
 ids <- get_athlete_ids()
@@ -158,7 +158,7 @@ timeline(athlete1)
 plot(athlete1, session = 40:45, what = c("power", "heart_rate"))
 ```
 
-We can also compute and visualize the summaries for the workout sessions (see, Section 5.2 of [**trackeR**'s vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf) for details)
+We can also compute and visualize the summaries for the workout sessions (see, Section 5.2 of the [**trackeR** vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf) for details)
 ```{r trackeRdata2, fig.height = 7}
 athlete1_summaries <- summary(athlete1)
 ##  Choose some features (see `?trackeR::plot.trackeRdataSummary`
@@ -174,7 +174,7 @@ and explore the relationships between those summaries
 plot(data.frame(athlete1_summaries)[features])
 ```
 
-A bit more advanced analysis: The power concentration profiles (see, Section 5.5 of [**trackeR**'s vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf) for details and definition of concentration profiles) for this athlete ID are
+A bit more advanced analysis: The power concentration profiles (see, Section 5.5 of the [**trackeR** vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf) for details and definition of concentration profiles) for this athlete ID are
 ```{r trackeRdata3, fig.height = 7}
 athlete1_cp <- concentration_profile(athlete1, what = c("power"))
 plot(athlete1_cp, multiple = TRUE)
@@ -197,7 +197,7 @@ plot(cbind(data.frame(athlete1_summaries)[has_power, features], PC2 = athlete1_f
 ```
 
 ## Issues
-Please use **GoldenCheetahOpenData**'s [GitHub issue
+Please use the **GoldenCheetahOpenData** [GitHub issue
 page](https://github.com/ikosmidis/GoldenCheetahOpenData/issues) to
 report any issues or suggest enhancements or improvements.
 
