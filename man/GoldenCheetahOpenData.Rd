@@ -3,16 +3,15 @@
 \docType{package}
 \name{GoldenCheetahOpenData}
 \alias{GoldenCheetahOpenData}
-\title{GoldenCheetahOpenData: R API to the GoldenCheetah OpenData Project
-and Management of Local Workout Databases}
+\title{GoldenCheetahOpenData: R API and local database management for the
+GoldenCheetah OpenData Project}
 \description{
-GoldenCheetahOpenData provides methods for querying the
-GoldenCheetah OpenData Project database <doi:
-10.17605/OSF.IO/6HFPZ>, downloading workout data from it and
-managing local workout databases. Methods are also provided for the
-organization of the workout data into 'trackeRdata' objects for
-further data analysis abd modelling in R using the infrastructure
-provided by the 'trackeR' R package
+GoldenCheetahOpenData provides methods for querying the GoldenCheetah
+OpenData Project database (Liversedge, 2020), downloading workout
+data from it and managing local workout databases. Methods are also
+provided for the organization of the workout data into
+'trackeRdata' objects for further data analysis and modelling in R
+using the infrastructure provided by the \code{trackeR} R package
 \url{https://CRAN.R-project.org/package=trackeR}.
 }
 \references{

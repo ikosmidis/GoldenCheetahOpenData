@@ -1,14 +1,13 @@
-#' GoldenCheetahOpenData: R API to the GoldenCheetah OpenData Project
-#' and Management of Local Workout Databases
+#' GoldenCheetahOpenData: R API and local database management for the
+#' GoldenCheetah OpenData Project
 #'
-#' GoldenCheetahOpenData provides methods for querying the
-#' GoldenCheetah OpenData Project database <doi:
-#' 10.17605/OSF.IO/6HFPZ>, downloading workout data from it and
-#' managing local workout databases. Methods are also provided for the
-#' organization of the workout data into 'trackeRdata' objects for
-#' further data analysis abd modelling in R using the infrastructure
-#' provided by the 'trackeR' R package
-#' <https://CRAN.R-project.org/package=trackeR>.
+#' GoldenCheetahOpenData provides methods for querying the GoldenCheetah
+#' OpenData Project database (Liversedge, 2020), downloading workout
+#' data from it and managing local workout databases. Methods are also
+#' provided for the organization of the workout data into
+#' 'trackeRdata' objects for further data analysis and modelling in R
+#' using the infrastructure provided by the `trackeR` R package
+#' \url{https://CRAN.R-project.org/package=trackeR}.
 #'
 #' @references
 #'
