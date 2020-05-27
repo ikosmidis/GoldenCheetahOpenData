@@ -1,7 +1,10 @@
 #' Print methods for objects of class `gcod_db`, as produced by [`get_athlete_ids()`].
 #'
 #' @param x an object of class `gcod_db`
-#' @param txtplot logical indicating whether or not text barplots should be printed for the remote and local perspectives showing the percentage of athlete ID records modified per year quarter. Default is `FALSE`.
+#' @param txtplot logical indicating whether or not text barplots
+#'     should be printed for the remote and local perspectives showing
+#'     the percentage of athlete ID records modified per year
+#'     quarter. Default is `FALSE`.
 #' @param ... currently not used.
 #'
 #' @aliases print.gcod_remote_db print.gcod_local_db

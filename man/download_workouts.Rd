@@ -17,23 +17,41 @@ download_workouts(
 )
 }
 \arguments{
-\item{object}{a character string with the athlete ID or the first few characters of that, or alternatively an object of class \code{gcod_db} as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
+\item{object}{a character string with the athlete ID or the first
+few characters of that, or alternatively an object of class
+\code{gcod_db} as produced by \code{\link[=get_athlete_ids]{get_athlete_ids()}}.}
 
-\item{local_dir}{the directory to download the workout archives for the selected athlete IDs.}
+\item{local_dir}{the directory to download the workout archives for
+the selected athlete IDs.}
 
-\item{pattern}{character string containing a regular expression to be matched with the athlete IDs in \code{object}. Only applicable if \code{object} is an object of class \code{gcod_db}. Default is \code{NULL}, which selects all IDs in \code{object}.}
+\item{pattern}{character string containing a regular expression to
+be matched with the athlete IDs in \code{object}. Only applicable if
+\code{object} is an object of class \code{gcod_db}. Default is \code{NULL},
+which selects all IDs in \code{object}.}
 
-\item{extract}{logical determining whether the workout files in the downloaded archives should be extracted. Default is \code{FALSE}. If \code{TRUE}, then the archives are extracted in sub-directories under \code{local_dir}, named according to the athlete IDs. See Details.}
+\item{extract}{logical determining whether the workout files in the
+downloaded archives should be extracted. Default is \code{FALSE}. If
+\code{TRUE}, then the archives are extracted in sub-directories
+under \code{local_dir}, named according to the athlete IDs. See
+Details.}
 
-\item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating which GoldenCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.}
+\item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating which
+GoldenCheetah OpenData mirror should be used. Default and
+recommended is "S3". See Details.}
 
-\item{verbose}{logical determining whether progress information should be printed. Default is \code{FALSE}.}
+\item{verbose}{logical determining whether progress information
+should be printed. Default is \code{FALSE}.}
 
-\item{confirm}{logical determining whether the user should be asked whether they should continue with the download or not. Default is \code{FALSE}.}
+\item{confirm}{logical determining whether the user should be asked
+whether they should continue with the download or not. Default
+is \code{FALSE}.}
 
-\item{overwrite}{logical determining whether existing archives with the same names as the ones selected for download should be overwritten. Default is \code{FALSE}.}
+\item{overwrite}{logical determining whether existing archives with
+the same names as the ones selected for download should be
+overwritten. Default is \code{FALSE}.}
 
-\item{...}{extra arguments to be passed to \code{\link[aws.s3:save_object]{aws.s3::save_object()}}.}
+\item{...}{extra arguments to be passed to
+\code{\link[aws.s3:save_object]{aws.s3::save_object()}}.}
 }
 \value{
 If \code{object} is a character string then a \code{gcod_db} object is
@@ -55,15 +73,14 @@ If \code{extract = TRUE}, then \code{\link[=extract_workouts]{extract_workouts()
 \donttest{
 ## Using the first few letters of the athlete ID
 if (interactive()) {
-   files_007_1 <- download_workouts("007", confirm = TRUE)
+  files_007_1 <- download_workouts("007", confirm = TRUE)
 }
 
 ## Using a `gcod_db` object and fitering using regex
 ids_00 <- get_athlete_ids(prefix = "00")
 if (interactive()) {
-   files_007_2 <- download_workouts(ids_00, pattern = "007", confirm = TRUE)
+  files_007_2 <- download_workouts(ids_00, pattern = "007", confirm = TRUE)
 }
-
 }
 }
 \references{

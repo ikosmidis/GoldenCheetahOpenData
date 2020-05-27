@@ -1,22 +1,27 @@
 #' Subset the local or remote perspective of a `gcod_db` object
 #'
 #' @param x an object of class `gcod_db`
-#' @param subset logical expression indicating records to keep in either `remote_perspective(x)` or `local_perspective(x)` according to the value of `perspective`;  missing values are taken as `FALSE`.
-#' @param perspective either `"remote"` (default) or `"local"`, for the perspective to subset.
+#' @param subset logical expression indicating records to keep in
+#'     either `remote_perspective(x)` or `local_perspective(x)`
+#'     according to the value of `perspective`; missing values are
+#'     taken as `FALSE`.
+#' @param perspective either `"remote"` (default) or `"local"`, for
+#'     the perspective to subset.
 #' @param ... currently not used.
 #'
 #' @details
 #' See [`get_athlete_ids()`] for the variables each perspective holds.
 #'
-#' @return
-#' An object of class `gcod_db` with the selected athlete IDs according to `subset` in its remote or local perspective.
+#' @return An object of class `gcod_db` with the selected athlete IDs
+#'     according to `subset` in its remote or local perspective.
 #'
 #' @export
 #' @examples
 #' \donttest{
 #' ## Get all available athelte IDs
 #' db <- get_athlete_ids()
-#' ## Return athletes from the remote perspective of db with "b7-9" in their IDs
+#' ## Return athletes from the remote perspective of db with "b7-9" in
+#' ## their IDs
 #' db79 <- subset(db, subset = grepl("b7-9", athlete_id(db)), perspective = "remote")
 #' athlete_id(db79, perspective = "remote")
 #' }
@@ -64,12 +69,16 @@ exist_in.gcod_db <- function(object, local_dir, ...) {
 
 #' Attempts to rebuild a `gcod_db` from the contents of a local directory
 #'
-#' @param object a character string giving the path to the directory to use for extracting athlete IDs.
-#' @param mirror either `"S3"` or `"OSF"`, indicating which GoldenCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.
+#' @param object a character string giving the path to the directory
+#'     to use for extracting athlete IDs.
+#' @param mirror either `"S3"` or `"OSF"`, indicating which
+#'     GoldenCheetah OpenData mirror should be used. Default and
+#'     recommended is "S3". See Details.
 #' @param ... currently not used.
 #'
 #' @details
-#' `mirror = OSF` currently returns an error and will be supported in future versions.
+#' `mirror = OSF` currently returns an error and will be
+#' supported in future versions.
 #'
 #' @return
 #' An object of class `gcod_db`.
@@ -127,7 +136,9 @@ rebuild_db.character <- function(object, mirror = "S3", ...) {
 #' Concatenate `gcod_db` objects
 #'
 #' @param ... objects to be concatenated.
-#' @param perspective either `"remote"` (default) or `"local"` or `"both"`, for the perspective to use for the extractor function.
+#' @param perspective either `"remote"` (default) or `"local"` or
+#'     `"both"`, for the perspective to use for the extractor
+#'     function.
 #' @details
 #'
 #' If `perspective = "remote"`, then the remote perspectives of `...`

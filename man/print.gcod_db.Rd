@@ -15,7 +15,10 @@
 \arguments{
 \item{x}{an object of class \code{gcod_db}}
 
-\item{txtplot}{logical indicating whether or not text barplots should be printed for the remote and local perspectives showing the percentage of athlete ID records modified per year quarter. Default is \code{FALSE}.}
+\item{txtplot}{logical indicating whether or not text barplots
+should be printed for the remote and local perspectives showing
+the percentage of athlete ID records modified per year
+quarter. Default is \code{FALSE}.}
 
 \item{...}{currently not used.}
 }

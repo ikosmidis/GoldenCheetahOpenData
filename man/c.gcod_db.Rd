@@ -9,7 +9,9 @@
 \arguments{
 \item{...}{objects to be concatenated.}
 
-\item{perspective}{either \code{"remote"} (default) or \code{"local"} or \code{"both"}, for the perspective to use for the extractor function.}
+\item{perspective}{either \code{"remote"} (default) or \code{"local"} or
+\code{"both"}, for the perspective to use for the extractor
+function.}
 }
 \value{
 An object of class \code{gcod_db}

@@ -1,19 +1,39 @@
 #' Get information for athlete IDs that are available in the GoldenCheetah OpenData project and organize it in a `gcod_db` object.
 #'
-#' @param n_ids integer indicating the maximum number of athlete IDs to return. Default is `Inf`, which will return all available athlete IDs.
-#' @param mirror either `"S3"` or `"OSF"`, indicating which GoldenCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.
-#' @param prefix character string that limits the response to athlete IDs that begin with it. Default is `NULL`, which does not limit responses.
-#' @param ... further options to be passed to `[aws.s3::get_bucket_df()]`.
+#' @param n_ids integer indicating the maximum number of athlete IDs
+#'     to return. Default is `Inf`, which will return all available
+#'     athlete IDs.
+#' @param mirror either `"S3"` or `"OSF"`, indicating which
+#'     GoldenCheetah OpenData mirror should be used. Default and
+#'     recommended is "S3". See Details.
+#' @param prefix character string that limits the response to athlete
+#'     IDs that begin with it. Default is `NULL`, which does not limit
+#'     responses.
+#' @param ... further options to be passed to
+#'     `[aws.s3::get_bucket_df()]`.
 #' @details
 #'
 #' @return
-#' A [`list`] also inheriting from class `gcod_db` with components `remote_db` (the "remote perspective"; of class `gcod_remote_db`) and `local_db` ("the local perspective"; of class `gcod_local_db`). `remote_db` and `local_db` are [`data.frame`]s, also inheriting from classes `gcod_remote_db` and `gcod_local_db`, respectively. `local_db` has variables "path", "last_modified", "size", "extracted", "downloaded", "athlete_id"m and `remote_db` has variables "key", "last_modified", "e_tag", "size", "owner_id", "owner_display_name", "storage_class", "bucket", and "athlete_id".
+#'
+#' A [`list`] also inheriting from class `gcod_db` with components
+#' `remote_db` (the "remote perspective"; of class `gcod_remote_db`)
+#' and `local_db` ("the local perspective"; of class
+#' `gcod_local_db`). `remote_db` and `local_db` are [`data.frame`]s,
+#' also inheriting from classes `gcod_remote_db` and `gcod_local_db`,
+#' respectively. `local_db` has variables "path", "last_modified",
+#' "size", "extracted", "downloaded", "athlete_id"m and `remote_db`
+#' has variables "key", "last_modified", "e_tag", "size", "owner_id",
+#' "owner_display_name", "storage_class", "bucket", and "athlete_id".
 #'
 #' @details
 #'
 #' `mirror = OSF` currently returns an error and will be supported in future versions.
 #'
-#' @seealso [`print.gcod_db()`] [`min_size.gcod_db()`] [`max_size.gcod_db()`] [`total_size.gcod_db()`] [`mean_size.gcod_db()`] [`n_ids.gcod_db()`] [`remote_perspective.gcod_db()`] [`local_perspective.gcod_db()`]
+#' @seealso [`print.gcod_db()`] [`min_size.gcod_db()`]
+#'     [`max_size.gcod_db()`] [`total_size.gcod_db()`]
+#'     [`mean_size.gcod_db()`] [`n_ids.gcod_db()`]
+#'     [`remote_perspective.gcod_db()`]
+#'     [`local_perspective.gcod_db()`]
 #'
 #' @aliases
 #' `gcod_db`

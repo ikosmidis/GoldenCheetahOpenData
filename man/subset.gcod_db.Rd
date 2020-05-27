@@ -9,14 +9,19 @@
 \arguments{
 \item{x}{an object of class \code{gcod_db}}
 
-\item{subset}{logical expression indicating records to keep in either \code{remote_perspective(x)} or \code{local_perspective(x)} according to the value of \code{perspective};  missing values are taken as \code{FALSE}.}
+\item{subset}{logical expression indicating records to keep in
+either \code{remote_perspective(x)} or \code{local_perspective(x)}
+according to the value of \code{perspective}; missing values are
+taken as \code{FALSE}.}
 
-\item{perspective}{either \code{"remote"} (default) or \code{"local"}, for the perspective to subset.}
+\item{perspective}{either \code{"remote"} (default) or \code{"local"}, for
+the perspective to subset.}
 
 \item{...}{currently not used.}
 }
 \value{
-An object of class \code{gcod_db} with the selected athlete IDs according to \code{subset} in its remote or local perspective.
+An object of class \code{gcod_db} with the selected athlete IDs
+according to \code{subset} in its remote or local perspective.
 }
 \description{
 Subset the local or remote perspective of a \code{gcod_db} object
@@ -28,7 +33,8 @@ See \code{\link[=get_athlete_ids]{get_athlete_ids()}} for the variables each per
 \donttest{
 ## Get all available athelte IDs
 db <- get_athlete_ids()
-## Return athletes from the remote perspective of db with "b7-9" in their IDs
+## Return athletes from the remote perspective of db with "b7-9" in
+## their IDs
 db79 <- subset(db, subset = grepl("b7-9", athlete_id(db)), perspective = "remote")
 athlete_id(db79, perspective = "remote")
 }

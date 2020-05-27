@@ -17,15 +17,21 @@ extract_workouts(object, ...)
 )
 }
 \arguments{
-\item{object}{an object of class \code{gcod_db} as produced from \code{\link[=download_workouts]{download_workouts()}}.}
+\item{object}{an object of class \code{gcod_db} as produced from
+\code{\link[=download_workouts]{download_workouts()}}.}
 
 \item{...}{currently not used.}
 
-\item{verbose}{logical determining whether progress information should be printed. Default is \code{FALSE}.}
+\item{verbose}{logical determining whether progress information
+should be printed. Default is \code{FALSE}.}
 
-\item{clean_db}{logical determining whether the workout directories should be deleted before extraction, if they already exist. Default is \code{TRUE}.}
+\item{clean_db}{logical determining whether the workout directories
+should be deleted before extraction, if they already
+exist. Default is \code{TRUE}.}
 
-\item{overwrite}{logical determining whether the workout directories should be overwritten, if they already exist. Default is \code{TRUE}.}
+\item{overwrite}{logical determining whether the workout
+directories should be overwritten, if they already
+exist. Default is \code{TRUE}.}
 }
 \value{
 An object of class \code{gcod_db} which is the same as \code{object} except

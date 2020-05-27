@@ -2,18 +2,26 @@
 % Please edit documentation in R/read_workouts.R
 \name{read_workouts.gcod_db}
 \alias{read_workouts.gcod_db}
-\title{Read the workout files, and wrangle and organize them into lists of \code{\link[trackeR:trackeRdata]{trackeR::trackeRdata}} objects for further processing into the \code{trackeR} R package.}
+\title{Read the workout files, and wrangle and organize them into lists of
+\code{\link[trackeR:trackeRdata]{trackeR::trackeRdata}} objects for further processing into the
+\code{trackeR} R package.}
 \usage{
 \method{read_workouts}{gcod_db}(object, verbose = FALSE, clean_db = TRUE, write_rds = TRUE, ...)
 }
 \arguments{
-\item{object}{an object of class \code{gcod_db}, as produced from \code{\link[=download_workouts]{download_workouts()}} or \code{\link[=extract_workouts]{extract_workouts()}}.}
+\item{object}{an object of class \code{gcod_db}, as produced from
+\code{\link[=download_workouts]{download_workouts()}} or \code{\link[=extract_workouts]{extract_workouts()}}.}
 
-\item{verbose}{logical determining whether progress information should be printed. Default is \code{FALSE}.}
+\item{verbose}{logical determining whether progress information
+should be printed. Default is \code{FALSE}.}
 
-\item{clean_db}{logical determining whether the workout sub-directories should be deleted after processing. Default is \code{TRUE}.}
+\item{clean_db}{logical determining whether the workout
+sub-directories should be deleted after processing. Default is
+\code{TRUE}.}
 
-\item{write_rds}{logical determining whether the processed \code{trackeRdata} objects should be written in the workout archive directory. Default is \code{TRUE}.}
+\item{write_rds}{logical determining whether the processed
+\code{trackeRdata} objects should be written in the workout archive
+directory. Default is \code{TRUE}.}
 
 \item{...}{other arguments to be passed to \code{\link[=extract_workouts]{extract_workouts()}}.}
 }
@@ -21,14 +29,23 @@
 A list of \code{\link[trackeR:trackeRdata]{trackeR::trackeRdata}} objects.
 }
 \description{
-Read the workout files, and wrangle and organize them into lists of \code{\link[trackeR:trackeRdata]{trackeR::trackeRdata}} objects for further processing into the \code{trackeR} R package.
+Read the workout files, and wrangle and organize them into lists of
+\code{\link[trackeR:trackeRdata]{trackeR::trackeRdata}} objects for further processing into the
+\code{trackeR} R package.
 }
 \details{
-If any of \code{local_perspective(object)$extracted} is \code{FALSE}, then the workout files are extracted automatically using \code{\link[=extract_workouts]{extract_workouts()}} with \code{overwirte = FALSE} and \code{clean_up = FALSE}.
+If any of \code{local_perspective(object)$extracted} is \code{FALSE}, then
+the workout files are extracted automatically using
+\code{\link[=extract_workouts]{extract_workouts()}} with \code{overwirte = FALSE} and \code{clean_up = FALSE}.
 
-It is assumed that the filename for each workout corresponds to the timestamp where the first observation is made for the session. Timestamps are in UTC.
+It is assumed that the filename for each workout corresponds to the
+timestamp where the first observation is made for the
+session. Timestamps are in UTC.
 
-If the number of workout files in the archive of a particular athlete ID does not match the number of workouts recorded in the json files within that archive, then the workout files for the ID are not read.
+If the number of workout files in the archive of a particular
+athlete ID does not match the number of workouts recorded in the
+json files within that archive, then the workout files for the ID
+are not read.
 }
 \examples{
 
@@ -36,7 +53,6 @@ If the number of workout files in the archive of a particular athlete ID does no
 ## them into a single `gcod_db` object
 ids000 <- lapply(c("000e", "000d"), function(x) get_athlete_ids(prefix = x))
 ids000 <- c(ids000[[1]], ids000[[2]])
-
 \donttest{
 ## Download the workout archives in tempdir()
 ids000 <- download_workouts(ids000, verbose = TRUE, overwrite = TRUE)
@@ -55,7 +71,6 @@ cp <- concentration_profile(w000[[2]], what = c("speed", "power"))
 plot(cp, multiple = TRUE)
 ## Get summaries for speed, power and work-to-rest ration
 plot(summary(w000[[2]]), what = c("avgSpeed", "avgPower", "wrRatio"))
-
 }
 
 }

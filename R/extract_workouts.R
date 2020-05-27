@@ -1,9 +1,15 @@
 #' Extract workouts from the workout archives downloaded using [`download_workouts()`].
 #'
-#' @param object an object of class `gcod_db` as produced from [`download_workouts()`].
-#' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
-#' @param clean_db logical determining whether the workout directories should be deleted before extraction, if they already exist. Default is `TRUE`.
-#' @param overwrite logical determining whether the workout directories should be overwritten, if they already exist. Default is `TRUE`.
+#' @param object an object of class `gcod_db` as produced from
+#'     [`download_workouts()`].
+#' @param verbose logical determining whether progress information
+#'     should be printed. Default is `FALSE`.
+#' @param clean_db logical determining whether the workout directories
+#'     should be deleted before extraction, if they already
+#'     exist. Default is `TRUE`.
+#' @param overwrite logical determining whether the workout
+#'     directories should be overwritten, if they already
+#'     exist. Default is `TRUE`.
 #' @param ... currently not used.
 #'
 #' @return

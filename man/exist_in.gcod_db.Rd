@@ -33,7 +33,7 @@ ids007 <- get_athlete_ids(prefix = "007")
 id <- subset(ids007, athlete_id(ids007) == athlete_id(ids007)[2])
 id <- download_workouts(id)
 ## Only the workout archive for athlete_id(ids007)[2] from the ones
-#in the remote perspective of ids007 exist in tempdir()
+# in the remote perspective of ids007 exist in tempdir()
 exist_in(ids007, tempdir())
 }
 }

@@ -7,9 +7,12 @@
 \method{rebuild_db}{character}(object, mirror = "S3", ...)
 }
 \arguments{
-\item{object}{a character string giving the path to the directory to use for extracting athlete IDs.}
+\item{object}{a character string giving the path to the directory
+to use for extracting athlete IDs.}
 
-\item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating which GoldenCheetah OpenData mirror should be used. Default and recommended is "S3". See Details.}
+\item{mirror}{either \code{"S3"} or \code{"OSF"}, indicating which
+GoldenCheetah OpenData mirror should be used. Default and
+recommended is "S3". See Details.}
 
 \item{...}{currently not used.}
 }
@@ -20,7 +23,8 @@ An object of class \code{gcod_db}.
 Attempts to rebuild a \code{gcod_db} from the contents of a local directory
 }
 \details{
-\code{mirror = OSF} currently returns an error and will be supported in future versions.
+\code{mirror = OSF} currently returns an error and will be
+supported in future versions.
 }
 \examples{
 \donttest{

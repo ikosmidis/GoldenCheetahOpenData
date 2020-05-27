@@ -1,18 +1,34 @@
-#' Read the workout files, and wrangle and organize them into lists of [`trackeR::trackeRdata`] objects for further processing into the `trackeR` R package.
+#' Read the workout files, and wrangle and organize them into lists of
+#' [`trackeR::trackeRdata`] objects for further processing into the
+#' `trackeR` R package.
 #'
-#' @param object an object of class `gcod_db`, as produced from [`download_workouts()`] or [`extract_workouts()`].
-#' @param verbose logical determining whether progress information should be printed. Default is `FALSE`.
-#' @param clean_db logical determining whether the workout sub-directories should be deleted after processing. Default is `TRUE`.
-#' @param write_rds logical determining whether the processed `trackeRdata` objects should be written in the workout archive directory. Default is `TRUE`.
+#' @param object an object of class `gcod_db`, as produced from
+#'     [`download_workouts()`] or [`extract_workouts()`].
+#' @param verbose logical determining whether progress information
+#'     should be printed. Default is `FALSE`.
+#' @param clean_db logical determining whether the workout
+#'     sub-directories should be deleted after processing. Default is
+#'     `TRUE`.
+#' @param write_rds logical determining whether the processed
+#'     `trackeRdata` objects should be written in the workout archive
+#'     directory. Default is `TRUE`.
 #' @param ... other arguments to be passed to [`extract_workouts()`].
 #' @rdname read_workouts
 #'
 #' @details
-#' If any of `local_perspective(object)$extracted` is `FALSE`, then the workout files are extracted automatically using [`extract_workouts()`] with `overwirte = FALSE` and `clean_up = FALSE`.
+#' If any of `local_perspective(object)$extracted` is `FALSE`, then
+#' the workout files are extracted automatically using
+#' [`extract_workouts()`] with `overwirte = FALSE` and `clean_up =
+#' FALSE`.
 #'
-#' It is assumed that the filename for each workout corresponds to the timestamp where the first observation is made for the session. Timestamps are in UTC.
+#' It is assumed that the filename for each workout corresponds to the
+#' timestamp where the first observation is made for the
+#' session. Timestamps are in UTC.
 #'
-#' If the number of workout files in the archive of a particular athlete ID does not match the number of workouts recorded in the json files within that archive, then the workout files for the ID are not read.
+#' If the number of workout files in the archive of a particular
+#' athlete ID does not match the number of workouts recorded in the
+#' json files within that archive, then the workout files for the ID
+#' are not read.
 #'
 #' @return
 #' A list of [`trackeR::trackeRdata`] objects.
