@@ -129,24 +129,20 @@ this choice made sense to me!).
                                  pattern = "b7-9",
                                  local_dir = "~/Downloads/GCOD-db/",
                                  verbose = TRUE)
-    #> 6f0380b7-92d0-4c19-a56d-85ac3bf472a6.zip exists and `overwrite = FALSE`. Skipping.
-    #> a3ccd92b-87f0-422d-adb7-91ab3e6021aa.zip exists and `overwrite = FALSE`. Skipping.
-    #> af3ab0e9-fc82-43b7-9d5b-60d496b77d70.zip exists and `overwrite = FALSE`. Skipping.
-    #> e104e895-9ecc-40b7-9e62-c1c8823ae0d8.zip exists and `overwrite = FALSE`. Skipping.
+    #> Downloading 6f0380b7-92d0-4c19-a56d-85ac3bf472a6.zip (5.9 Mb) ... Done.
+    #> Downloading a3ccd92b-87f0-422d-adb7-91ab3e6021aa.zip (21.7 Mb) ... Done.
+    #> Downloading af3ab0e9-fc82-43b7-9d5b-60d496b77d70.zip (2.7 Mb) ... Done.
+    #> Downloading e104e895-9ecc-40b7-9e62-c1c8823ae0d8.zip (9.7 Mb) ... Done.
 
 After the above code chunk was run, `download_workouts()` downloaded the
 requested workout data on my disk and placed them in the directory
 “~/Downloads/GCOD-db/”
 
     dir("~/Downloads/GCOD-db")
-    #> [1] "6f0380b7-92d0-4c19-a56d-85ac3bf472a6.rds"
-    #> [2] "6f0380b7-92d0-4c19-a56d-85ac3bf472a6.zip"
-    #> [3] "a3ccd92b-87f0-422d-adb7-91ab3e6021aa.rds"
-    #> [4] "a3ccd92b-87f0-422d-adb7-91ab3e6021aa.zip"
-    #> [5] "af3ab0e9-fc82-43b7-9d5b-60d496b77d70.rds"
-    #> [6] "af3ab0e9-fc82-43b7-9d5b-60d496b77d70.zip"
-    #> [7] "e104e895-9ecc-40b7-9e62-c1c8823ae0d8.rds"
-    #> [8] "e104e895-9ecc-40b7-9e62-c1c8823ae0d8.zip"
+    #> [1] "6f0380b7-92d0-4c19-a56d-85ac3bf472a6.zip"
+    #> [2] "a3ccd92b-87f0-422d-adb7-91ab3e6021aa.zip"
+    #> [3] "af3ab0e9-fc82-43b7-9d5b-60d496b77d70.zip"
+    #> [4] "e104e895-9ecc-40b7-9e62-c1c8823ae0d8.zip"
 
 The result from `download_workouts()` is a new `gcod_db` object, which
 has updated the local and remote perspectives of the original `gcod_db`
@@ -162,7 +158,7 @@ object
     #> Local perspective
     #> Number of athlete IDs: 4 
     #> File sizes: min = 2.7 Mb | max = 21.7 Mb | total = 39.9 Mb 
-    #> Last modified: between 2020-05-26 23:50:57 and 2020-05-26 23:51:06
+    #> Last modified: between 2020-05-27 18:41:50 and 2020-05-27 18:42:23
 
 You may save your `gcod_db` files, but this is not really necessary.
 They can be reconstructed using the `rebuild_bd()` method, which reads
@@ -180,7 +176,7 @@ GoldenCheetah OpenData project’s mirrors:
     #> Local perspective
     #> Number of athlete IDs: 4 
     #> File sizes: min = 2.7 Mb | max = 21.7 Mb | total = 39.9 Mb 
-    #> Last modified: between 2020-05-26 23:50:57 and 2020-05-26 23:51:06
+    #> Last modified: between 2020-05-27 18:41:50 and 2020-05-27 18:42:23
     ids_b79
     #> Remote perspective
     #> Mirror: S3 
@@ -191,7 +187,7 @@ GoldenCheetah OpenData project’s mirrors:
     #> Local perspective
     #> Number of athlete IDs: 4 
     #> File sizes: min = 2.7 Mb | max = 21.7 Mb | total = 39.9 Mb 
-    #> Last modified: between 2020-05-26 23:50:57 and 2020-05-26 23:51:06
+    #> Last modified: between 2020-05-27 18:41:50 and 2020-05-27 18:42:23
     athlete_id(ids_dir, perspective = "local")
     #> [1] "6f0380b7-92d0-4c19-a56d-85ac3bf472a6"
     #> [2] "a3ccd92b-87f0-422d-adb7-91ab3e6021aa"
