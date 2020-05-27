@@ -12,8 +12,8 @@ status](https://github.com/ikosmidis/GoldenCheetahOpenData/workflows/R-CMD-check
 Introduction
 ------------
 
-The **GoldeCheetahOpenData** R package provides methods for querying the
-GoldenCheetah OpenData Project database &lt;doi:
+The **GoldenCheetahOpenData** R package provides methods for querying
+the GoldenCheetah OpenData Project database &lt;doi:
 10.17605/OSF.IO/6HFPZ&gt;, downloading workout data from it and managing
 local workout databases. Methods are also provided for the organization
 of the workout data into ‘trackeRdata’ objects for further data analysis
@@ -66,9 +66,9 @@ records in their local perspective because none have been downloaded.
     print(ids, txtplot = TRUE)
     #> Remote perspective
     #> Mirror: S3 
-    #> Number of athlete IDs: 6566 
-    #> File sizes: min = 301 bytes | max = 251.8 Mb | total = 107.1 Gb 
-    #> Last modified: between 2018-11-17 10:20:38 and 2020-05-26 19:59:07 
+    #> Number of athlete IDs: 6576 
+    #> File sizes: min = 301 bytes | max = 251.8 Mb | total = 107.2 Gb 
+    #> Last modified: between 2018-11-17 10:20:38 and 2020-05-27 07:46:13 
     #> Athlete ID records modified per year quarter:
     #>      +--+-----------+----------+----------+----------+----------+----------+---+
     #>      |                                                          =              |
@@ -100,12 +100,12 @@ The output above also gives us a quick snapshot of GoldenCheetah
 OpenData project’s database. It currently has a massive
 
     format(total_size(ids), unit = "auto")
-    #> [1] "107.1 Gb"
+    #> [1] "107.2 Gb"
 
 worth of *compressed* workouts for
 
     n_ids(ids, perspective = "remote")
-    #> [1] 6566
+    #> [1] 6576
 
 athletes. And it keeps growing!
 
