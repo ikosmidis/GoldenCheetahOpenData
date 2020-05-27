@@ -19,6 +19,8 @@ knitr::opts_chunk$set(
 [![R build status](https://github.com/ikosmidis/GoldenCheetahOpenData/workflows/R-CMD-check/badge.svg)](https://github.com/ikosmidis/GoldenCheetahOpenData/actions)
 <!-- badges: end -->
 
+## Introduction
+
 The **GoldeCheetahOpenData** R package provides methods for querying
 the GoldenCheetah OpenData Project database <doi:
 10.17605/OSF.IO/6HFPZ>, downloading workout data from it and managing
@@ -42,6 +44,8 @@ The development version can be installed directly from [GitHub](https://github.c
 devtools::install_github("ikosmidis/GoldenCheetahOpenData")
 ```
 ## Workflow
+
+**GoldenCheetahOpenData** implements a simple query-download-read workflow, that allows users to gradually build a local workout repository.
 
 ### Querying GoldenCheetah OpenData project's mirrors
 
@@ -107,7 +111,7 @@ athlete_id(ids_sub)
 ```
 In this way, whenever you rebuild the `gcod_db` object form the local database you are getting access to all the workout files you have ever downloaded.
 
-## Reading workouts
+### Reading workouts
 Reading workouts involves: extracting the workout archives for each athlete ID, reading all the csv files in the extracted directories, wrangling the information in them (e.g. inferring the workout timestamps, carrying out data quality checks, imputation, etc), and organizing the resulting data into objects that can be used for further analyses. The `read_workouts()` method can do all the above from a unified interface. For example (and this takes a while):
 ```{r extract, warning = FALSE}
 b79 <- read_workouts(ids_b79)
@@ -117,13 +121,84 @@ By default, `read_workouts()`:
 - deletes the extracted directories after everything has been read (which can be bypassed by setting `clean_db = FALSE`)
 - writes the processed `trackeRdata` objects (see `?saveRDS`) in the same directory as the workout archives, using the convention `<athlete_id>.rds`.
 
-`b79` is now a list of `trackeRdata` objects, and `trackeR` can be used for further analyses.
+
+## Analyses of workout data using `trackeR`
+`b79` is now a list of `trackeRdata` objects, and `trackeR` can be used for exploration.
 ```{r trackeRdata}
 library("trackeR")
-athlete1 <- b79[[1]]
-plot(athlete1, session = 80:84, what = c("power", "heart_rate"))
-plot(summary(athlete1))
-plot(concentration_profile(athlete1, what = c("speed")), multiple = TRUE)
-
+## Reading was not possible for athlete ID (see `warnings`)
+which(is.na(b79))
+## so we remove them 
+b79 <- b79[!is.na(b79)]
+## number of workout sessions per athlete ID
+sapply(b79, nsessions)
+## total duration per athlete ID in hours
+sapply(b79, function(x) sum(session_duration(x, duration_unit = "h")))
 ```
+
+Let's explore further some sessions for athlete ID `af3ab0e9-fc82-43b7-9d5b-60d496b77d70`
+```{r trackeRdata1}
+athlete1 <- b79[["af3ab0e9-fc82-43b7-9d5b-60d496b77d70"]]
+## Number of sessions
+nsessions(athlete1)
+## Total workout duration
+athlete1_duration <- session_duration(athlete1)
+sum(athlete1_duration)
+## Make sure we only keep workout sessions with duration more than 10 min
+athlete1 <- athlete1[athlete1_duration > 10/60]
+## Training times
+timeline(athlete1)
+## Power and heart_rate for the 80th to 84th workout
+plot(athlete1, session = 40:47, what = c("power", "heart_rate"))
+```
+
+Session summaries can also easily be extracted
+```{r trackeRdata2}
+athlete1_summaries <- summary(athlete1)
+## Let's choose some features (see `?trackeR::plot.trackeRdataSummary`
+##  for the names of the available summaries, or
+##  names(data.frame(athlete1_summaries)))
+features <- c("duration", "distance", "avgPower", "avgHeartRate", "total_elevation_gain", "wrRatio")
+## Plot each feature longitudinally
+plot(athlete1_summaries, what = features)
+## Plot all pairs of features
+plot(data.frame(athlete1_summaries)[features])
+```
+
+A bit more advanced analytics: The power concentration profiles for the this athlete ID are
+```{r trackeRdata3}
+athlete1_cp <- concentration_profile(athlete1, what = c("power"))
+plot(athlete1_cp, multiple = TRUE)
+```
+and a functional PCA on them gives that the first 4 components explain about 95% of the variability in the concentration profiles
+```{r}
+athlete1_fpca <- funPCA(athlete1_cp, what = "power", nharm = 5)
+round(athlete1_fpca$varprop[1:5] * 100, 2)
+## Check which sessions have power datax
+has_power <- !is.na(athlete1_summaries$avgPower)
+## Scatterplots of the first harmonic against session summaries (high correlation with distance and duration)
+plot(cbind(data.frame(athlete1_summaries)[has_power, features], PC1 = athlete1_fpca$scores[, 1]))
+## Scatterplots of the second harmonic against session summaries
+plot(cbind(data.frame(athlete1_summaries)[has_power, features], PC2 = athlete1_fpca$scores[, 2]))
+## etc
+```
+
+## Issues
+Please use **GoldenCheetahOpenData**'s [GitHib issue
+page](https://github.com/ikosmidis/GoldenCheetahOpenData/issues) to
+report any issues or suggest furth enhancements or improvements.
+
+
+## References and resources
+See the [trackeR R package CRAN
+page](https://cran.r-project.org/package=trackeR) for vignettes on the
+use of trackeR.
+
+Frick, H., Kosmidis, I. (2017). trackeR: Infrastructure for Running
+and Cycling Data from GPS-Enabled Tracking Devices in R. *Journal
+of Statistical Software*, **82**(7),
+1--29. [doi:10.18637/jss.v082.i07](https://doi.org/10.18637/jss.v082.i07)
+
+Liversedge, M. (2020). GoldenCheetah OpenData
+Project. OSF. \url{https://doi.org/10.17605/OSF.IO/6HFPZ}
 
