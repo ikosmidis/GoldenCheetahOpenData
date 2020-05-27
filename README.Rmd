@@ -19,6 +19,8 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R build status](https://github.com/ikosmidis/GoldenCheetahOpenData/workflows/R-CMD-check/badge.svg)](https://github.com/ikosmidis/GoldenCheetahOpenData/actions)
+[![Licence](https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.en.html)
+[![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- badges: end -->
 
 ## Introduction
@@ -85,12 +87,12 @@ ids_b79 <- download_workouts(ids,
                              verbose = TRUE)
 ```
 
-`download_workouts()` downloaded the requested workout data on my disk and placed them in the directory "~/Downloads/GCOD-db/"
+After the above code chunk was run, `download_workouts()` downloaded the requested workout data on my disk and placed them in the directory "~/Downloads/GCOD-db/"
 ```{r dir}
 dir("~/Downloads/GCOD-db")
 ```
 
-`download_workouts()` returns a new `gcod_db` object, updating the local and remote perspectives of the original `gcod_db` object
+The result from `download_workouts()` is a new `gcod_db` object, which has updated the local and remote perspectives of the original `gcod_db` object
 ```{r ids_be79}
 ids_b79
 ```
@@ -106,7 +108,7 @@ athlete_id(ids_dir, perspective = "remote")
 athlete_id(ids_b79, perspective = "remote")
 ```
 
-A careless call to `download_workouts()` can easily instruct R to start downloading all workouts from the **GoldenCheetah OpenData** project, which is rarely what you want. Instead, I recommend downloading only a few at a time. This can be done in various ways, including using the `prefix` argument of `get_athlete_ids()`, the `pattern` argument of `download_workouts()` (as above) or --- a bit more advanced --- by directly subsetting the `gcod_db` object
+Caution! A careless call to `download_workouts()` can easily instruct R to start downloading all workouts from the **GoldenCheetah OpenData** project, which is rarely what you want. Instead, I recommend downloading only a few at a time. This can be done in various ways, including using the `prefix` argument of `get_athlete_ids()`, the `pattern` argument of `download_workouts()` (as above) or --- a bit more advanced --- by directly subsetting the `gcod_db` object
 ```{r subset}
 ids_sub <- subset(ids, subset = grepl("b7-9", athlete_id(ids)), perspective = "remote")
 athlete_id(ids_sub)
@@ -158,7 +160,7 @@ timeline(athlete1)
 plot(athlete1, session = 40:45, what = c("power", "heart_rate"))
 ```
 
-We can also compute and visualize the summaries for the workout sessions (see, Section 5.2 of the [**trackeR** vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf) for details)
+We can also compute and visualize summaries for the workout sessions (see, Section 5.2 of the [**trackeR** vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf) for details)
 ```{r trackeRdata2, fig.height = 7}
 athlete1_summaries <- summary(athlete1)
 ##  Choose some features (see `?trackeR::plot.trackeRdataSummary`

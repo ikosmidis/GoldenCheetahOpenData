@@ -127,8 +127,9 @@ this choice made sense to me!).
     #> af3ab0e9-fc82-43b7-9d5b-60d496b77d70.zip exists and `overwrite = FALSE`. Skipping.
     #> e104e895-9ecc-40b7-9e62-c1c8823ae0d8.zip exists and `overwrite = FALSE`. Skipping.
 
-`download_workouts()` downloaded the requested workout data on my disk
-and placed them in the directory “~/Downloads/GCOD-db/”
+After the above code chunk was run, `download_workouts()` downloaded the
+requested workout data on my disk and placed them in the directory
+“~/Downloads/GCOD-db/”
 
     dir("~/Downloads/GCOD-db")
     #> [1] "6f0380b7-92d0-4c19-a56d-85ac3bf472a6.rds"
@@ -140,8 +141,9 @@ and placed them in the directory “~/Downloads/GCOD-db/”
     #> [7] "e104e895-9ecc-40b7-9e62-c1c8823ae0d8.rds"
     #> [8] "e104e895-9ecc-40b7-9e62-c1c8823ae0d8.zip"
 
-`download_workouts()` returns a new `gcod_db` object, updating the local
-and remote perspectives of the original `gcod_db` object
+The result from `download_workouts()` is a new `gcod_db` object, which
+has updated the local and remote perspectives of the original `gcod_db`
+object
 
     ids_b79
     #> Remote perspective
@@ -204,11 +206,11 @@ GoldenCheetah OpenData project’s mirrors:
     #> [3] "af3ab0e9-fc82-43b7-9d5b-60d496b77d70"
     #> [4] "e104e895-9ecc-40b7-9e62-c1c8823ae0d8"
 
-A careless call to `download_workouts()` can easily instruct R to start
-downloading all workouts from the **GoldenCheetah OpenData** project,
-which is rarely what you want. Instead, I recommend downloading only a
-few at a time. This can be done in various ways, including using the
-`prefix` argument of `get_athlete_ids()`, the `pattern` argument of
+Caution! A careless call to `download_workouts()` can easily instruct R
+to start downloading all workouts from the **GoldenCheetah OpenData**
+project, which is rarely what you want. Instead, I recommend downloading
+only a few at a time. This can be done in various ways, including using
+the `prefix` argument of `get_athlete_ids()`, the `pattern` argument of
 `download_workouts()` (as above) or — a bit more advanced — by directly
 subsetting the `gcod_db` object
 
@@ -296,7 +298,7 @@ methods from the **trackeR** R package
 
 <img src="man/figures/README-trackeRdata1.1-2.png" width="80%" />
 
-We can also compute and visualize the summaries for the workout sessions
+We can also compute and visualize summaries for the workout sessions
 (see, Section 5.2 of the [**trackeR**
 vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf)
 for details)
