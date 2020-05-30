@@ -1,6 +1,6 @@
 Package: GoldenCheetahOpenData
 Title: R API and Local Database Management for the GoldenCheetah OpenData Project
-Version: 0.1.900
+Version: 0.2
 Authors@R: person(given = "Ioannis", family = "Kosmidis", role = c("aut", "cre"), email = "ioannis.kosmidis@warwick.ac.uk", comment = c(ORCID = "0000-0003-1556-0302"))    
 Description: Provides methods for querying the GoldenCheetah OpenData Project database <doi: 10.17605/OSF.IO/6HFPZ>, downloading workout data from it and managing local workout databases. Methods are also provided for the organization of the workout data into 'trackeRdata' objects for further data analysis and modelling in R using the infrastructure provided by the 'trackeR' R package <https://CRAN.R-project.org/package=trackeR>.
 License: GPL (>= 2)
