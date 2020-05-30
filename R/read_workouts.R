@@ -18,7 +18,7 @@
 #' @details
 #' If any of `local_perspective(object)$extracted` is `FALSE`, then
 #' the workout files are extracted automatically using
-#' [`extract_workouts()`] with `overwirte = FALSE` and `clean_up =
+#' [`extract_workouts()`] with `overwrite = FALSE` and `clean_up =
 #' FALSE`.
 #'
 #' It is assumed that the filename for each workout corresponds to the
@@ -99,6 +99,9 @@ read_workouts.gcod_db <- function(object, verbose = FALSE, clean_db = TRUE, writ
       if (isTRUE(verbose)) {
         message(paste("ID", athlete_id, "|", "No data is available. Skipping."), appendLF = TRUE)
       }
+      if (isTRUE(clean_db)) {
+        clean_db(oo, confirm = FALSE, verbose = verbose)
+      }
       return(NA)
     }
 
@@ -115,7 +118,10 @@ read_workouts.gcod_db <- function(object, verbose = FALSE, clean_db = TRUE, writ
       tz = ""
     )
     if (length(json_dates) != length(csv_dates)) {
-      warning("Number of workout files for ID ", athlete_id, " does not match the number of workouts in ", json, ". Workouts have not been read.")
+       warning("Number of workout files for ID ", athlete_id, " does not match the number of workouts in ", json, ". Workouts have not been read.")
+       if (isTRUE(clean_db)) {
+        clean_db(oo, confirm = FALSE, verbose = verbose)
+      }
       return(NA)
     }
     ## ensure csv_dates and json_dates are ordered and assume 1-1 match
@@ -180,6 +186,10 @@ read_workouts.gcod_db <- function(object, verbose = FALSE, clean_db = TRUE, writ
       sessions[[j]] <- current_session
     }
 
+    if (isTRUE(clean_db)) {
+        clean_db(oo, confirm = FALSE, verbose = verbose)
+    }
+
     inds <- is.na(sessions)
     if (all(inds)) {
       out <- return(NA)
@@ -201,10 +211,6 @@ read_workouts.gcod_db <- function(object, verbose = FALSE, clean_db = TRUE, writ
     }
   }
   names(out) <- athlete_id
-
-  if (isTRUE(clean_db)) {
-    clean_db(object, confirm = FALSE, verbose = verbose)
-  }
 
   out
 }
