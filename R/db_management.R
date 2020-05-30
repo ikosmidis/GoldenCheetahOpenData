@@ -18,7 +18,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' ## Get all available athelte IDs
+#' ## Get all available athlete IDs
 #' db <- get_athlete_ids()
 #' ## Return athletes from the remote perspective of db with "b7-9" in
 #' ## their IDs

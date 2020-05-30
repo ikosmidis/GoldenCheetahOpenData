@@ -34,7 +34,7 @@ the GoldenCheetah OpenData project database <doi:
 local workout databases. Methods are also provided for the
 organization of the workout data into `trackeRdata` objects for
 further data analysis and modelling in R using the infrastructure
-provided by the **trackeR** R package <https://CRAN.R-project.org/package=trackeR>.
+provided by the [**trackeR**](https://CRAN.R-project.org/package=trackeR) R package.
 
 ## Installation
 
@@ -56,7 +56,7 @@ devtools::install_github("ikosmidis/GoldenCheetahOpenData")
 
 ### Querying GoldenCheetah OpenData project mirrors
 
-The first step in the **GoldenCheetahOpenData** R package workflow is to query the mirrors of the GoldenCheetah OpenData project for the available IDs. This is done with a call to `get_athelte_ids()`, which will create a `gcod_db` object.
+The first step in the **GoldenCheetahOpenData** R package workflow is to query the mirrors of the GoldenCheetah OpenData project for the available IDs. This is done with a call to `get_athlete_ids()`, which will create a `gcod_db` object.
 ```{r athletes, cache = TRUE}
 library("GoldenCheetahOpenData")
 ids <- get_athlete_ids()
@@ -100,7 +100,7 @@ The result from `download_workouts()` is a new `gcod_db` object, which has updat
 ids_b79
 ```
 
-You may save your `gcod_db` files, but this is not really necessary. They can be reconstructed using the `rebuild_bd()` method, which reads the local workout database and makes appropriate queries to the GoldenCheetah OpenData project's mirrors:
+You may save your `gcod_db` objects, but this is not really necessary. They can be reconstructed using the `rebuild_bd()` method, which reads the local workout database and makes appropriate queries to the GoldenCheetah OpenData project's mirrors:
 ```{r re_ids_b79}
 ids_dir <- rebuild_db("~/Downloads/GCOD-db")
 ids_dir
@@ -124,8 +124,11 @@ Reading workouts involves: extracting the workout archives for each athlete ID, 
 b79 <- read_workouts(ids_b79)
 ```
 By default, `read_workouts()`:
+
 - does not overwrite existing directories with extracted workouts (which can be bypassed by setting `overwrite = TRUE`) 
+
 - deletes the extracted directories after everything has been read (which can be bypassed by setting `clean_db = FALSE`)
+
 - writes the processed `trackeRdata` objects (see `?saveRDS`) in the same directory as the workout archives, using the convention `<athlete_id>.rds`.
 
 
@@ -180,7 +183,7 @@ and explore the relationships between those summaries
 plot(data.frame(athlete1_summaries)[features])
 ```
 
-A bit more advanced analysis: The power concentration profiles (see, Section 5.5 of the [**trackeR** vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf) for details and definition of concentration profiles) for this athlete ID are
+And a bit more advanced analysis: the power concentration profiles (see, Section 5.5 of the [**trackeR** vignette](https://cran.r-project.org/package=trackeR/vignettes/trackeR.pdf) for details and definition of concentration profiles) for this athlete ID are
 ```{r trackeRdata3, fig.height = 7}
 athlete1_cp <- concentration_profile(athlete1, what = c("power"))
 plot(athlete1_cp, multiple = TRUE)

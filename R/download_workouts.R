@@ -54,7 +54,7 @@
 #'   files_007_1 <- download_workouts("007", confirm = TRUE)
 #' }
 #'
-#' ## Using a `gcod_db` object and fitering using regex
+#' ## Using a `gcod_db` object and filtering using regex
 #' ids_00 <- get_athlete_ids(prefix = "00")
 #' if (interactive()) {
 #'   files_007_2 <- download_workouts(ids_00, pattern = "007", confirm = TRUE)
